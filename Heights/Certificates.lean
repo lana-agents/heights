@@ -419,6 +419,28 @@ theorem exists_localMinimalDiscriminantExponent
   rw [← hn]
   exact hequiv.le_iff_le.mpr hcan'
 
+/-- A chosen local minimal exponent together with its realizing
+certificate. -/
+noncomputable def localMinimalDiscriminantData
+    {K : Type*} [Field K] [NumberField K]
+    (v : HeightOneSpectrum (𝓞 K)) (W : WeierstrassCurve K) [W.IsElliptic] :
+    Σ n : ℕ, IsLocalMinimalDiscriminantExponent K v W n :=
+  Classical.choice (exists_localMinimalDiscriminantExponent v W)
+
+/-- The chosen minimal discriminant exponent at a number-field prime. -/
+noncomputable def localMinimalDiscriminantExponent
+    {K : Type*} [Field K] [NumberField K]
+    (v : HeightOneSpectrum (𝓞 K)) (W : WeierstrassCurve K) [W.IsElliptic] : ℕ :=
+  (localMinimalDiscriminantData v W).1
+
+/-- The chosen local certificate realizing `localMinimalDiscriminantExponent`. -/
+noncomputable def localMinimalDiscriminantCertificate
+    {K : Type*} [Field K] [NumberField K]
+    (v : HeightOneSpectrum (𝓞 K)) (W : WeierstrassCurve K) [W.IsElliptic] :
+    IsLocalMinimalDiscriminantExponent K v W
+      (localMinimalDiscriminantExponent v W) :=
+  (localMinimalDiscriminantData v W).2
+
 /-- The multiplicity of a prime in a finite product of powers of distinct
 height-one primes is the selected exponent, provided the finite set contains
 the support of the exponent function. -/
@@ -493,6 +515,62 @@ theorem exists_ideal_with_multiplicities_of_le
   exact ⟨I, hI, fun v => by
     dsimp only [I]
     exact multiplicity_finset_product f S hsupport v⟩
+
+/-- Every elliptic Weierstrass curve over `ℚ` has global
+minimal-discriminant data.
+
+Choose a local minimal exponent at every rational prime. A single globally
+integral scaling of the original equation bounds all these exponents by the
+prime multiplicities of its nonzero discriminant ideal. The bounded-exponent
+assembly theorem then produces the required nonzero ideal. -/
+theorem nonempty_globalMinimalDiscriminantData_rat
+    (W : WeierstrassCurve ℚ) [W.IsElliptic] :
+    Nonempty (GlobalMinimalDiscriminantData ℚ W) := by
+  let C : WeierstrassCurve.VariableChange ℚ :=
+    Classical.choose (exists_integralModel_change_rat W)
+  have hC : WeierstrassCurve.IsIntegral (𝓞 ℚ) (C • W) :=
+    Classical.choose_spec (exists_integralModel_change_rat W)
+  let E := C • W
+  let d : 𝓞 ℚ := (WeierstrassCurve.integralModel (𝓞 ℚ) E).Δ
+  let J : Ideal (𝓞 ℚ) := Ideal.span {d}
+  have hd : d ≠ 0 := by
+    intro hd
+    have hΔ : E.Δ = 0 := by
+      rw [← WeierstrassCurve.integralModel_Δ_eq (𝓞 ℚ) E]
+      change (algebraMap (𝓞 ℚ) ℚ) d = 0
+      rw [hd, map_zero]
+    rw [show E = C • W from rfl, WeierstrassCurve.variableChange_Δ] at hΔ
+    exact W.isUnit_Δ.ne_zero (mul_eq_zero.mp hΔ |>.resolve_left
+      (pow_ne_zero _ (Units.ne_zero _)))
+  have hJ : J ≠ ⊥ := mt Ideal.span_singleton_eq_bot.mp hd
+  have hbound : ∀ v : HeightOneSpectrum (𝓞 ℚ),
+      localMinimalDiscriminantExponent v W ≤ multiplicity v.asIdeal J := by
+    intro v
+    let m := localMinimalDiscriminantCertificate v W
+    have hmax := m.maximal C (integralAt_of_isIntegral v hC)
+    have hval : v.valuation ℚ E.Δ =
+        WithZero.exp (-(multiplicity v.asIdeal J : ℤ)) := by
+      rw [← WeierstrassCurve.integralModel_Δ_eq (𝓞 ℚ) E,
+        IsDedekindDomain.HeightOneSpectrum.valuation_of_algebraMap,
+        IsDedekindDomain.HeightOneSpectrum.intValuation_eq_exp_neg_multiplicity v hd]
+    rw [show C • W = E from rfl, hval, WithZero.exp_le_exp,
+      neg_le_neg_iff, Int.ofNat_le] at hmax
+    exact hmax
+  obtain ⟨I, hI, hmult⟩ :=
+    exists_ideal_with_multiplicities_of_le
+      (fun v => localMinimalDiscriminantExponent v W) J hJ hbound
+  exact ⟨{
+    ideal := I
+    ideal_ne_bot := hI
+    realizes := fun v => hmult v ▸ localMinimalDiscriminantCertificate v W
+  }⟩
+
+/-- A chosen global minimal-discriminant certificate for an elliptic
+Weierstrass curve over `ℚ`. -/
+noncomputable def globalMinimalDiscriminantDataRat
+    (W : WeierstrassCurve ℚ) [W.IsElliptic] :
+    GlobalMinimalDiscriminantData ℚ W :=
+  Classical.choice (nonempty_globalMinimalDiscriminantData_rat W)
 
 /-- Local minimality bounds the pole order of `j` by the minimal
 discriminant exponent.
