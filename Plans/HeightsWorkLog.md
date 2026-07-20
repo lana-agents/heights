@@ -170,3 +170,30 @@ witness `r`, using `unstableMinimalDiscriminant m` directly).
 target used that data, and the headline stays unexported pending the
 modular estimate. Independently re-verified: full `ci-checks.sh` passes,
 185 declarations audited, all within the permitted axiom set.
+
+## Issue #99 resolved and merged — 2026-07-20 (`ce8915a`)
+
+The last genuinely analytic gap. Proves `modularDeltaJ_fd_comparison` and
+the companion `modularIm_logLogJ_fd_comparison` (equation (11)'s archimedean
+partner) using cusp asymptotics, the discriminant product expansion, and
+truncated fundamental-domain compactness. Exports the comparator target,
+updates the Blueprint. Merged cleanly (only `Blueprint.lean` was touched by
+both lines of work; auto-merged without conflict). Independently
+re-verified: 189 declarations audited, all clean. Taxis #99 closed.
+
+**Milestone:** `thm:proposition-2-1-certified` in the Blueprint is now
+"reduced to `prop:modular-estimates`," and that proposition is proved — so
+the entire certified Proposition 2.1 chain's *mathematical content* (finite-
+place identity, semistable specialization, equation (11), ε-absorption, and
+now the archimedean modular estimates) is complete. What remains is purely
+the two realization certificates (`GlobalMinimalDiscriminantData`,
+`ArchimedeanPeriodData` — #56/#101 and #57). The two now-proved modular
+lemmas aren't wired into `proposition_2_1_certified_of_standard_modular_estimates`
+yet (that theorem still takes the bounds as existential hypotheses); doing
+so is queued as the next main-line step.
+
+Second observation: issue-101 (relaunched after its own kill, on top of
+current `main`, with instructions to commit incrementally) has already
+produced at least one commit mid-run this time, unlike its first ~4-hour
+attempt which produced none — the incremental-commit mitigation appears to
+be working.
