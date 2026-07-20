@@ -232,4 +232,48 @@ theorem logIdealNorm_minimal_eq_denominator_add_unstable
     logIdealNorm_mul _ _ r.denominator_ne_bot
       (unstableMinimalDiscriminant_ne_bot m r)]
 
+/-- Expanding the definition of Silverman's height and splitting the minimal
+ideal gives the exact finite-plus-archimedean formula with the reduced
+`j`-denominator and unstable ideal displayed separately. -/
+theorem twelve_mul_silvermanHeight_eq
+    {K : Type*} [Field K] [NumberField K]
+    (W : WeierstrassCurve K) [W.IsElliptic]
+    (m : GlobalMinimalDiscriminantData K W)
+    (r : ReducedPrincipalIdealData K W.j)
+    (p : ArchimedeanPeriodData K W) :
+    12 * silvermanHeight W m p =
+      (logIdealNorm r.denominator +
+          logIdealNorm (unstableMinimalDiscriminant m r) -
+          ∑ v : InfinitePlace K,
+            (v.mult : ℝ) * Real.log
+              (‖silvermanModularDiscriminant (p.τ v)‖ * (p.τ v).im ^ 6)) /
+        (Module.finrank ℚ K : ℝ) := by
+  rw [silvermanHeight, logIdealNorm_minimal_eq_denominator_add_unstable]
+  have hd := (numberFieldDegree_pos K).ne'
+  field_simp
+
+/-- The comparison expression from Proposition 2.1 is exactly the normalized
+height minus the denominator contribution plus the archimedean metric sum.
+This is an identity, not an analytic estimate. -/
+theorem comparisonExpression_eq
+    {K : Type*} [Field K] [NumberField K]
+    (W : WeierstrassCurve K) [W.IsElliptic]
+    (m : GlobalMinimalDiscriminantData K W)
+    (r : ReducedPrincipalIdealData K W.j)
+    (p : ArchimedeanPeriodData K W) :
+    normalizedLogHeight K W.j +
+          logIdealNorm (unstableMinimalDiscriminant m r) /
+            (Module.finrank ℚ K : ℝ) -
+        12 * silvermanHeight W m p =
+      normalizedLogHeight K W.j -
+          logIdealNorm r.denominator / (Module.finrank ℚ K : ℝ) +
+          (∑ v : InfinitePlace K,
+            (v.mult : ℝ) * Real.log
+              (‖silvermanModularDiscriminant (p.τ v)‖ * (p.τ v).im ^ 6)) /
+            (Module.finrank ℚ K : ℝ) := by
+  rw [silvermanHeight, logIdealNorm_minimal_eq_denominator_add_unstable]
+  have hd := (numberFieldDegree_pos K).ne'
+  field_simp
+  ring
+
 end Heights
