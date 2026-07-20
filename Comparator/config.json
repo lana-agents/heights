@@ -3,7 +3,8 @@
   "solution_module": "Solution",
   "theorem_names": [
     "rat_height_scaled_denominator",
-    "weighted_log_one_add_average"
+    "weighted_log_one_add_average",
+    "modular_delta_j_fd_comparison"
   ],
   "definition_names": [],
   "permitted_axioms": ["propext", "Quot.sound", "Classical.choice"]
