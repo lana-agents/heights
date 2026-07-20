@@ -104,6 +104,26 @@ structure ReducedPrincipalIdealData
     FractionalIdeal.coeIdeal numerator /
       FractionalIdeal.coeIdeal denominator
 
+/-- An equation integral over the global ring of integers is integral at
+every height-one prime in the valuation sense used by the certificates. -/
+theorem integralAt_of_isIntegral
+    {K : Type*} [Field K] [NumberField K]
+    (v : HeightOneSpectrum (𝓞 K)) {W : WeierstrassCurve K}
+    (h : WeierstrassCurve.IsIntegral (𝓞 K) W) : IsIntegralAt K v W := by
+  obtain ⟨E, hE⟩ := h.integral
+  constructor
+  all_goals
+    rw [hE]
+    simp only [WeierstrassCurve.baseChange, WeierstrassCurve.map_a₁,
+      WeierstrassCurve.map_a₂, WeierstrassCurve.map_a₃,
+      WeierstrassCurve.map_a₄, WeierstrassCurve.map_a₆]
+    first
+    | exact v.valuation_le_one (K := K) E.a₁
+    | exact v.valuation_le_one (K := K) E.a₂
+    | exact v.valuation_le_one (K := K) E.a₃
+    | exact v.valuation_le_one (K := K) E.a₄
+    | exact v.valuation_le_one (K := K) E.a₆
+
 /-- Every number-field element admits a reduced principal-ideal representation.
 
 For a nonzero `x`, first write `x = n / d`. The sum of the principal ideals
@@ -214,6 +234,343 @@ theorem IsIntegralAt.valuation_c₄_le_one
     exact pow_le_one₀ bot_le hb₂
   · rw [map_mul]
     exact mul_le_one₀ (hconst 24) bot_le hb₄
+
+/-- Every nonzero value in `ℤᵐ⁰` at most one has a unique-style
+nonnegative additive order: it is `exp (-n)` for some natural number `n`.
+
+This is the elementary value-group conversion needed to record the
+nonnegative discriminant order of an integral local equation. -/
+lemma exists_eq_exp_neg_nat
+    {x : WithZero (Multiplicative ℤ)} (hx : x ≠ 0) (h : x ≤ 1) :
+    ∃ n : ℕ, x = WithZero.exp (-(n : ℤ)) := by
+  have hz : WithZero.log x ≤ 0 := by
+    rw [← WithZero.exp_le_exp]
+    simpa [hx] using h
+  refine ⟨(-WithZero.log x).toNat, ?_⟩
+  rw [Int.toNat_of_nonneg (neg_nonneg.mpr hz)]
+  simp [hx]
+
+/-- If the denominator of a rational number divides `d`, then multiplying
+by `d` gives an element of the ring of integers of `ℚ`. -/
+lemma exists_integer_mul_of_den_dvd (q : ℚ) (d : ℕ) (h : q.den ∣ d) :
+    ∃ z : 𝓞 ℚ, algebraMap (𝓞 ℚ) ℚ z = (d : ℚ) * q := by
+  obtain ⟨k, rfl⟩ := h
+  refine ⟨Rat.ringOfIntegersEquiv.symm (k * q.num), ?_⟩
+  rw [← Rat.ringOfIntegersEquiv_apply_coe]
+  simp only [RingEquiv.apply_symm_apply, Int.cast_mul, Int.cast_natCast]
+  rw [Nat.cast_mul, mul_comm (q.den : ℚ) (k : ℚ), mul_assoc,
+    Rat.den_mul_eq_num]
+
+/-- Every rational Weierstrass equation admits an integral equation after a
+single rational scaling change.
+
+The scaling factor is the product of the five coefficient denominators. Its
+powers clear the weighted denominators of `a₁`, `a₂`, `a₃`, `a₄`, and `a₆`. -/
+theorem exists_integralModel_change_rat (W : WeierstrassCurve ℚ) :
+    ∃ C : WeierstrassCurve.VariableChange ℚ,
+      WeierstrassCurve.IsIntegral (𝓞 ℚ) (C • W) := by
+  let d := W.a₁.den * W.a₂.den * W.a₃.den * W.a₄.den * W.a₆.den
+  have hd : d ≠ 0 := by simp [d]
+  let C : WeierstrassCurve.VariableChange ℚ :=
+    ⟨Units.mk0 (d : ℚ)⁻¹ (inv_ne_zero (Nat.cast_ne_zero.mpr hd)), 0, 0, 0⟩
+  have hd1 : W.a₁.den ∣ d :=
+    ⟨W.a₂.den * W.a₃.den * W.a₄.den * W.a₆.den, by simp [d]; ring⟩
+  have hd2 : W.a₂.den ∣ d :=
+    ⟨W.a₁.den * W.a₃.den * W.a₄.den * W.a₆.den, by simp [d]; ring⟩
+  have hd3 : W.a₃.den ∣ d :=
+    ⟨W.a₁.den * W.a₂.den * W.a₄.den * W.a₆.den, by simp [d]; ring⟩
+  have hd4 : W.a₄.den ∣ d :=
+    ⟨W.a₁.den * W.a₂.den * W.a₃.den * W.a₆.den, by simp [d]; ring⟩
+  have hd6 : W.a₆.den ∣ d :=
+    ⟨W.a₁.den * W.a₂.den * W.a₃.den * W.a₄.den, by simp [d]; ring⟩
+  refine ⟨C, WeierstrassCurve.isIntegral_of_exists_lift (𝓞 ℚ) ?_ ?_ ?_ ?_ ?_⟩
+  all_goals
+    simp only [WeierstrassCurve.variableChange_def, C, Units.val_inv_eq_inv_val,
+      Units.val_mk0, inv_inv, add_zero, mul_zero, sub_zero, zero_mul]
+    try norm_num only [zero_pow]
+    try simp only [sub_zero, add_zero, zero_mul]
+  · apply exists_integer_mul_of_den_dvd
+    exact hd1
+  · apply exists_integer_mul_of_den_dvd
+    exact hd2.trans (dvd_pow_self d (n := 2) (by omega))
+  · apply exists_integer_mul_of_den_dvd
+    exact hd3.trans (dvd_pow_self d (n := 3) (by omega))
+  · apply exists_integer_mul_of_den_dvd
+    exact hd4.trans (dvd_pow_self d (n := 4) (by omega))
+  · apply exists_integer_mul_of_den_dvd
+    exact hd6.trans (dvd_pow_self d (n := 6) (by omega))
+
+/-- Local minimal-discriminant data exists at every number-field prime.
+
+The proof applies mathlib's DVR minimal-model theorem to the valuation subring
+of the prime valuation. It then transfers integrality and discriminant
+maximality back to the repository's normalized prime valuation. This theorem
+is local: it does not assemble the resulting exponents into an ideal. -/
+theorem exists_localMinimalDiscriminantExponent
+    {K : Type*} [Field K] [NumberField K]
+    (v : HeightOneSpectrum (𝓞 K)) (W : WeierstrassCurve K) [W.IsElliptic] :
+    Nonempty (Σ n : ℕ, IsLocalMinimalDiscriminantExponent K v W n) := by
+  let ν := v.valuation K
+  let R := ν.valuationSubring
+  haveI : IsDiscreteValuationRing R := by dsimp [R]; infer_instance
+  letI : Algebra R K := Algebra.ofSubsemiring R
+  letI : FaithfulSMul R K := (faithfulSMul_iff_algebraMap_injective R K).mpr (by
+    intro x y h
+    apply Subtype.ext
+    simpa only [Algebra.coe_algebraMap_ofSubsemiring R] using h)
+  haveI : IsFractionRing R K := by
+    apply IsFractionRing.of_field
+    intro x
+    by_cases hx : x = 0
+    · exact ⟨0, 1, by simp [hx]⟩
+    · by_cases hle : ν x ≤ 1
+      · exact ⟨⟨x, hle⟩, 1, by
+          simp only [Algebra.coe_algebraMap_ofSubsemiring R, map_one, div_one]⟩
+      · have hinv : ν x⁻¹ ≤ 1 := by
+          rw [map_inv₀]
+          exact (inv_le_one₀ (zero_lt_iff.mpr ((Valuation.ne_zero_iff ν).2 hx))).mpr
+            (le_of_not_ge hle)
+        exact ⟨1, ⟨x⁻¹, hinv⟩, by
+          simp only [Algebra.coe_algebraMap_ofSubsemiring R, map_one, one_div, inv_inv]⟩
+  let C := Classical.choose (W.exists_isMinimal R)
+  have hC := Classical.choose_spec (W.exists_isMinimal R)
+  let E := C • W
+  haveI hmin : WeierstrassCurve.IsMinimal R E := hC
+  have hint : WeierstrassCurve.IsIntegral R E := inferInstance
+  have hcoeff : IsIntegralAt K v E := by
+    obtain ⟨E', hE'⟩ := hint.integral
+    constructor
+    all_goals
+      rw [hE']
+      simp only [WeierstrassCurve.baseChange, WeierstrassCurve.map_a₁,
+        WeierstrassCurve.map_a₂, WeierstrassCurve.map_a₃,
+        WeierstrassCurve.map_a₄, WeierstrassCurve.map_a₆]
+      simp only [Algebra.coe_algebraMap_ofSubsemiring R]
+      first
+      | exact E'.a₁.property
+      | exact E'.a₂.property
+      | exact E'.a₃.property
+      | exact E'.a₄.property
+      | exact E'.a₆.property
+  have hΔne : ν E.Δ ≠ 0 := by
+    exact (Valuation.ne_zero_iff ν).2 (by
+      rw [show E = C • W from rfl, WeierstrassCurve.variableChange_Δ]
+      exact mul_ne_zero (pow_ne_zero _ (Units.ne_zero _)) W.isUnit_Δ.ne_zero)
+  have hΔle : ν E.Δ ≤ 1 := by
+    obtain ⟨d, hd⟩ := WeierstrassCurve.Δ_integral_of_isIntegral R E
+    rw [← hd]
+    simp only [Algebra.coe_algebraMap_ofSubsemiring R]
+    exact d.property
+  obtain ⟨n, hn⟩ := exists_eq_exp_neg_nat hΔne hΔle
+  refine ⟨⟨n, C, hcoeff, hn, ?_⟩⟩
+  intro D hD
+  have hDint : WeierstrassCurve.IsIntegral R (D • W) := by
+    apply WeierstrassCurve.isIntegral_of_exists_lift R
+    · exact ⟨⟨(D • W).a₁, hD.a₁⟩, by
+        simp only [Algebra.coe_algebraMap_ofSubsemiring R]⟩
+    · exact ⟨⟨(D • W).a₂, hD.a₂⟩, by
+        simp only [Algebra.coe_algebraMap_ofSubsemiring R]⟩
+    · exact ⟨⟨(D • W).a₃, hD.a₃⟩, by
+        simp only [Algebra.coe_algebraMap_ofSubsemiring R]⟩
+    · exact ⟨⟨(D • W).a₄, hD.a₄⟩, by
+        simp only [Algebra.coe_algebraMap_ofSubsemiring R]⟩
+    · exact ⟨⟨(D • W).a₆, hD.a₆⟩, by
+        simp only [Algebra.coe_algebraMap_ofSubsemiring R]⟩
+  let F := D * C⁻¹
+  have hFEeq : F • E = D • W := by
+    simp [F, E, smul_smul]
+  have hFE : WeierstrassCurve.IsIntegral R (F • E) := hFEeq ▸ hDint
+  letI : WeierstrassCurve.IsIntegral R (F • E) := hFE
+  have hcan : WeierstrassCurve.valuation_Δ_aux R (F • E) ≤
+      WeierstrassCurve.valuation_Δ_aux R E := by
+    rcases le_total (WeierstrassCurve.valuation_Δ_aux R (F • E))
+        (WeierstrassCurve.valuation_Δ_aux R E) with h | h
+    · exact h
+    · have hm := hmin.val_Δ_maximal.2 hFE (by simpa only [one_smul] using h)
+      simpa only [one_smul] using hm
+  have hcan' :
+      ((IsDiscreteValuationRing.maximalIdeal R).valuation K) (D • W).Δ ≤
+        ((IsDiscreteValuationRing.maximalIdeal R).valuation K) E.Δ := by
+    change
+      (↑(WeierstrassCurve.valuation_Δ_aux R (F • E)) :
+        WithZero (Multiplicative ℤ)) ≤
+      (↑(WeierstrassCurve.valuation_Δ_aux R E) :
+        WithZero (Multiplicative ℤ)) at hcan
+    rw [WeierstrassCurve.valuation_Δ_aux_eq_of_isIntegral R,
+      WeierstrassCurve.valuation_Δ_aux_eq_of_isIntegral R] at hcan
+    simpa only [hFEeq] using hcan
+  have hequiv : ν.IsEquiv
+      ((IsDiscreteValuationRing.maximalIdeal R).valuation K) := by
+    apply Valuation.isEquiv_of_val_le_one
+    intro x
+    constructor
+    · intro hx
+      let r : R := ⟨x, hx⟩
+      simpa only [Algebra.coe_algebraMap_ofSubsemiring R] using
+        (IsDedekindDomain.HeightOneSpectrum.valuation_le_one
+          (K := K) (IsDiscreteValuationRing.maximalIdeal R) r)
+    · intro hx
+      obtain ⟨r, hr⟩ := IsDiscreteValuationRing.exists_lift_of_le_one hx
+      rw [← hr]
+      simp only [Algebra.coe_algebraMap_ofSubsemiring R]
+      have hrp := r.property
+      change ν (r : K) ≤ 1 at hrp
+      exact hrp
+  rw [← hn]
+  exact hequiv.le_iff_le.mpr hcan'
+
+/-- A chosen local minimal exponent together with its realizing
+certificate. -/
+noncomputable def localMinimalDiscriminantData
+    {K : Type*} [Field K] [NumberField K]
+    (v : HeightOneSpectrum (𝓞 K)) (W : WeierstrassCurve K) [W.IsElliptic] :
+    Σ n : ℕ, IsLocalMinimalDiscriminantExponent K v W n :=
+  Classical.choice (exists_localMinimalDiscriminantExponent v W)
+
+/-- The chosen minimal discriminant exponent at a number-field prime. -/
+noncomputable def localMinimalDiscriminantExponent
+    {K : Type*} [Field K] [NumberField K]
+    (v : HeightOneSpectrum (𝓞 K)) (W : WeierstrassCurve K) [W.IsElliptic] : ℕ :=
+  (localMinimalDiscriminantData v W).1
+
+/-- The chosen local certificate realizing `localMinimalDiscriminantExponent`. -/
+noncomputable def localMinimalDiscriminantCertificate
+    {K : Type*} [Field K] [NumberField K]
+    (v : HeightOneSpectrum (𝓞 K)) (W : WeierstrassCurve K) [W.IsElliptic] :
+    IsLocalMinimalDiscriminantExponent K v W
+      (localMinimalDiscriminantExponent v W) :=
+  (localMinimalDiscriminantData v W).2
+
+/-- The multiplicity of a prime in a finite product of powers of distinct
+height-one primes is the selected exponent, provided the finite set contains
+the support of the exponent function. -/
+theorem multiplicity_finset_product
+    {R : Type*} [CommRing R] [IsDedekindDomain R]
+    (f : HeightOneSpectrum R → ℕ) (S : Finset (HeightOneSpectrum R))
+    (hf : ∀ v, f v ≠ 0 → v ∈ S) (v : HeightOneSpectrum R) :
+    multiplicity v.asIdeal (∏ w ∈ S, w.asIdeal ^ f w) = f v := by
+  classical
+  let I : Ideal R := ∏ w ∈ S, w.asIdeal ^ f w
+  have hI : I ≠ 0 := by
+    dsimp [I]
+    change (∏ w ∈ S, w.asIdeal ^ f w) ≠ (0 : Ideal R)
+    rw [Finset.prod_ne_zero_iff]
+    intro w hw
+    exact pow_ne_zero _ w.ne_bot
+  have hem := Finset.emultiplicity_prod v.prime S (fun w => w.asIdeal ^ f w)
+  rw [← ENat.coe_inj, ← FiniteMultiplicity.emultiplicity_eq_multiplicity
+    (FiniteMultiplicity.of_prime_left v.prime hI), hem]
+  by_cases hv : f v = 0
+  · rw [hv, ENat.coe_zero]
+    apply Finset.sum_eq_zero
+    intro i hi
+    by_cases hiv : i = v
+    · subst i
+      rw [hv, pow_zero, emultiplicity_eq_zero]
+      exact fun h => v.prime.not_unit (isUnit_iff_dvd_one.mpr h)
+    · rw [emultiplicity_pow v.prime,
+        emultiplicity_eq_zero_of_irreducible_ne v.irreducible i.irreducible]
+      · simp
+      · exact fun h => hiv (HeightOneSpectrum.ext h.symm)
+  · have hvS := hf v hv
+    rw [Finset.sum_eq_single v]
+    · simp [emultiplicity_pow_self_of_prime v.prime]
+    · intro w hw hwv
+      rw [emultiplicity_pow v.prime,
+        emultiplicity_eq_zero_of_irreducible_ne v.irreducible w.irreducible]
+      · simp
+      · exact fun h => hwv (HeightOneSpectrum.ext h.symm)
+    · exact fun h => (h hvS).elim
+
+/-- Any family of nonnegative prime exponents bounded by the multiplicities of
+a fixed nonzero ideal is realized by a nonzero integral ideal. -/
+theorem exists_ideal_with_multiplicities_of_le
+    {R : Type*} [CommRing R] [IsDedekindDomain R]
+    (f : HeightOneSpectrum R → ℕ) (J : Ideal R) (hJ : J ≠ ⊥)
+    (hf : ∀ v, f v ≤ multiplicity v.asIdeal J) :
+    ∃ I : Ideal R, I ≠ ⊥ ∧ ∀ v, multiplicity v.asIdeal I = f v := by
+  classical
+  have hinj : Function.Injective
+      (fun v : HeightOneSpectrum R => v.asIdeal) := by
+    intro v w h
+    exact HeightOneSpectrum.ext h
+  let S : Finset (HeightOneSpectrum R) :=
+    (UniqueFactorizationMonoid.normalizedFactors J).toFinset.preimage
+      (fun v => v.asIdeal) hinj.injOn
+  have hsupport : ∀ v, f v ≠ 0 → v ∈ S := by
+    intro v hv
+    change v ∈ (UniqueFactorizationMonoid.normalizedFactors J).toFinset.preimage
+      (fun v => v.asIdeal) hinj.injOn
+    rw [Finset.mem_preimage]
+    simp only [Multiset.mem_toFinset]
+    rw [← Multiset.count_ne_zero,
+      IsDedekindDomain.HeightOneSpectrum.count_normalizedFactors_eq_multiplicity hJ]
+    exact fun hm => hv (Nat.eq_zero_of_le_zero (hm ▸ hf v))
+  let I : Ideal R := ∏ v ∈ S, v.asIdeal ^ f v
+  have hI : I ≠ ⊥ := by
+    change (∏ v ∈ S, v.asIdeal ^ f v) ≠ (0 : Ideal R)
+    rw [Finset.prod_ne_zero_iff]
+    intro v hv
+    exact pow_ne_zero _ v.ne_bot
+  exact ⟨I, hI, fun v => by
+    dsimp only [I]
+    exact multiplicity_finset_product f S hsupport v⟩
+
+/-- Every elliptic Weierstrass curve over `ℚ` has global
+minimal-discriminant data.
+
+Choose a local minimal exponent at every rational prime. A single globally
+integral scaling of the original equation bounds all these exponents by the
+prime multiplicities of its nonzero discriminant ideal. The bounded-exponent
+assembly theorem then produces the required nonzero ideal. -/
+theorem nonempty_globalMinimalDiscriminantData_rat
+    (W : WeierstrassCurve ℚ) [W.IsElliptic] :
+    Nonempty (GlobalMinimalDiscriminantData ℚ W) := by
+  let C : WeierstrassCurve.VariableChange ℚ :=
+    Classical.choose (exists_integralModel_change_rat W)
+  have hC : WeierstrassCurve.IsIntegral (𝓞 ℚ) (C • W) :=
+    Classical.choose_spec (exists_integralModel_change_rat W)
+  let E := C • W
+  let d : 𝓞 ℚ := (WeierstrassCurve.integralModel (𝓞 ℚ) E).Δ
+  let J : Ideal (𝓞 ℚ) := Ideal.span {d}
+  have hd : d ≠ 0 := by
+    intro hd
+    have hΔ : E.Δ = 0 := by
+      rw [← WeierstrassCurve.integralModel_Δ_eq (𝓞 ℚ) E]
+      change (algebraMap (𝓞 ℚ) ℚ) d = 0
+      rw [hd, map_zero]
+    rw [show E = C • W from rfl, WeierstrassCurve.variableChange_Δ] at hΔ
+    exact W.isUnit_Δ.ne_zero (mul_eq_zero.mp hΔ |>.resolve_left
+      (pow_ne_zero _ (Units.ne_zero _)))
+  have hJ : J ≠ ⊥ := mt Ideal.span_singleton_eq_bot.mp hd
+  have hbound : ∀ v : HeightOneSpectrum (𝓞 ℚ),
+      localMinimalDiscriminantExponent v W ≤ multiplicity v.asIdeal J := by
+    intro v
+    let m := localMinimalDiscriminantCertificate v W
+    have hmax := m.maximal C (integralAt_of_isIntegral v hC)
+    have hval : v.valuation ℚ E.Δ =
+        WithZero.exp (-(multiplicity v.asIdeal J : ℤ)) := by
+      rw [← WeierstrassCurve.integralModel_Δ_eq (𝓞 ℚ) E,
+        IsDedekindDomain.HeightOneSpectrum.valuation_of_algebraMap,
+        IsDedekindDomain.HeightOneSpectrum.intValuation_eq_exp_neg_multiplicity v hd]
+    rw [show C • W = E from rfl, hval, WithZero.exp_le_exp,
+      neg_le_neg_iff, Int.ofNat_le] at hmax
+    exact hmax
+  obtain ⟨I, hI, hmult⟩ :=
+    exists_ideal_with_multiplicities_of_le
+      (fun v => localMinimalDiscriminantExponent v W) J hJ hbound
+  exact ⟨{
+    ideal := I
+    ideal_ne_bot := hI
+    realizes := fun v => hmult v ▸ localMinimalDiscriminantCertificate v W
+  }⟩
+
+/-- A chosen global minimal-discriminant certificate for an elliptic
+Weierstrass curve over `ℚ`. -/
+noncomputable def globalMinimalDiscriminantDataRat
+    (W : WeierstrassCurve ℚ) [W.IsElliptic] :
+    GlobalMinimalDiscriminantData ℚ W :=
+  Classical.choice (nonempty_globalMinimalDiscriminantData_rat W)
 
 /-- Local minimality bounds the pole order of `j` by the minimal
 discriminant exponent.
