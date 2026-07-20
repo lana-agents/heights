@@ -70,6 +70,21 @@ independently re-verified by the orchestrator. GitHub Pages for the blueprint
 will 404 until the repo is public (requires purging the copyrighted PDF from
 history first) or the org enables Pages for private repos.
 
+## Autonomous run 3 — 2026-07-20 (`5a93557`, main line, run concurrently with 3 sub-issue agents)
+
+Deliberately avoided `Heights/ModularJ.lean` and `Heights/Certificates.lean`
+(owned by the concurrent issue-99/100/101 agents). Landed:
+`159b1fd` (certified good/multiplicative reduction, `IsSemistable`; proves
+semistability gives `D = Δmin` hence `unstableMinimalDiscriminant m r = ⊤`),
+`45d2f85` (specializes the archimedean comparison identity to the semistable
+case), `5a93557` (derives the semistable absolute-value bound from the
+general corrected bounds). Independently re-verified: full
+`LAKE_JOBS=6 ./scripts/ci-checks.sh` passes, 170 declarations audited, all
+within `{propext, Quot.sound, Classical.choice}`. Filed and labeled
+`ready-to-clanck` #113 (complete equation (11): bound the archimedean
+log-log sum by normalized `j`-height) and #115 (the `ε`-absorption bound for
+the rational specialization, `Plans/HeightsSpec.md` P7).
+
 ## Parallel sub-issue agents launched — 2026-07-20
 
 Per owner directive, launched 3 sub-issue pi agents in dedicated git
