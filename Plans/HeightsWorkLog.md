@@ -216,3 +216,41 @@ ideal with the canonical denominator, assembled the two realization
 certificates, and exported `silverman_proposition_2_1_certified`. The complete
 four-target comparator is now configured. A second full check passed with 198
 public declarations audited.
+
+## Issue #101 resolved and merged — 2026-07-20 (`1cfbfc4`)
+
+A full, unconditional existence result for every elliptic Weierstrass curve
+over `ℚ` — not a partial slice. Applies mathlib's DVR minimal-model theorem
+(`WeierstrassCurve.exists_isMinimal`) at each prime's valuation subring,
+bridges to the project's `HeightOneSpectrum`-based valuation framework via
+a `Valuation.IsEquiv` argument, bounds every local minimal exponent by a
+single global integral model's discriminant multiplicities, and assembles
+the bounded exponents into a genuine ideal via Dedekind-domain unique
+factorization (`nonempty_globalMinimalDiscriminantData_rat`,
+`globalMinimalDiscriminantDataRat`). Merged cleanly (main never touched
+`Heights/Certificates.lean` in the interim). Independently re-verified with
+a clean, uncontended build (no other pi processes running): 215
+declarations audited, all clean. A mid-run report of a blocked full build
+was a false alarm from cross-worktree `.lake` build-cache hardlink sharing
+while main-line concurrently rewrote `Heights/IdealFactorization.lean` —
+worth remembering for future concurrent-worktree setups (hardlink
+`.lake/packages`, but prefer independent `.lake/build` per worktree, or at
+minimum re-verify from a quiescent state before trusting a mid-flight
+build failure). The general number-field case remains open as #56; the
+"simultaneously minimal at every prime" fact used here is special to
+class-number-one-style base rings. Taxis #101 closed.
+
+## Milestone: certified Proposition 2.1 complete for K = ℚ, modulo one certificate — 2026-07-20
+
+With #99, #100, and #101 all merged, `Heights.proposition_2_1_certified` and
+`proposition_2_1_semistable_certified` hold **unconditionally for K = ℚ**:
+`GlobalMinimalDiscriminantData ℚ W` is now always constructible
+(`globalMinimalDiscriminantDataRat`), so the only remaining hypothesis for
+`K = ℚ` is `ArchimedeanPeriodData ℚ W` (#57 — the complex-uniformization
+bridge from `WeierstrassCurve.j` to the modular `j`-function; nothing else
+is missing). For general number fields, both `GlobalMinimalDiscriminantData`
+(#56) and `ArchimedeanPeriodData` (#57) remain open. Every other
+mathematical ingredient of Silverman's Proposition 2.1 — the finite-place
+Weil-height identity, the archimedean modular fundamental-domain estimates,
+equation (11), the `ε`-absorption bound, and the semistable specialization
+— is now proved unconditionally with no realization-data hypotheses at all.
