@@ -572,4 +572,24 @@ theorem comparisonExpression_eq_archimedeanAverage
   rw [← InfinitePlace.norm_embedding_eq v W.j, p.j_eq]
   ring
 
+/-- For a semistable certified curve, the correction-free comparison is the
+same purely archimedean average as the general corrected comparison. -/
+theorem comparisonExpression_eq_archimedeanAverage_of_semistable
+    {K : Type*} [Field K] [NumberField K]
+    (W : WeierstrassCurve K) [W.IsElliptic]
+    (m : GlobalMinimalDiscriminantData K W)
+    (r : ReducedPrincipalIdealData K W.j)
+    (p : ArchimedeanPeriodData K W)
+    (hs : IsSemistable K W m) :
+    normalizedLogHeight K W.j - 12 * silvermanHeight W m p =
+      (∑ v : InfinitePlace K, (v.mult : ℝ) *
+        (Real.posLog ‖modularJ (p.τ v)‖ +
+          Real.log (‖silvermanModularDiscriminant (p.τ v)‖ *
+            (p.τ v).im ^ 6))) /
+        (Module.finrank ℚ K : ℝ) := by
+  have h := comparisonExpression_eq_archimedeanAverage W m r p
+  rw [unstableMinimalDiscriminant_eq_top_of_semistable m r hs,
+    logIdealNorm_top, zero_div, add_zero] at h
+  exact h
+
 end Heights
