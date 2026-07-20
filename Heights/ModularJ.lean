@@ -12,10 +12,10 @@ analytic discriminant includes the additional factor `(2π) ^ 12`. The modular
 in front of `E₄ ^ 3 / Δ`.
 -/
 
-open scoped UpperHalfPlane
+open scoped UpperHalfPlane MatrixGroups
 
 open Filter Topology Asymptotics UpperHalfPlane
-open Matrix.SpecialLinearGroup
+open Matrix.SpecialLinearGroup CongruenceSubgroup
 
 namespace Heights
 
@@ -28,6 +28,32 @@ noncomputable def silvermanModularDiscriminant (τ : ℍ) : ℂ :=
 /-- The modular `j`-function in the `q⁻¹ + 744 + ⋯` normalization. -/
 noncomputable def modularJ (τ : ℍ) : ℂ :=
   ModularForm.E₄ τ ^ 3 / ModularForm.discriminant τ
+
+/-- The modular `j`-function is invariant under the integral special linear
+group. This is the reduction needed to move a preimage into the standard
+fundamental domain. -/
+theorem modularJ_smul (γ : SL(2, ℤ)) (τ : ℍ) : modularJ (γ • τ) = modularJ τ := by
+  have hE : ModularForm.E₄ (γ • τ) = denom γ τ ^ (4 : ℤ) * ModularForm.E₄ τ := by
+    letI : SlashInvariantFormClass (ModularForm 𝒮ℒ 4) Γ(1) 4 :=
+      Gamma_one_coe_eq_SL ▸ inferInstance
+    exact SlashInvariantForm.slash_action_eqn_SL'' ModularForm.E₄ (mem_Gamma_one γ) τ
+  have hD : ModularForm.discriminant (γ • τ) =
+      denom γ τ ^ (12 : ℤ) * ModularForm.discriminant τ := by
+    letI : SlashInvariantFormClass (CuspForm 𝒮ℒ 12) Γ(1) 12 :=
+      Gamma_one_coe_eq_SL ▸ inferInstance
+    exact SlashInvariantForm.slash_action_eqn_SL'' CuspForm.discriminant (mem_Gamma_one γ) τ
+  rw [modularJ, modularJ, hE, hD]
+  field_simp [denom_ne_zero, ModularForm.discriminant_ne_zero]
+
+/-- Surjectivity of modular `j` would already give a preimage in the standard
+fundamental domain. Thus the certificate interface does not require a separate
+fundamental-domain existence theorem once surjectivity is available. -/
+theorem exists_mem_fd_modularJ_eq_of_surjective
+    (hsurj : Function.Surjective modularJ) (z : ℂ) :
+    ∃ τ : ℍ, τ ∈ ModularGroup.fd ∧ modularJ τ = z := by
+  obtain ⟨τ, hτ⟩ := hsurj z
+  obtain ⟨γ, hγ⟩ := ModularGroup.exists_smul_mem_fd τ
+  exact ⟨γ • τ, hγ, (modularJ_smul γ τ).trans hτ⟩
 
 /-- Silverman's modular discriminant does not vanish on the upper half-plane. -/
 theorem silvermanModularDiscriminant_ne_zero (τ : ℍ) :

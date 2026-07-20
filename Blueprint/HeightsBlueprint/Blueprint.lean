@@ -61,7 +61,7 @@ The factor is retained explicitly, and the function is proved nonvanishing.
 *Status: formalized unconditionally.*
 :::
 
-:::definition "def:modular-j" (lean := "Heights.modularJ, Heights.modularJ_mul_discriminant, Heights.modularJ_eq_zero_iff")
+:::definition "def:modular-j" (lean := "Heights.modularJ, Heights.modularJ_mul_discriminant, Heights.modularJ_eq_zero_iff, Heights.modularJ_smul, Heights.exists_mem_fd_modularJ_eq_of_surjective")
 Define $`j_{\mathrm{mod}}(\tau)=E_4(\tau)^3/\Delta_{\mathrm{mathlib}}(\tau)`.
 This is the $`q^{-1}+744+\cdots` normalization, without a factor of 1728.
 The denominator is proved nonzero and the normalization is checked against the
@@ -138,20 +138,27 @@ discriminant exponent, and maximality among integral changes.
 *Status: interface formalized; no existence claim.*
 :::
 
-:::definition "def:global-minimal-discriminant-data" (uses := "def:local-minimal-discriminant-exponent") (lean := "Heights.GlobalMinimalDiscriminantData")
+:::definition "def:global-minimal-discriminant-data" (uses := "def:local-minimal-discriminant-exponent") (lean := "Heights.GlobalMinimalDiscriminantData, Heights.globalMinimalDiscriminantDataRat")
 `GlobalMinimalDiscriminantData` supplies a nonzero integral ideal and proves
 that every prime multiplicity realizes the corresponding local minimum. It
-does not supply denominator divisibility or a comparison inequality.
+does not supply denominator divisibility or a comparison inequality. Mathlib's
+DVR minimal-model theorem can be assembled globally over $`\mathbb Q`, where a
+single integral equation bounds all local exponents; this produces
+`globalMinimalDiscriminantDataRat` for every elliptic rational curve.
 
-*Status: interface formalized; existence for every curve is not claimed.*
+*Status: interface formalized and existence proved over $`\mathbb Q`; general
+number-field existence remains open.*
 :::
 
-:::definition "def:archimedean-period-data" (uses := "def:modular-j") (lean := "Heights.ArchimedeanPeriodData")
+:::definition "def:archimedean-period-data" (uses := "def:modular-j") (lean := "Heights.ArchimedeanPeriodData, Heights.nonempty_archimedeanPeriodData_of_modularJ_surjective")
 `ArchimedeanPeriodData` supplies a fundamental-domain period ratio at each
 infinite place and identifies its modular $`j` with the embedded algebraic
-$`j`. It contains no analytic bound or target comparison.
+$`j`. It contains no analytic bound or target comparison. Modular invariance
+shows that surjectivity of `modularJ` would construct this interface at every
+place; that surjectivity theorem remains the concrete analytic gap.
 
-*Status: interface formalized; existence for every curve is not claimed.*
+*Status: interface and surjectivity reduction formalized; unconditional
+existence for every curve is not claimed.*
 :::
 
 :::definition "def:reduced-principal-ideal-data" (lean := "Heights.ReducedPrincipalIdealData, Heights.exists_reducedPrincipalIdealData, Heights.reducedPrincipalIdealData")
@@ -218,9 +225,12 @@ data and certified semistability; no analytic estimate remains as a hypothesis.*
 :::
 
 The repository does not presently claim period construction, global minimal-
-discriminant construction for every curve, complex uniformization, an
-Arakelov Faltings height, or unconditional Proposition 2.1. Those questions
-belong to the later feasibility gate.
+discriminant construction over every number field, complex uniformization, an
+Arakelov Faltings height, or unconditional all-curves Proposition 2.1. Over
+$`\mathbb Q` the global minimal-discriminant certificate is unconditional, so
+`ArchimedeanPeriodData` is the sole remaining realization input. The precise
+archimedean feasibility findings are recorded in
+`Plans/ArchimedeanUniformizationFeasibility.md`.
 
 {blueprint_graph}
 {blueprint_summary}

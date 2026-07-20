@@ -1,6 +1,8 @@
 # Heights: phase-gated implementation specification
 
-**Status:** round-1 specification for adversarial review
+**Status:** living specification and implementation record. The original
+phase-gated workflow has been superseded by autonomous development; the current
+status table in §5 is authoritative.
 
 **Pinned environment:** Lean 4 / mathlib `v4.32.0`
 
@@ -199,14 +201,17 @@ the desired comparison.
 
 #### What is not claimed
 
-The repository does **not** initially claim:
+The repository does **not** claim:
 
 * an unconditional construction of the Faltings height as the Arakelov degree of
   the Hodge bundle;
-* existence of global minimal-discriminant data for every `W/K`;
+* existence of global minimal-discriminant data for every `W/K` (it is now
+  constructed for every elliptic `W/ℚ`, but not for general number fields);
 * existence of compatible periods for every complex embedding of every `W/K`;
 * an algebraic/analytic isomorphism `E(ℂ) ≃ ℂ/(ℤ+ℤτ)`;
-* the unconditional all-curves form of Proposition 2.1.
+* the unconditional all-curves form of Proposition 2.1. The certified theorem
+  is proved, and over `ℚ` its sole remaining realization input is
+  `ArchimedeanPeriodData ℚ W`.
 
 Those become targets only after the feasibility gate in P8. Merely restricting to
 `K = ℚ` or to a totally real field does not remove the archimedean term: even a
@@ -337,19 +342,22 @@ with an explicit convention for `x = 0` rather than silently assuming `j ≠ 0`.
 
 ### 2.3 Explicit library gaps and forbidden shortcuts
 
-There are two genuinely large realization gaps.
+There are two genuinely large realization gaps, one now partially discharged.
 
 1. **Global arithmetic assembly.** `Reduction.lean` proves local minimal-model
-   existence over a DVR, but there is no construction of the global minimal
-   discriminant ideal of a Weierstrass curve over a number field, no unstable
-   minimal discriminant, and no all-primes assembly theorem. This overlaps the
-   existing elliptic-reduction infrastructure issue #5 but the number-field
-   assembly is additional work.
+   existence over a DVR. This repository now bridges it to the number-field
+   valuation framework and constructs `GlobalMinimalDiscriminantData ℚ W` for
+   every elliptic curve over `ℚ`. General number fields still lack the global
+   ideal assembly (taxis #56); the argument over `ℚ` uses simultaneous
+   integrality unavailable over an arbitrary ring of integers.
 2. **Complex uniformization bridge.** Mathlib has upper-half-plane geometry,
    modular forms, the modular discriminant, period lattices, and Weierstrass
    `℘`, but no theorem producing periods from an algebraic elliptic curve over
    `ℂ`, no `ℂ/L` elliptic-curve equivalence, and no bridge identifying
-   `WeierstrassCurve.j` with `modularJ`. This is a mathlib-scale subproject.
+   `WeierstrassCurve.j` with `modularJ`. For the current, deliberately weak
+   `ArchimedeanPeriodData` interface, this repository proves that surjectivity
+   of `modularJ` alone would suffice; that surjectivity theorem is also absent.
+   See `Plans/ArchimedeanUniformizationFeasibility.md` and taxis #57.
 
 Forbidden in every phase:
 
@@ -560,17 +568,32 @@ cannot be inspected, or if a challenge proof-hole axiom leaks through
 `Solution.lean`. The shell audit and Lean audit run in CI after the bounded full
 build.
 
-### Phase-gate protocol
+### Development protocol
 
-Every phase has one implementer and an adversarial reviewer. A reviewer returns
-`ACCEPTED` or `CHANGES REQUESTED` with reproducible findings. Changes-requested
-loops are capped at four rounds. A gate closes only after all listed checks pass,
-the review verdict is recorded below, and the orchestrator creates a phase-sized
-`P<n>: ...` commit with the acting model's co-author trailer. At every accepted
-gate the orchestrator pushes and posts the required issue #32 status comment.
-No implementer or reviewer pushes directly.
+The phase-gate protocol used for bootstrap and initial specification review has
+been superseded by the autonomous workflow in `CLAUDE.md`. The checks and honesty
+criteria below remain requirements, but phases are now organizational landmarks,
+not mandatory implement/review gates. Small honest commits, full bounded CI, the
+trust/axiom audits, and taxis status reporting remain in force.
 
 ## 5. Phases
+
+The detailed briefs below are retained as historical design context. This table
+is the current status; a completed row means the repository has the promised
+mathematical content, not that the abandoned review ceremony was performed.
+
+| Phase | Current status (2026-07-20) |
+|---|---|
+| P0 | Complete: package and reviewed honesty specification. |
+| P1 | Complete: blueprint, comparator, bounded CI, trust and axiom audits. |
+| P2 | Complete: normalized heights, reduced ideals, finite-place identity, weighted bounds. |
+| P3 | Complete: actual modular functions and both absolute fundamental-domain estimates. |
+| P4 | Complete: realization interfaces compile and contain no comparison conclusions. |
+| P5 | Complete: denominator divisibility, canonical unstable ideal, exact finite/archimedean decomposition, semistability. |
+| P6 | Complete: both certified Proposition 2.1 theorems and the expanded comparator target. |
+| P7 | Partially complete: rational arithmetic, equation (11), and ε-absorption are proved; no uncertified Faltings-height corollary is claimed. |
+| P8 | Arithmetic `ℚ` branch GO and complete; general arithmetic branch remains #56. Archimedean branch STOP as phase-sized work; see `Plans/ArchimedeanUniformizationFeasibility.md` and #57. Arakelov identification remains unavailable. |
+| P9 | Not scheduled. Over `ℚ`, only `ArchimedeanPeriodData ℚ W` remains; general `K` also needs #56. |
 
 ### P0 — Bootstrap (already committed)
 
