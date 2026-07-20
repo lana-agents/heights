@@ -1,2 +1,4 @@
 /.lake
 .pi/orchestration/taxis.env
+.pi/orchestration/prompts/
+.pi/orchestration/logs/
