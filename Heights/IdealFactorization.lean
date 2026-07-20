@@ -592,4 +592,36 @@ theorem comparisonExpression_eq_archimedeanAverage_of_semistable
     logIdealNorm_top, zero_div, add_zero] at h
   exact h
 
+/-- Any corrected Proposition 2.1 bounds specialize to the usual absolute-value
+bound for a semistable certified curve. This isolates the formal deduction of
+the semistable statement from the general analytic comparison. -/
+theorem semistable_abs_comparison_of_corrected_bounds
+    {K : Type*} [Field K] [NumberField K]
+    (W : WeierstrassCurve K) [W.IsElliptic]
+    (m : GlobalMinimalDiscriminantData K W)
+    (r : ReducedPrincipalIdealData K W.j)
+    (p : ArchimedeanPeriodData K W)
+    (C : ℝ)
+    (hs : IsSemistable K W m)
+    (hbounds :
+      -C ≤ normalizedLogHeight K W.j +
+          logIdealNorm (unstableMinimalDiscriminant m r) /
+            (Module.finrank ℚ K : ℝ) -
+          12 * silvermanHeight W m p ∧
+      normalizedLogHeight K W.j +
+          logIdealNorm (unstableMinimalDiscriminant m r) /
+            (Module.finrank ℚ K : ℝ) -
+          12 * silvermanHeight W m p ≤
+        6 * Real.log (1 + normalizedLogHeight K W.j) + C) :
+    |normalizedLogHeight K W.j - 12 * silvermanHeight W m p| ≤
+      6 * Real.log (1 + normalizedLogHeight K W.j) + C := by
+  rw [unstableMinimalDiscriminant_eq_top_of_semistable m r hs,
+    logIdealNorm_top, zero_div, add_zero] at hbounds
+  apply abs_le.mpr
+  constructor
+  · have hh : 0 ≤ Real.log (1 + normalizedLogHeight K W.j) :=
+      Real.log_nonneg (by linarith [normalizedLogHeight_nonneg K W.j])
+    linarith [hh, hbounds.1]
+  · exact hbounds.2
+
 end Heights
