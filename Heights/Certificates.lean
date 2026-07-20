@@ -104,6 +104,26 @@ structure ReducedPrincipalIdealData
     FractionalIdeal.coeIdeal numerator /
       FractionalIdeal.coeIdeal denominator
 
+/-- An equation integral over the global ring of integers is integral at
+every height-one prime in the valuation sense used by the certificates. -/
+theorem integralAt_of_isIntegral
+    {K : Type*} [Field K] [NumberField K]
+    (v : HeightOneSpectrum (𝓞 K)) {W : WeierstrassCurve K}
+    (h : WeierstrassCurve.IsIntegral (𝓞 K) W) : IsIntegralAt K v W := by
+  obtain ⟨E, hE⟩ := h.integral
+  constructor
+  all_goals
+    rw [hE]
+    simp only [WeierstrassCurve.baseChange, WeierstrassCurve.map_a₁,
+      WeierstrassCurve.map_a₂, WeierstrassCurve.map_a₃,
+      WeierstrassCurve.map_a₄, WeierstrassCurve.map_a₆]
+    first
+    | exact v.valuation_le_one (K := K) E.a₁
+    | exact v.valuation_le_one (K := K) E.a₂
+    | exact v.valuation_le_one (K := K) E.a₃
+    | exact v.valuation_le_one (K := K) E.a₄
+    | exact v.valuation_le_one (K := K) E.a₆
+
 /-- Every number-field element admits a reduced principal-ideal representation.
 
 For a nonzero `x`, first write `x = n / d`. The sum of the principal ideals
