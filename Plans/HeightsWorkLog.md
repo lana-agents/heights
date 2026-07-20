@@ -134,3 +134,24 @@ subtasks under #32, chosen to not touch any file run 2 is currently editing
   resolve to real compiling declarations.
 * #103 — blueprint proof-sketch prose for already-`lean :=`-linked nodes
   (currently signature restatements, not real exposition).
+
+## Issue #100 resolved and merged — 2026-07-20 (`0293ae3`)
+
+First sub-issue agent to land (after one transient kill/relaunch with no
+lost work — see below). Constructed `exists_reducedPrincipalIdealData` and
+the canonical `reducedPrincipalIdealData` in `Heights/Certificates.lean`:
+cancels the ideal-theoretic gcd from an arbitrary fraction representation to
+produce coprime integral numerator/denominator ideals for any number-field
+element, handling `x = 0` via the documented normalization. Pure existence
+construction, no comparison content. Merged cleanly (main never touched
+`Heights/Certificates.lean` in the interim, confirmed by diffing against the
+branch's actual base). Independently re-verified: full `ci-checks.sh`
+passes. Taxis #100 closed.
+
+Note: the first attempts at issue-99 and issue-100 were both killed
+(`SIGTERM`, exit 143) simultaneously partway through, cause unresolved (not
+OOM — memory was never under pressure) but likely incidental to running 4
+concurrent `pi` processes plus orchestrator verification builds on this box.
+No commits existed in either worktree at the time, so nothing was lost;
+both were relaunched fresh and issue-100 completed normally on the second
+attempt.
