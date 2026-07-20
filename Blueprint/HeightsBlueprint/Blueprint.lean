@@ -96,14 +96,15 @@ functions, not certificate fields.
 *Status: not started (unconditional target).*
 :::
 
-:::proposition "prop:weighted-log-log" (lean := "Heights.weightedLogOneAdd_le, Heights.weightedLogOneAdd_nonneg, Heights.infinitePlaceWeightedLogOneAdd_bounds")
+:::proposition "prop:weighted-log-log" (lean := "Heights.weightedLogOneAdd_le, Heights.infinitePlaceWeightedLogOneAdd_bounds, Heights.infinitePlacePosLogAverage_le_normalizedLogHeight, Heights.infinitePlaceLogLogMax_bounds")
 The finite weighted Jensen estimate for $`\log(1+x)` holds for arbitrary
 nonnegative real weights and inputs. Specializing the weights to infinite-place
-multiplicities gives both bounds underlying equation (11), using that those
-multiplicities sum to $`[K:\mathbb Q]`.
+multiplicities, bounding the omitted finite-place height terms by positivity,
+and applying the local log-log cutoff estimate proves equation (11):
+$`0 \le \sum_v n_v \log\log\max(|z|_v,e)
+\le [K:\mathbb Q]\log(1+h(z))` for the actual normalized Weil height.
 
-*Status: proved unconditionally; the later height decomposition must still
-bound the displayed weighted average by the $`j`-height.*
+*Status: proved unconditionally.*
 :::
 
 # Realization interfaces

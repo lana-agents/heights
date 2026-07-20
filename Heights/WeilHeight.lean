@@ -128,4 +128,103 @@ theorem infinitePlaceWeightedLogOneAdd_bounds
     · exact_mod_cast InfinitePlace.sum_mult_eq (K := K)
     · exact numberFieldDegree_pos K
 
+open NumberField in
+/-- The normalized infinite-place contribution is bounded by the full absolute
+logarithmic height. The omitted finite-place terms are all nonnegative. -/
+theorem infinitePlacePosLogAverage_le_normalizedLogHeight
+    (K : Type*) [Field K] [NumberField K] (z : K) :
+    (∑ v : InfinitePlace K, (v.mult : ℝ) * Real.posLog (v z)) /
+        (Module.finrank ℚ K : ℝ) ≤ normalizedLogHeight K z := by
+  have hfin : 0 ≤ ∑ᶠ v : FinitePlace K, Real.posLog (v z) :=
+    finsum_nonneg fun _ => Real.posLog_nonneg
+  rw [normalizedLogHeight, NumberField.logHeight₁_eq]
+  apply div_le_div_of_nonneg_right _ (numberFieldDegree_pos K).le
+  exact le_add_of_nonneg_right hfin
+
+open NumberField in
+/-- Jensen's bound at the infinite places, now with its weighted average
+bounded by the actual normalized height of the number-field element. -/
+theorem infinitePlaceWeightedLogOneAdd_posLog_bounds
+    (K : Type*) [Field K] [NumberField K] (z : K) :
+    0 ≤ ∑ v : InfinitePlace K,
+        (v.mult : ℝ) * Real.log (1 + Real.posLog (v z)) ∧
+      ∑ v : InfinitePlace K,
+          (v.mult : ℝ) * Real.log (1 + Real.posLog (v z)) ≤
+        (Module.finrank ℚ K : ℝ) *
+          Real.log (1 + normalizedLogHeight K z) := by
+  have h := infinitePlaceWeightedLogOneAdd_bounds K
+    (fun v : InfinitePlace K => Real.posLog (v z))
+    (fun _ => Real.posLog_nonneg)
+  refine ⟨h.1, h.2.trans ?_⟩
+  have harch : 0 ≤
+      (∑ v : InfinitePlace K, (v.mult : ℝ) * Real.posLog (v z)) /
+        (Module.finrank ℚ K : ℝ) := by
+    apply div_nonneg _ (numberFieldDegree_pos K).le
+    apply Finset.sum_nonneg
+    intro v _
+    exact mul_nonneg (by positivity) Real.posLog_nonneg
+  apply mul_le_mul_of_nonneg_left _ (numberFieldDegree_pos K).le
+  apply Real.strictMonoOn_log.monotoneOn
+  · exact Set.mem_Ioi.mpr (by linarith)
+  · exact Set.mem_Ioi.mpr (by linarith [normalizedLogHeight_nonneg K z])
+  · gcongr
+    exact infinitePlacePosLogAverage_le_normalizedLogHeight K z
+
+/-- A local log-log term is nonnegative and is bounded by the `log (1 + log⁺)`
+term to which weighted Jensen applies. The cutoff `exp 1` is the precise
+formal version of the conventional `e` in `log log max (a, e)`. -/
+theorem logLogMaxExpOne_bounds (a : ℝ) :
+    0 ≤ Real.log (Real.log (max a (Real.exp 1))) ∧
+      Real.log (Real.log (max a (Real.exp 1))) ≤
+        Real.log (1 + Real.posLog a) := by
+  by_cases h : a ≤ Real.exp 1
+  · have hmax : max a (Real.exp 1) = Real.exp 1 := max_eq_right h
+    rw [hmax, Real.log_exp, Real.log_one]
+    refine ⟨le_rfl, Real.log_nonneg ?_⟩
+    linarith [Real.posLog_nonneg (x := a)]
+  · have hea : Real.exp 1 ≤ a := le_of_not_ge h
+    have ha_pos : 0 < a := (Real.exp_pos 1).trans_le hea
+    have hlog_one : 1 ≤ Real.log a := by
+      rw [← Real.log_exp 1]
+      exact Real.strictMonoOn_log.monotoneOn (Real.exp_pos 1) ha_pos hea
+    have hposlog : Real.posLog a = Real.log a := by
+      apply Real.posLog_eq_log
+      rw [abs_of_pos ha_pos]
+      exact le_trans (Real.one_le_exp (by norm_num)) hea
+    rw [max_eq_left hea, hposlog]
+    constructor
+    · exact Real.log_nonneg hlog_one
+    · apply Real.strictMonoOn_log.monotoneOn
+      · exact Set.mem_Ioi.mpr (lt_of_lt_of_le (by norm_num) hlog_one)
+      · exact Set.mem_Ioi.mpr (by linarith)
+      · linarith
+
+open NumberField in
+/-- Silverman's equation (11): the weighted archimedean log-log sum is between
+zero and the degree times `log (1 + h(z))`, where `h` is the actual absolute
+normalized Weil height. -/
+theorem infinitePlaceLogLogMax_bounds
+    (K : Type*) [Field K] [NumberField K] (z : K) :
+    0 ≤ ∑ v : InfinitePlace K, (v.mult : ℝ) *
+        Real.log (Real.log (max (v z) (Real.exp 1))) ∧
+      ∑ v : InfinitePlace K, (v.mult : ℝ) *
+          Real.log (Real.log (max (v z) (Real.exp 1))) ≤
+        (Module.finrank ℚ K : ℝ) *
+          Real.log (1 + normalizedLogHeight K z) := by
+  constructor
+  · apply Finset.sum_nonneg
+    intro v _
+    exact mul_nonneg (by positivity) (logLogMaxExpOne_bounds (v z)).1
+  · calc
+      ∑ v : InfinitePlace K, (v.mult : ℝ) *
+          Real.log (Real.log (max (v z) (Real.exp 1))) ≤
+          ∑ v : InfinitePlace K, (v.mult : ℝ) *
+            Real.log (1 + Real.posLog (v z)) := by
+        apply Finset.sum_le_sum
+        intro v _
+        exact mul_le_mul_of_nonneg_left (logLogMaxExpOne_bounds (v z)).2 (by positivity)
+      _ ≤ (Module.finrank ℚ K : ℝ) *
+          Real.log (1 + normalizedLogHeight K z) :=
+        (infinitePlaceWeightedLogOneAdd_posLog_bounds K z).2
+
 end Heights
