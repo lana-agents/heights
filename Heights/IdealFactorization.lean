@@ -425,4 +425,48 @@ theorem comparisonExpression_eq
     field_simp
     ring
 
+/-- After removing the reduced denominator contribution, normalized Weil height
+is exactly the normalized weighted infinite-place sum. -/
+theorem normalizedHeight_sub_denominator_eq_infinitePlace
+    {K : Type*} [Field K] [NumberField K]
+    {x : K} (r : ReducedPrincipalIdealData K x) :
+    normalizedLogHeight K x -
+        logIdealNorm r.denominator / (Module.finrank ℚ K : ℝ) =
+      (∑ v : InfinitePlace K, (v.mult : ℝ) * Real.posLog (v x)) /
+        (Module.finrank ℚ K : ℝ) := by
+  rw [normalizedLogHeight,
+    r.logHeight_eq_logIdealNorm_add_infinitePlace]
+  have hd := (numberFieldDegree_pos K).ne'
+  field_simp
+  ring
+
+/-- Using compatible periods, the entire Proposition 2.1 comparison expression
+is a normalized weighted average of an explicit function of the actual modular
+`j`, modular discriminant, and imaginary part. Thus all remaining inequalities
+are purely archimedean fundamental-domain estimates. -/
+theorem comparisonExpression_eq_archimedeanAverage
+    {K : Type*} [Field K] [NumberField K]
+    (W : WeierstrassCurve K) [W.IsElliptic]
+    (m : GlobalMinimalDiscriminantData K W)
+    (r : ReducedPrincipalIdealData K W.j)
+    (p : ArchimedeanPeriodData K W) :
+    normalizedLogHeight K W.j +
+          logIdealNorm (unstableMinimalDiscriminant m r) /
+            (Module.finrank ℚ K : ℝ) -
+        12 * silvermanHeight W m p =
+      (∑ v : InfinitePlace K, (v.mult : ℝ) *
+        (Real.posLog ‖modularJ (p.τ v)‖ +
+          Real.log (‖silvermanModularDiscriminant (p.τ v)‖ *
+            (p.τ v).im ^ 6))) /
+        (Module.finrank ℚ K : ℝ) := by
+  rw [comparisonExpression_eq,
+    normalizedHeight_sub_denominator_eq_infinitePlace r]
+  have hd := (numberFieldDegree_pos K).ne'
+  field_simp
+  rw [← Finset.sum_add_distrib]
+  apply Finset.sum_congr rfl
+  intro v _
+  rw [← InfinitePlace.norm_embedding_eq v W.j, p.j_eq]
+  ring
+
 end Heights
