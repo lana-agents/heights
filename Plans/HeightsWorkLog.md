@@ -312,4 +312,7 @@ No quotient-torus descent, projective extension at lattice points, group-law
 compatibility, arbitrary-curve uniformization, or modular-`j` surjectivity is
 claimed; those remain the substantial Route B / Route A gaps. Full
 `LAKE_JOBS=6 ./scripts/ci-checks.sh` passed with 259 declarations audited and
-only `propext`, `Quot.sound`, and `Classical.choice`.
+only `propext`, `Quot.sound`, and `Classical.choice`. Filed ready-to-clanck
+#138 for the next independent Route B slice: package the off-lattice affine
+`(℘,℘′/2)` point and prove its invariance under lattice translation, without
+yet claiming a quotient descent or projective extension.
