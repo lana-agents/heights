@@ -254,17 +254,20 @@ theorem ReducedPrincipalIdealData.logHeight_eq_logIdealNorm_add_infinitePlace
   rw [NumberField.logHeight₁_eq, r.finsum_finitePlace_posLog_eq hx]
   ring
 
-/-- Prime by prime, the reduced denominator multiplicity of `j` is at most the
-certified minimal-discriminant multiplicity. The zero-`j` normalization is
-handled separately; otherwise coprimality removes the numerator multiplicity
-at every denominator prime. -/
+/-- Prime by prime, the canonical reduced denominator multiplicity of `j` is at
+most the certified minimal-discriminant multiplicity. The zero-`j`
+normalization is handled separately; otherwise coprimality removes the
+numerator multiplicity at every denominator prime. -/
 lemma denominator_multiplicity_le_minimal
     {K : Type*} [Field K] [NumberField K]
     {W : WeierstrassCurve K} [W.IsElliptic]
     (m : GlobalMinimalDiscriminantData K W)
-    (r : ReducedPrincipalIdealData K W.j)
     (v : HeightOneSpectrum (𝓞 K)) :
-    multiplicity v.asIdeal r.denominator ≤ multiplicity v.asIdeal m.ideal := by
+    multiplicity v.asIdeal
+        (reducedPrincipalIdealData K W.j).denominator ≤
+      multiplicity v.asIdeal m.ideal := by
+  let r := reducedPrincipalIdealData K W.j
+  change multiplicity v.asIdeal r.denominator ≤ multiplicity v.asIdeal m.ideal
   by_cases hj0 : W.j = 0
   · have hD := (r.zero_normalization hj0).2
     rw [hD]
@@ -290,21 +293,22 @@ lemma denominator_multiplicity_le_minimal
     WithZero.exp_le_exp] at hj
   exact_mod_cast hj
 
-/-- The reduced denominator ideal of `j` divides the certified global minimal
-discriminant ideal. This is the finite-place arithmetic input needed to define
-the complementary unstable ideal canonically from the certificates. -/
+/-- The canonical reduced denominator ideal of `j` divides the certified global
+minimal-discriminant ideal. This is the finite-place arithmetic input needed to
+define the complementary unstable ideal without external denominator data. -/
 theorem denominator_dvd_minimalDiscriminant
     {K : Type*} [Field K] [NumberField K]
     {W : WeierstrassCurve K} [W.IsElliptic]
-    (m : GlobalMinimalDiscriminantData K W)
-    (r : ReducedPrincipalIdealData K W.j) :
-    r.denominator ∣ m.ideal := by
+    (m : GlobalMinimalDiscriminantData K W) :
+    (reducedPrincipalIdealData K W.j).denominator ∣ m.ideal := by
+  let r := reducedPrincipalIdealData K W.j
+  change r.denominator ∣ m.ideal
   apply (UniqueFactorizationMonoid.dvd_iff_emultiplicity_le
     r.denominator_ne_bot).mpr
   intro p hp
   let v : HeightOneSpectrum (𝓞 K) :=
     ⟨p, Ideal.isPrime_of_prime hp, hp.ne_zero⟩
-  have h := denominator_multiplicity_le_minimal m r v
+  have h := denominator_multiplicity_le_minimal m v
   have hD : FiniteMultiplicity p r.denominator :=
     FiniteMultiplicity.of_prime_left hp r.denominator_ne_bot
   have hm : FiniteMultiplicity p m.ideal :=
@@ -313,47 +317,46 @@ theorem denominator_dvd_minimalDiscriminant
   exact_mod_cast h
 
 /-- The canonical complementary (unstable) ideal obtained by removing the
-reduced `j`-denominator from the minimal-discriminant ideal. Its construction
-uses the proved denominator-divisibility theorem, not extra certificate data. -/
+canonical reduced `j`-denominator from the minimal-discriminant ideal. Its
+construction uses the proved denominator-divisibility theorem, not extra
+certificate data. -/
 noncomputable def unstableMinimalDiscriminant
     {K : Type*} [Field K] [NumberField K]
     {W : WeierstrassCurve K} [W.IsElliptic]
-    (m : GlobalMinimalDiscriminantData K W)
-    (r : ReducedPrincipalIdealData K W.j) : Ideal (𝓞 K) :=
-  Classical.choose (denominator_dvd_minimalDiscriminant m r)
+    (m : GlobalMinimalDiscriminantData K W) : Ideal (𝓞 K) :=
+  Classical.choose (denominator_dvd_minimalDiscriminant m)
 
-/-- The denominator times its canonical complement is the certified
+/-- The canonical denominator times its complement is the certified
 minimal-discriminant ideal. -/
 theorem denominator_mul_unstableMinimalDiscriminant
     {K : Type*} [Field K] [NumberField K]
     {W : WeierstrassCurve K} [W.IsElliptic]
-    (m : GlobalMinimalDiscriminantData K W)
-    (r : ReducedPrincipalIdealData K W.j) :
-    r.denominator * unstableMinimalDiscriminant m r = m.ideal :=
-  (Classical.choose_spec (denominator_dvd_minimalDiscriminant m r)).symm
+    (m : GlobalMinimalDiscriminantData K W) :
+    (reducedPrincipalIdealData K W.j).denominator *
+        unstableMinimalDiscriminant m = m.ideal :=
+  (Classical.choose_spec (denominator_dvd_minimalDiscriminant m)).symm
 
 /-- The canonical complementary unstable ideal is nonzero. -/
 theorem unstableMinimalDiscriminant_ne_bot
     {K : Type*} [Field K] [NumberField K]
     {W : WeierstrassCurve K} [W.IsElliptic]
-    (m : GlobalMinimalDiscriminantData K W)
-    (r : ReducedPrincipalIdealData K W.j) :
-    unstableMinimalDiscriminant m r ≠ ⊥ := by
+    (m : GlobalMinimalDiscriminantData K W) :
+    unstableMinimalDiscriminant m ≠ ⊥ := by
   intro h
-  have hm := denominator_mul_unstableMinimalDiscriminant m r
+  have hm := denominator_mul_unstableMinimalDiscriminant m
   rw [h, Ideal.mul_bot] at hm
   exact m.ideal_ne_bot hm.symm
 
-/-- The complement is uniquely determined because the denominator is
+/-- The complement is uniquely determined because the canonical denominator is
 nonzero. -/
 theorem unstableMinimalDiscriminant_unique
     {K : Type*} [Field K] [NumberField K]
     {W : WeierstrassCurve K} [W.IsElliptic]
     (m : GlobalMinimalDiscriminantData K W)
-    (r : ReducedPrincipalIdealData K W.j)
-    (γ : Ideal (𝓞 K)) (hγ : r.denominator * γ = m.ideal) :
-    γ = unstableMinimalDiscriminant m r := by
-  apply mul_left_cancel₀ r.denominator_ne_bot
+    (γ : Ideal (𝓞 K))
+    (hγ : (reducedPrincipalIdealData K W.j).denominator * γ = m.ideal) :
+    γ = unstableMinimalDiscriminant m := by
+  apply mul_left_cancel₀ (reducedPrincipalIdealData K W.j).denominator_ne_bot
   rw [hγ, denominator_mul_unstableMinimalDiscriminant]
 
 /-- A certified local minimal model has good reduction when its discriminant
@@ -386,19 +389,25 @@ def IsSemistable
     (m.realizes v).IsGoodReduction ∨
       (m.realizes v).IsMultiplicativeReduction
 
-/-- At every finite place of a semistable certified curve, the reduced
-`j`-denominator multiplicity equals the minimal-discriminant multiplicity. -/
+/-- At every finite place of a semistable certified curve, the canonical
+reduced `j`-denominator multiplicity equals the minimal-discriminant
+multiplicity. -/
 lemma denominator_multiplicity_eq_minimal_of_semistable
     {K : Type*} [Field K] [NumberField K]
     {W : WeierstrassCurve K} [W.IsElliptic]
     (m : GlobalMinimalDiscriminantData K W)
-    (r : ReducedPrincipalIdealData K W.j)
     (hs : IsSemistable K W m)
     (v : HeightOneSpectrum (𝓞 K)) :
-    multiplicity v.asIdeal r.denominator = multiplicity v.asIdeal m.ideal := by
+    multiplicity v.asIdeal
+        (reducedPrincipalIdealData K W.j).denominator =
+      multiplicity v.asIdeal m.ideal := by
+  let r := reducedPrincipalIdealData K W.j
+  change multiplicity v.asIdeal r.denominator = multiplicity v.asIdeal m.ideal
   let h := m.realizes v
   let n := multiplicity v.asIdeal m.ideal
-  have hle := denominator_multiplicity_le_minimal m r v
+  have hle : multiplicity v.asIdeal r.denominator ≤
+      multiplicity v.asIdeal m.ideal := by
+    simpa [r] using denominator_multiplicity_le_minimal m v
   rcases hs v with hgood | hmult
   · have hexp : WithZero.exp (-(n : ℤ)) = 1 := h.exponent.symm.trans hgood
     have hn : -(n : ℤ) = 0 := WithZero.exp_eq_one.mp hexp
@@ -423,21 +432,22 @@ lemma denominator_multiplicity_eq_minimal_of_semistable
     have hz := WithZero.exp_injective hexp
     omega
 
-/-- For a semistable certified curve, the reduced denominator of `j` is the
-entire minimal-discriminant ideal. -/
+/-- For a semistable certified curve, the canonical reduced denominator of `j`
+is the entire minimal-discriminant ideal. -/
 theorem denominator_eq_minimalDiscriminant_of_semistable
     {K : Type*} [Field K] [NumberField K]
     {W : WeierstrassCurve K} [W.IsElliptic]
     (m : GlobalMinimalDiscriminantData K W)
-    (r : ReducedPrincipalIdealData K W.j)
     (hs : IsSemistable K W m) :
-    r.denominator = m.ideal := by
-  apply dvd_antisymm (denominator_dvd_minimalDiscriminant m r)
+    (reducedPrincipalIdealData K W.j).denominator = m.ideal := by
+  let r := reducedPrincipalIdealData K W.j
+  change r.denominator = m.ideal
+  apply dvd_antisymm (denominator_dvd_minimalDiscriminant m)
   apply (UniqueFactorizationMonoid.dvd_iff_emultiplicity_le m.ideal_ne_bot).mpr
   intro p hp
   let v : HeightOneSpectrum (𝓞 K) :=
     ⟨p, Ideal.isPrime_of_prime hp, hp.ne_zero⟩
-  have heq := denominator_multiplicity_eq_minimal_of_semistable m r hs v
+  have heq := denominator_multiplicity_eq_minimal_of_semistable m hs v
   have hm : FiniteMultiplicity p m.ideal :=
     FiniteMultiplicity.of_prime_left hp m.ideal_ne_bot
   have hD : FiniteMultiplicity p r.denominator :=
@@ -445,19 +455,18 @@ theorem denominator_eq_minimalDiscriminant_of_semistable
   rw [hm.emultiplicity_eq_multiplicity, hD.emultiplicity_eq_multiplicity]
   exact_mod_cast heq.symm.le
 
-/-- Semistability kills the complementary unstable minimal-discriminant
-ideal. -/
+/-- Semistability kills the canonical complementary unstable
+minimal-discriminant ideal. -/
 theorem unstableMinimalDiscriminant_eq_top_of_semistable
     {K : Type*} [Field K] [NumberField K]
     {W : WeierstrassCurve K} [W.IsElliptic]
     (m : GlobalMinimalDiscriminantData K W)
-    (r : ReducedPrincipalIdealData K W.j)
     (hs : IsSemistable K W m) :
-    unstableMinimalDiscriminant m r = ⊤ := by
+    unstableMinimalDiscriminant m = ⊤ := by
   symm
-  apply unstableMinimalDiscriminant_unique m r ⊤
+  apply unstableMinimalDiscriminant_unique m ⊤
   rw [← Ideal.one_eq_top, mul_one,
-    denominator_eq_minimalDiscriminant_of_semistable m r hs]
+    denominator_eq_minimalDiscriminant_of_semistable m hs]
 
 /-- Logarithmic ideal norm turns products of nonzero ideals into sums. -/
 theorem logIdealNorm_mul
@@ -469,31 +478,31 @@ theorem logIdealNorm_mul
   · exact_mod_cast Ideal.absNorm_eq_zero_iff.not.mpr hI
   · exact_mod_cast Ideal.absNorm_eq_zero_iff.not.mpr hJ
 
-/-- The finite minimal-discriminant term splits into the reduced denominator
-term and the unstable term. -/
+/-- The finite minimal-discriminant term splits into the canonical reduced
+denominator term and the unstable term. -/
 theorem logIdealNorm_minimal_eq_denominator_add_unstable
     {K : Type*} [Field K] [NumberField K]
     {W : WeierstrassCurve K} [W.IsElliptic]
-    (m : GlobalMinimalDiscriminantData K W)
-    (r : ReducedPrincipalIdealData K W.j) :
-    logIdealNorm m.ideal = logIdealNorm r.denominator +
-      logIdealNorm (unstableMinimalDiscriminant m r) := by
-  rw [← denominator_mul_unstableMinimalDiscriminant m r,
-    logIdealNorm_mul _ _ r.denominator_ne_bot
-      (unstableMinimalDiscriminant_ne_bot m r)]
+    (m : GlobalMinimalDiscriminantData K W) :
+    logIdealNorm m.ideal =
+      logIdealNorm (reducedPrincipalIdealData K W.j).denominator +
+        logIdealNorm (unstableMinimalDiscriminant m) := by
+  rw [← denominator_mul_unstableMinimalDiscriminant m,
+    logIdealNorm_mul _ _
+      (reducedPrincipalIdealData K W.j).denominator_ne_bot
+      (unstableMinimalDiscriminant_ne_bot m)]
 
 /-- Expanding the definition of Silverman's height and splitting the minimal
-ideal gives the exact finite-plus-archimedean formula with the reduced
-`j`-denominator and unstable ideal displayed separately. -/
+ideal gives the exact finite-plus-archimedean formula with the canonical
+reduced `j`-denominator and unstable ideal displayed separately. -/
 theorem twelve_mul_silvermanHeight_eq
     {K : Type*} [Field K] [NumberField K]
     (W : WeierstrassCurve K) [W.IsElliptic]
     (m : GlobalMinimalDiscriminantData K W)
-    (r : ReducedPrincipalIdealData K W.j)
     (p : ArchimedeanPeriodData K W) :
     12 * silvermanHeight W m p =
-      (logIdealNorm r.denominator +
-          logIdealNorm (unstableMinimalDiscriminant m r) -
+      (logIdealNorm (reducedPrincipalIdealData K W.j).denominator +
+          logIdealNorm (unstableMinimalDiscriminant m) -
           ∑ v : InfinitePlace K,
             (v.mult : ℝ) * Real.log
               (‖silvermanModularDiscriminant (p.τ v)‖ * (p.τ v).im ^ 6)) /
@@ -504,20 +513,20 @@ theorem twelve_mul_silvermanHeight_eq
     field_simp
 
 /-- The comparison expression from Proposition 2.1 is exactly the normalized
-height minus the denominator contribution plus the archimedean metric sum.
-This is an identity, not an analytic estimate. -/
+height minus the canonical denominator contribution plus the archimedean metric
+sum. This is an identity, not an analytic estimate. -/
 theorem comparisonExpression_eq
     {K : Type*} [Field K] [NumberField K]
     (W : WeierstrassCurve K) [W.IsElliptic]
     (m : GlobalMinimalDiscriminantData K W)
-    (r : ReducedPrincipalIdealData K W.j)
     (p : ArchimedeanPeriodData K W) :
     normalizedLogHeight K W.j +
-          logIdealNorm (unstableMinimalDiscriminant m r) /
+          logIdealNorm (unstableMinimalDiscriminant m) /
             (Module.finrank ℚ K : ℝ) -
         12 * silvermanHeight W m p =
       normalizedLogHeight K W.j -
-          logIdealNorm r.denominator / (Module.finrank ℚ K : ℝ) +
+          logIdealNorm (reducedPrincipalIdealData K W.j).denominator /
+            (Module.finrank ℚ K : ℝ) +
           (∑ v : InfinitePlace K,
             (v.mult : ℝ) * Real.log
               (‖silvermanModularDiscriminant (p.τ v)‖ * (p.τ v).im ^ 6)) /
@@ -551,10 +560,9 @@ theorem comparisonExpression_eq_archimedeanAverage
     {K : Type*} [Field K] [NumberField K]
     (W : WeierstrassCurve K) [W.IsElliptic]
     (m : GlobalMinimalDiscriminantData K W)
-    (r : ReducedPrincipalIdealData K W.j)
     (p : ArchimedeanPeriodData K W) :
     normalizedLogHeight K W.j +
-          logIdealNorm (unstableMinimalDiscriminant m r) /
+          logIdealNorm (unstableMinimalDiscriminant m) /
             (Module.finrank ℚ K : ℝ) -
         12 * silvermanHeight W m p =
       (∑ v : InfinitePlace K, (v.mult : ℝ) *
@@ -563,7 +571,8 @@ theorem comparisonExpression_eq_archimedeanAverage
             (p.τ v).im ^ 6))) /
         (Module.finrank ℚ K : ℝ) := by
   rw [comparisonExpression_eq,
-    normalizedHeight_sub_denominator_eq_infinitePlace r]
+    normalizedHeight_sub_denominator_eq_infinitePlace
+      (reducedPrincipalIdealData K W.j)]
   have hd := (numberFieldDegree_pos K).ne'
   field_simp
   rw [← Finset.sum_add_distrib]
@@ -578,7 +587,6 @@ theorem comparisonExpression_eq_archimedeanAverage_of_semistable
     {K : Type*} [Field K] [NumberField K]
     (W : WeierstrassCurve K) [W.IsElliptic]
     (m : GlobalMinimalDiscriminantData K W)
-    (r : ReducedPrincipalIdealData K W.j)
     (p : ArchimedeanPeriodData K W)
     (hs : IsSemistable K W m) :
     normalizedLogHeight K W.j - 12 * silvermanHeight W m p =
@@ -587,8 +595,8 @@ theorem comparisonExpression_eq_archimedeanAverage_of_semistable
           Real.log (‖silvermanModularDiscriminant (p.τ v)‖ *
             (p.τ v).im ^ 6))) /
         (Module.finrank ℚ K : ℝ) := by
-  have h := comparisonExpression_eq_archimedeanAverage W m r p
-  rw [unstableMinimalDiscriminant_eq_top_of_semistable m r hs,
+  have h := comparisonExpression_eq_archimedeanAverage W m p
+  rw [unstableMinimalDiscriminant_eq_top_of_semistable m hs,
     logIdealNorm_top, zero_div, add_zero] at h
   exact h
 
@@ -599,23 +607,22 @@ theorem semistable_abs_comparison_of_corrected_bounds
     {K : Type*} [Field K] [NumberField K]
     (W : WeierstrassCurve K) [W.IsElliptic]
     (m : GlobalMinimalDiscriminantData K W)
-    (r : ReducedPrincipalIdealData K W.j)
     (p : ArchimedeanPeriodData K W)
     (C : ℝ)
     (hs : IsSemistable K W m)
     (hbounds :
       -C ≤ normalizedLogHeight K W.j +
-          logIdealNorm (unstableMinimalDiscriminant m r) /
+          logIdealNorm (unstableMinimalDiscriminant m) /
             (Module.finrank ℚ K : ℝ) -
           12 * silvermanHeight W m p ∧
       normalizedLogHeight K W.j +
-          logIdealNorm (unstableMinimalDiscriminant m r) /
+          logIdealNorm (unstableMinimalDiscriminant m) /
             (Module.finrank ℚ K : ℝ) -
           12 * silvermanHeight W m p ≤
         6 * Real.log (1 + normalizedLogHeight K W.j) + C) :
     |normalizedLogHeight K W.j - 12 * silvermanHeight W m p| ≤
       6 * Real.log (1 + normalizedLogHeight K W.j) + C := by
-  rw [unstableMinimalDiscriminant_eq_top_of_semistable m r hs,
+  rw [unstableMinimalDiscriminant_eq_top_of_semistable m hs,
     logIdealNorm_top, zero_div, add_zero] at hbounds
   apply abs_le.mpr
   constructor
@@ -690,7 +697,6 @@ theorem correctedComparison_bounds_of_modular_estimates
     {K : Type*} [Field K] [NumberField K]
     (W : WeierstrassCurve K) [W.IsElliptic]
     (m : GlobalMinimalDiscriminantData K W)
-    (r : ReducedPrincipalIdealData K W.j)
     (p : ArchimedeanPeriodData K W)
     (CΔ Cy : ℝ) (hCΔ : 0 ≤ CΔ) (hCy : 0 ≤ Cy)
     (hΔ : ∀ τ : ℍ, τ ∈ ModularGroup.fd →
@@ -701,11 +707,11 @@ theorem correctedComparison_bounds_of_modular_estimates
         Real.log (Real.log (max ‖modularJ τ‖ (Real.exp 1)))| ≤ Cy) :
     0 ≤ CΔ + 6 * Cy ∧
     (-(CΔ + 6 * Cy) ≤ normalizedLogHeight K W.j +
-          logIdealNorm (unstableMinimalDiscriminant m r) /
+          logIdealNorm (unstableMinimalDiscriminant m) /
             (Module.finrank ℚ K : ℝ) -
         12 * silvermanHeight W m p ∧
       normalizedLogHeight K W.j +
-          logIdealNorm (unstableMinimalDiscriminant m r) /
+          logIdealNorm (unstableMinimalDiscriminant m) /
             (Module.finrank ℚ K : ℝ) -
         12 * silvermanHeight W m p ≤
       6 * Real.log (1 + normalizedLogHeight K W.j) + (CΔ + 6 * Cy)) := by
@@ -729,7 +735,7 @@ theorem correctedComparison_bounds_of_modular_estimates
       (Module.finrank ℚ K : ℝ) := by
     exact_mod_cast InfinitePlace.sum_mult_eq (K := K)
   refine ⟨hC, ?_⟩
-  rw [comparisonExpression_eq_archimedeanAverage W m r p]
+  rw [comparisonExpression_eq_archimedeanAverage W m p]
   change -(CΔ + 6 * Cy) ≤ (∑ v, (v.mult : ℝ) * A v) /
       (Module.finrank ℚ K : ℝ) ∧ _
   constructor
@@ -792,23 +798,22 @@ theorem proposition_2_1_certified_of_modular_estimates
       ∀ (K : Type*) [Field K] [NumberField K]
         (W : WeierstrassCurve K) [W.IsElliptic]
         (m : GlobalMinimalDiscriminantData K W)
-        (r : ReducedPrincipalIdealData K W.j)
         (p : ArchimedeanPeriodData K W),
         -C ≤ normalizedLogHeight K W.j +
-              logIdealNorm (unstableMinimalDiscriminant m r) /
+              logIdealNorm (unstableMinimalDiscriminant m) /
                 (Module.finrank ℚ K : ℝ) -
             12 * silvermanHeight W m p ∧
           normalizedLogHeight K W.j +
-              logIdealNorm (unstableMinimalDiscriminant m r) /
+              logIdealNorm (unstableMinimalDiscriminant m) /
                 (Module.finrank ℚ K : ℝ) -
             12 * silvermanHeight W m p ≤
           6 * Real.log (1 + normalizedLogHeight K W.j) + C := by
   rcases hΔexist with ⟨CΔ, hCΔ, hΔ⟩
   rcases hyexist with ⟨Cy, hCy, hy⟩
   refine ⟨CΔ + 6 * Cy, by positivity, ?_⟩
-  intro K _ _ W _ m r p
+  intro K _ _ W _ m p
   exact (correctedComparison_bounds_of_modular_estimates
-    W m r p CΔ Cy hCΔ hCy hΔ hy).2
+    W m p CΔ Cy hCΔ hCy hΔ hy).2
 
 /-- Under the same two modular estimates, certified semistability removes the
 unstable-ideal correction and gives the absolute-value specialization. -/
@@ -823,7 +828,6 @@ theorem proposition_2_1_semistable_certified_of_modular_estimates
       ∀ (K : Type*) [Field K] [NumberField K]
         (W : WeierstrassCurve K) [W.IsElliptic]
         (m : GlobalMinimalDiscriminantData K W)
-        (_r : ReducedPrincipalIdealData K W.j)
         (p : ArchimedeanPeriodData K W),
         IsSemistable K W m →
         |normalizedLogHeight K W.j - 12 * silvermanHeight W m p| ≤
@@ -831,9 +835,9 @@ theorem proposition_2_1_semistable_certified_of_modular_estimates
   rcases proposition_2_1_certified_of_modular_estimates hΔexist hyexist with
     ⟨C, hC, hall⟩
   refine ⟨C, hC, ?_⟩
-  intro K _ _ W _ m r p hs
-  exact semistable_abs_comparison_of_corrected_bounds W m r p C hs
-    (hall K W m r p)
+  intro K _ _ W _ m p hs
+  exact semistable_abs_comparison_of_corrected_bounds W m p C hs
+    (hall K W m p)
 
 /-- Version of the quantifier bridge accepting the discriminant estimate in
 its standard `|-log ‖Δ‖ - log max (‖j‖, 1)|` form. -/
@@ -848,14 +852,13 @@ theorem proposition_2_1_certified_of_standard_modular_estimates
       ∀ (K : Type*) [Field K] [NumberField K]
         (W : WeierstrassCurve K) [W.IsElliptic]
         (m : GlobalMinimalDiscriminantData K W)
-        (r : ReducedPrincipalIdealData K W.j)
         (p : ArchimedeanPeriodData K W),
         -C ≤ normalizedLogHeight K W.j +
-              logIdealNorm (unstableMinimalDiscriminant m r) /
+              logIdealNorm (unstableMinimalDiscriminant m) /
                 (Module.finrank ℚ K : ℝ) -
             12 * silvermanHeight W m p ∧
           normalizedLogHeight K W.j +
-              logIdealNorm (unstableMinimalDiscriminant m r) /
+              logIdealNorm (unstableMinimalDiscriminant m) /
                 (Module.finrank ℚ K : ℝ) -
             12 * silvermanHeight W m p ≤
           6 * Real.log (1 + normalizedLogHeight K W.j) + C := by
@@ -876,7 +879,6 @@ theorem proposition_2_1_semistable_certified_of_standard_modular_estimates
       ∀ (K : Type*) [Field K] [NumberField K]
         (W : WeierstrassCurve K) [W.IsElliptic]
         (m : GlobalMinimalDiscriminantData K W)
-        (_r : ReducedPrincipalIdealData K W.j)
         (p : ArchimedeanPeriodData K W),
         IsSemistable K W m →
         |normalizedLogHeight K W.j - 12 * silvermanHeight W m p| ≤

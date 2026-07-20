@@ -165,20 +165,18 @@ theorem proposition_2_1_certified :
     ∀ (K : Type*) [Field K] [NumberField K]
       (W : WeierstrassCurve K) [W.IsElliptic]
       (m : GlobalMinimalDiscriminantData K W)
-      (r : ReducedPrincipalIdealData K W.j)
       (p : ArchimedeanPeriodData K W),
       let hj := normalizedLogHeight K W.j;
-      let γ := unstableMinimalDiscriminant m r;
+      let γ := unstableMinimalDiscriminant m;
       let hF := silvermanHeight W m p;
       -C ≤ hj + logIdealNorm γ / Module.finrank ℚ K - 12 * hF ∧
       hj + logIdealNorm γ / Module.finrank ℚ K - 12 * hF
         ≤ 6 * Real.log (1 + hj) + C
 ```
 
-The explicit reduced-principal-ideal argument keeps the displayed signature
-stable even if a canonical construction proves awkward; uniqueness lemmas must
-show the result is independent of that witness. The theorem must not quantify
-an arbitrary `hF : ℝ`.
+The reduced principal-ideal representation is now constructed unconditionally,
+so the displayed signature uses its canonical choice and does not quantify an
+external witness. The theorem must not quantify an arbitrary `hF : ℝ`.
 
 Define certified semistability place-by-place as “good or multiplicative” for a
 minimal local model. Prove that semistability implies `γ = ⊤`, then derive
@@ -189,7 +187,6 @@ theorem proposition_2_1_semistable_certified :
     ∀ (K : Type*) [Field K] [NumberField K]
       (W : WeierstrassCurve K) [W.IsElliptic]
       (m : GlobalMinimalDiscriminantData K W)
-      (r : ReducedPrincipalIdealData K W.j)
       (p : ArchimedeanPeriodData K W),
       IsSemistable K W m →
       |normalizedLogHeight K W.j - 12 * silvermanHeight W m p| ≤

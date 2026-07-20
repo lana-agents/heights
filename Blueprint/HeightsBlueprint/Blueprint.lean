@@ -26,9 +26,10 @@ are two deliberately separate kinds of result:
 * *Unconditional targets* are to be proved from mathlib without elliptic
   uniformization certificates.
 * *Certificate-level targets* assume explicit local-minimal-model and
-  archimedean-period realization data. They do not assert that those
-  certificates exist for every elliptic curve, and they are not an
-  unconditional construction of the Faltings height.
+  archimedean-period realization data. Reduced principal-ideal data is now
+  constructed unconditionally and is no longer one of these hypotheses. The
+  remaining interfaces are not known to exist for every elliptic curve, and
+  they do not give an unconditional construction of the Faltings height.
 
 Status is derived from the attached Lean declarations where proofs now exist.
 Unlinked items remain targets rather than claims.
@@ -87,12 +88,13 @@ An explicit valid choice is $`C_\varepsilon=6\log(1+6/\varepsilon)`.
 *Status: proved unconditionally.*
 :::
 
-:::proposition "prop:reduced-principal-ideals" (uses := "def:log-ideal-norm")
-Construct coprime numerator and denominator ideals for a principal fractional
-ideal, including the required $`x=0` convention, and prove the finite-plus-
-archimedean relative-height identity.
+:::proposition "prop:reduced-principal-ideals" (uses := "def:log-ideal-norm") (lean := "Heights.exists_reducedPrincipalIdealData, Heights.reducedPrincipalIdealData, Heights.ReducedPrincipalIdealData.logHeight_eq_logIdealNorm_add_infinitePlace")
+Every number-field element has coprime numerator and denominator ideals for its
+principal fractional ideal, including the required $`x=0` convention. A
+canonical choice is fixed, and the finite-plus-archimedean relative-height
+identity is proved.
 
-*Status: not started (unconditional target).*
+*Status: proved unconditionally.*
 :::
 
 :::proposition "prop:modular-estimates" (uses := "def:silverman-modular-discriminant, def:modular-j")
@@ -152,12 +154,14 @@ $`j`. It contains no analytic bound or target comparison.
 *Status: interface formalized; existence for every curve is not claimed.*
 :::
 
-:::definition "def:reduced-principal-ideal-data" (lean := "Heights.ReducedPrincipalIdealData")
-`ReducedPrincipalIdealData` temporarily packages coprime numerator and
-denominator ideals, their fractional-ideal equality, and the explicit zero
-normalization. It does not package the height identity or any comparison.
+:::definition "def:reduced-principal-ideal-data" (lean := "Heights.ReducedPrincipalIdealData, Heights.exists_reducedPrincipalIdealData, Heights.reducedPrincipalIdealData")
+`ReducedPrincipalIdealData` packages coprime numerator and denominator ideals,
+their fractional-ideal equality, and the explicit zero normalization. It does
+not package the height identity or any comparison. Such data is constructed
+unconditionally for every number-field element, and `reducedPrincipalIdealData`
+fixes a canonical choice for downstream statements.
 
-*Status: temporary interface formalized; canonical construction remains open.*
+*Status: interface and unconditional construction formalized.*
 :::
 
 # Certificate-level height and comparisons
@@ -183,22 +187,27 @@ Arakelov/Hodge-bundle construction.
 
 :::definition "def:certified-semistability" (uses := "def:global-minimal-discriminant-data") (lean := "Heights.IsSemistable, Heights.denominator_dvd_minimalDiscriminant, Heights.unstableMinimalDiscriminant_eq_top_of_semistable")
 Semistability is defined place by place as good or multiplicative reduction for
-a certified minimal local model. The reduced $`j`-denominator is proved to
-divide the minimal-discriminant ideal, defining its canonical complement, and
-semistability is proved to make that complement the unit ideal.
+a certified minimal local model. The unconditionally constructed reduced
+$`j`-denominator is proved to divide the minimal-discriminant ideal, defining
+its canonical complement without a reduced-ideal hypothesis, and semistability
+is proved to make that complement the unit ideal.
 
-*Status: formalized and proved conditionally on the stated realization data.*
+*Status: formalized and proved conditionally only on global minimal-
+discriminant realization data.*
 :::
 
 :::theorem "thm:proposition-2-1-certified" (uses := "prop:rational-height-arithmetic, prop:reduced-principal-ideals, prop:modular-estimates, prop:weighted-log-log, def:silverman-height") (lean := "Heights.comparisonExpression_eq_archimedeanAverage, Heights.correctedComparison_bounds_of_modular_estimates, Heights.proposition_2_1_certified_of_modular_estimates, Heights.proposition_2_1_certified_of_standard_modular_estimates")
 One pair of absolute modular-estimate constants, quantified before the number
-field, curve, and certificates, gives Silverman's two-sided Proposition 2.1
-estimate for normalized $`j`-height, the unstable ideal, and
-`silvermanHeight`. The finite decomposition and weighted aggregation have been
-proved; only the unconditional existence of the two modular constants remains.
+field, curve, and remaining realization data, gives Silverman's two-sided
+Proposition 2.1 estimate for normalized $`j`-height, the canonical unstable
+ideal, and `silvermanHeight`. The theorem no longer assumes reduced
+principal-ideal data. The finite decomposition and weighted aggregation have
+been proved; only the unconditional existence of the two modular constants
+remains.
 
-*Status: reduced to `prop:modular-estimates` (conditional/certificate-level;
-not an all-curves Faltings-height theorem).*
+*Status: reduced to `prop:modular-estimates` (conditional only on minimal-
+discriminant and period realization data; not an all-curves Faltings-height
+theorem).*
 :::
 
 :::theorem "thm:proposition-2-1-semistable-certified" (uses := "thm:proposition-2-1-certified, def:certified-semistability") (lean := "Heights.semistable_abs_comparison_of_corrected_bounds, Heights.proposition_2_1_semistable_certified_of_modular_estimates, Heights.proposition_2_1_semistable_certified_of_standard_modular_estimates")
@@ -206,8 +215,9 @@ After proving certified semistability makes the unstable ideal trivial, derive
 the absolute-value specialization comparing normalized $`j`-height with
 $`12\,\mathrm{silvermanHeight}`.
 
-*Status: the deduction from corrected bounds is proved; the remaining modular
-estimates and the period/minimal realization data remain explicit hypotheses.*
+*Status: the deduction from corrected bounds is proved without a reduced-ideal
+hypothesis; the remaining modular estimates and the period/minimal realization
+data remain explicit hypotheses.*
 :::
 
 The repository does not presently claim period construction, global minimal-
