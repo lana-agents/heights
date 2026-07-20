@@ -170,6 +170,90 @@ lemma ReducedPrincipalIdealData.finitePlace_posLog_eq
   rw [zpow_natCast, Real.posLog_pow,
     Real.posLog_eq_log (by rw [abs_of_pos hposbase]; exact hbase.le)]
 
+/-- The logarithm of a nonzero ideal norm is the finite sum of its prime
+multiplicities weighted by logarithms of prime norms. -/
+theorem logIdealNorm_eq_finsum_multiplicity
+    {K : Type*} [Field K] [NumberField K]
+    (I : Ideal (𝓞 K)) (hI : I ≠ ⊥) :
+    logIdealNorm I =
+      ∑ᶠ w : FinitePlace K,
+        (multiplicity w.maximalIdeal.asIdeal I : ℝ) *
+          Real.log (Ideal.absNorm w.maximalIdeal.asIdeal : ℝ) := by
+  rw [logIdealNorm]
+  let F : Ideal (𝓞 K) := ∏ᶠ (w : FinitePlace K),
+    w.maximalIdeal.asIdeal ^ multiplicity w.maximalIdeal.asIdeal I
+  have hF : F = I := FinitePlace.finprod_finitePlace_pow_multiplicity hI
+  have hmap :
+      ((Ideal.absNorm F : ℕ) : ℝ) =
+        ∏ᶠ w : FinitePlace K,
+          (Ideal.absNorm (w.maximalIdeal.asIdeal ^
+            multiplicity w.maximalIdeal.asIdeal I) : ℝ) := by
+    change ((Nat.castRingHom ℝ).toMonoidHom.comp
+      Ideal.absNorm.toMonoidHom) F = _
+    rw [show F = ∏ᶠ (w : FinitePlace K),
+      w.maximalIdeal.asIdeal ^ multiplicity w.maximalIdeal.asIdeal I from rfl]
+    exact ((Nat.castRingHom ℝ).toMonoidHom.comp
+        Ideal.absNorm.toMonoidHom).map_finprod_of_preimage_one
+          (fun (J : Ideal (𝓞 K)) hJ => by
+            change (Ideal.absNorm J : ℝ) = 1 at hJ
+            have hJ' : Ideal.absNorm J = 1 := by exact_mod_cast hJ
+            simpa only [Ideal.one_eq_top] using Ideal.absNorm_eq_one_iff.mp hJ')
+          (fun w : FinitePlace K =>
+            w.maximalIdeal.asIdeal ^ multiplicity w.maximalIdeal.asIdeal I)
+  calc
+    Real.log (Ideal.absNorm I : ℝ) = Real.log (Ideal.absNorm F : ℝ) := by rw [hF]
+    _ = Real.log (∏ᶠ w : FinitePlace K,
+          (Ideal.absNorm (w.maximalIdeal.asIdeal ^
+            multiplicity w.maximalIdeal.asIdeal I) : ℝ)) := by rw [hmap]
+    _ = ∑ᶠ w : FinitePlace K,
+          Real.log (Ideal.absNorm (w.maximalIdeal.asIdeal ^
+            multiplicity w.maximalIdeal.asIdeal I) : ℝ) := by
+      rw [Real.log_finprod]
+      intro w
+      have hw : (1 : ℝ) < Ideal.absNorm w.maximalIdeal.asIdeal := by
+        exact_mod_cast NumberField.HeightOneSpectrum.one_lt_absNorm w.maximalIdeal
+      rw [map_pow, Nat.cast_pow]
+      exact pow_pos (lt_trans (by norm_num) hw) _
+    _ = ∑ᶠ w : FinitePlace K,
+        (multiplicity w.maximalIdeal.asIdeal I : ℝ) *
+          Real.log (Ideal.absNorm w.maximalIdeal.asIdeal : ℝ) := by
+      apply finsum_congr
+      intro w
+      rw [map_pow, Nat.cast_pow, Real.log_pow]
+
+/-- The full finite-place contribution to the relative logarithmic height is
+the logarithmic norm of the reduced denominator ideal. -/
+theorem ReducedPrincipalIdealData.finsum_finitePlace_posLog_eq
+    {K : Type*} [Field K] [NumberField K]
+    {x : K} (r : ReducedPrincipalIdealData K x) (hx : x ≠ 0) :
+    ∑ᶠ w : FinitePlace K, Real.posLog (w x) = logIdealNorm r.denominator := by
+  calc
+    ∑ᶠ w : FinitePlace K, Real.posLog (w x) =
+        ∑ᶠ w : FinitePlace K,
+          (multiplicity w.maximalIdeal.asIdeal r.denominator : ℝ) *
+            Real.log (Ideal.absNorm w.maximalIdeal.asIdeal : ℝ) := by
+      apply finsum_congr
+      exact r.finitePlace_posLog_eq hx
+    _ = logIdealNorm r.denominator :=
+      (logIdealNorm_eq_finsum_multiplicity
+        r.denominator r.denominator_ne_bot).symm
+
+/-- The relative logarithmic Weil height is the denominator norm plus the
+weighted infinite-place contribution. This is equation (10) in the project's
+normalization, including the zero branch of the reduced representation. -/
+theorem ReducedPrincipalIdealData.logHeight_eq_logIdealNorm_add_infinitePlace
+    {K : Type*} [Field K] [NumberField K]
+    {x : K} (r : ReducedPrincipalIdealData K x) :
+    Height.logHeight₁ x = logIdealNorm r.denominator +
+      ∑ v : InfinitePlace K, (v.mult : ℝ) * Real.posLog (v x) := by
+  by_cases hx : x = 0
+  · subst x
+    have hD := (r.zero_normalization rfl).2
+    rw [hD]
+    simp
+  rw [NumberField.logHeight₁_eq, r.finsum_finitePlace_posLog_eq hx]
+  ring
+
 /-- Prime by prime, the reduced denominator multiplicity of `j` is at most the
 certified minimal-discriminant multiplicity. The zero-`j` normalization is
 handled separately; otherwise coprimality removes the numerator multiplicity
