@@ -1,7 +1,7 @@
 name = "heights"
 version = "0.1.0"
 keywords = ["math"]
-defaultTargets = ["Heights"]
+defaultTargets = ["Heights", "Challenge", "Solution"]
 
 [leanOptions]
 pp.unicode.fun = true # pretty-prints `fun a ↦ b`
@@ -16,3 +16,14 @@ rev = "v4.32.0"
 
 [[lean_lib]]
 name = "Heights"
+
+# The comparator roots elaborate in separate environments. The challenge may
+# contain only its four reviewed placeholders; the solution lists proved
+# targets only.
+[[lean_lib]]
+name = "Challenge"
+srcDir = "Comparator"
+
+[[lean_lib]]
+name = "Solution"
+srcDir = "Comparator"

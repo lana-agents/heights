@@ -8,44 +8,49 @@ heights and Faltings heights of elliptic curves (cf. [Silv], Proposition 2.1)".
 (Proposition 2.1 compares h_F and h(j)). The repo is PRIVATE; the reference PDF
 is copyrighted and must be removed/excluded before the repo is ever made public.
 
-## Method: phase-gated pi orchestration
-You are the ORCHESTRATOR. You do not write Lean yourself. Drive the `pi` coding
-agent (invoke as `bun run pi -p --model openai-codex/gpt-5.6-sol --thinking
-high|medium "$(cat <promptfile>)"`, PATH includes ~/bin ~/.local/bin ~/.elan/bin)
-in one-shot implementer/reviewer rounds, exactly one pi process at a time,
-launched in background without inner `&`. Prompts in .pi/orchestration/,
-logs beside them. pi buffers output until exit — poll by process exit.
+## Method: autonomous pi agent (owner directive 2026-07-20 — supersedes the
+## earlier phase-gated implement/review loop)
+You are the ORCHESTRATOR. You do not write Lean yourself. The implement/review
+phase-gate workflow is ABANDONED. Instead:
 
-Copy the methodology proven in https://github.com/LANA-Project/iut4-sec1
-(public; read its Plans/Iut4Sec1Spec.md and README for the shape):
-spec-author round → adversarial review gate → phase implementer → adversarial
-reviewer, CHANGES REQUESTED loops capped at 4 rounds; phase gates recorded in
-the spec's review log; push to GitHub at accepted gates (remote uses the
-deploy-key alias: git@github.com-heights:LANA-Project/heights.git).
-Structure: verso blueprint (template: github.com/chrisflav/proetale
-blueprint-verso), leanprover/comparator challenge/solution pair (headline:
-mathlib-statable form of the Weil/Faltings comparison; challenge = import
-Mathlib only, sorried target suite; config lists only proved theorems),
-trust/axiom audit scripts, honesty boundary (Faltings height may need explicit
-interface/certificate structures if mathlib lacks it — never axioms, never
-conclusion-smuggling structure fields; spec must draw the boundary explicitly).
+- Drive a single `pi` agent (`bun run pi -p --model openai-codex/gpt-5.6-sol
+  --thinking high "$(cat <promptfile>)"`, PATH includes ~/bin ~/.local/bin
+  ~/.elan/bin ~/.bun/bin) and give it AUTONOMY: prompt it to work on the
+  project toward the mission, decide for itself what to do next, and COMMIT
+  REGULARLY (small, honest commits to main as it goes — not phase-sized
+  gates). It should figure out how to organize its own work; do not impose
+  phase plans or review rounds on it.
+- pi is one-shot per invocation: when a run exits, read what it did (git log,
+  its output log), push, then launch the next run with a short prompt that
+  hands it back the reins ("continue; here is where you left off"). Keep these
+  continuation prompts light — context and mission pointer, not task lists.
+  Prompts in .pi/orchestration/prompts/, logs in .pi/orchestration/logs/;
+  pi buffers output until exit.
+- Existing artifacts (Plans/HeightsSpec.md, Blueprint/, Comparator/, audit
+  scripts) are raw material the pi agent may keep, rework, or discard as it
+  sees fit — tell it so.
+- Honesty still binds: no axioms, no sorry-free claims that aren't, no
+  conclusion-smuggling structure fields. The pi agent proves what it can and
+  states the rest honestly. Keep the trust/audit scripts running before pushes
+  if they exist; fix or drop them only deliberately.
 
 ## Safety rules
 - ONE pi at a time; background via run_in_background only; check for strays
-  between phases (`ps -axo pid,rss,etime,command | grep "bun run pi"`).
+  between runs (`ps -eo pid,rss,etime,command | grep "bun run pi"`).
 - Cap lake parallelism (`LAKE_JOBS=6` / `lake build -j6`): this server also
   hosts the taxis service; do not starve it.
 - No credentials in tracked files ever (the taxis token lives ONLY in
-  .pi/orchestration/taxis.env, git-ignored; audit scripts must reject
-  credential patterns, as in iut4-sec1).
-- Commit convention: phase-sized commits to main, `P<n>: <summary>`; end commit
-  messages with the Co-Authored-By trailer for the acting model.
+  .pi/orchestration/taxis.env, git-ignored).
+- Push to GitHub regularly (remote uses the deploy-key alias:
+  git@github.com-heights:LANA-Project/heights.git). End commit messages with
+  the Co-Authored-By trailer for the acting model.
 
 ## Taxis communication protocol (REQUIRED)
 Token/API: source .pi/orchestration/taxis.env; docs in
 .pi/orchestration/taxis-workflow.md. This project is issue #32.
-1. At EVERY closed phase gate (accepted review), post a short status comment on
-   issue #32: phase, commit, what is now proved/stated, next phase.
+1. Post a short status comment on issue #32 at meaningful checkpoints —
+   after each pi run's work is pushed, or at least every few hours of active
+   work: what was done, current commit, what the agent is heading toward next.
 2. If BLOCKED on anything only the project owner can resolve (scope decision,
    credential, missing reference, external mathematics), post a comment on #32
    that (a) states precisely what input is needed and why, and (b) includes

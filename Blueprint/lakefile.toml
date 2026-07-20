@@ -1,0 +1,23 @@
+name = "HeightsBlueprint"
+precompileModules = false
+defaultTargets = ["HeightsBlueprint"]
+
+[leanOptions]
+experimental.module = true
+verso.blueprint.foldCodeBlocks = true
+
+[[require]]
+name = "VersoBlueprint"
+git = "https://github.com/leanprover/verso-blueprint"
+rev = "v4.32.0"
+
+[[require]]
+name = "heights"
+path = ".."
+
+[[lean_lib]]
+name = "HeightsBlueprint"
+
+[[lean_exe]]
+name = "blueprint-gen"
+root = "HeightsBlueprintMain"
