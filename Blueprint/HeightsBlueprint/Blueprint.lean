@@ -44,12 +44,12 @@ field degree is essential. Its nonnegativity is proved in
 *Status: formalized unconditionally.*
 :::
 
-:::definition "def:log-ideal-norm"
-For a nonzero integral ideal $`I`, define $`\log N(I)` using
-`Ideal.absNorm`. Uses in height formulae must carry a proof that $`I` is not
-the zero ideal.
+:::definition "def:log-ideal-norm" (lean := "Heights.logIdealNorm, Heights.absNorm_pos_of_ne_bot, Heights.logIdealNorm_nonneg")
+For a nonzero integral ideal $`I`, $`\log N(I)` is defined using
+`Ideal.absNorm`. The accompanying lemmas prove strict positivity of the norm
+and nonnegativity of its logarithm from $`I\ne 0`.
 
-*Status: not started (unconditional definition target).*
+*Status: formalized unconditionally.*
 :::
 
 :::definition "def:silverman-modular-discriminant" (lean := "Heights.silvermanModularDiscriminant, Heights.silvermanModularDiscriminant_ne_zero")
@@ -152,13 +152,14 @@ normalization. It does not package the height identity or any comparison.
 
 # Certificate-level height and comparisons
 
-:::definition "def:silverman-height" (uses := "def:silverman-modular-discriminant, def:global-minimal-discriminant-data, def:archimedean-period-data")
-Define `silvermanHeight` by the displayed finite minimal-discriminant term
-minus the archimedean $`\log(|\Delta_{\mathrm{Silv}}(\tau)|\operatorname{Im}(\tau)^6)`
+:::definition "def:silverman-height" (uses := "def:silverman-modular-discriminant, def:global-minimal-discriminant-data, def:archimedean-period-data") (lean := "Heights.silvermanHeight, Heights.silvermanHeight_archimedean_log_arg_pos, Heights.silvermanHeight_denominator_pos")
+`silvermanHeight` is the displayed finite minimal-discriminant term minus the
+archimedean $`\log(|\Delta_{\mathrm{Silv}}(\tau)|\operatorname{Im}(\tau)^6)`
 term, divided by $`12[K:\mathbb Q]`. It is formula-defined and is not a free
-real called “Faltings height.”
+real called “Faltings height.” Every logarithm argument and the denominator are
+proved strictly positive.
 
-*Status: not started (certificate-level definition).*
+*Status: certificate-level definition formalized; no Arakelov identification is claimed.*
 :::
 
 :::proposition "prop:proposition-1-1-certified" (uses := "def:silverman-height")
