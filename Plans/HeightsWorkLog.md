@@ -254,3 +254,25 @@ mathematical ingredient of Silverman's Proposition 2.1 — the finite-place
 Weil-height identity, the archimedean modular fundamental-domain estimates,
 equation (11), the `ε`-absorption bound, and the semistable specialization
 — is now proved unconditionally with no realization-data hypotheses at all.
+
+## Autonomous run 7 — 2026-07-20
+
+Closed tooling issue #102 with `d18ecb3`: CI now parses every Verso
+`lean :=` annotation, elaborates all linked declaration names under
+`import Heights`, and runs a negative fixture proving a nonexistent link is
+rejected. The full bounded build and trust/axiom audits passed.
+
+Investigated #57 rather than forcing a uniformization construction. Commit
+`d232a6e` proves `modularJ_smul`, reduces fundamental-domain preimages to
+surjectivity, and proves
+`nonempty_archimedeanPeriodData_of_modularJ_surjective`. Thus the exact
+minimum blocker for the current certificate interface is now the honest
+analytic theorem `Function.Surjective Heights.modularJ`; no period or
+uniformization existence is claimed. The detailed source survey and
+**STOP-as-phase-sized / GO-as-decomposed-mathlib-project** judgment are in
+`Plans/ArchimedeanUniformizationFeasibility.md`. The spec's P0–P9 table,
+Blueprint, and umbrella documentation were updated to the actual milestone.
+Filed ready-to-clanck #128 (modular-`j` surjectivity, the minimal route) and
+#129 (identify `PeriodPair.G` with `E₄/E₆`, the first genuine geometric route
+slice). Full CI passed with 227 public declarations audited and only
+`propext`, `Quot.sound`, and `Classical.choice`.
