@@ -112,42 +112,42 @@ These interfaces may package missing geometry and arithmetic, but none may
 contain a height comparison, a complete height formula for a free real, or
 one of the desired inequalities.
 
-:::definition "def:integral-at"
+:::definition "def:integral-at" (lean := "Heights.IsIntegralAt")
 `IsIntegralAt` records coefficient integrality at one number-field prime via
 its multiplicative valuation.
 
-*Status: not started (certificate-interface definition; no existence claim).*
+*Status: interface formalized; no existence claim.*
 :::
 
-:::definition "def:local-minimal-discriminant-exponent" (uses := "def:integral-at")
+:::definition "def:local-minimal-discriminant-exponent" (uses := "def:integral-at") (lean := "Heights.IsLocalMinimalDiscriminantExponent")
 `IsLocalMinimalDiscriminantExponent` stores an integral variable change, its
 discriminant exponent, and maximality among integral changes.
 
-*Status: not started (certificate-interface definition; no existence claim).*
+*Status: interface formalized; no existence claim.*
 :::
 
-:::definition "def:global-minimal-discriminant-data" (uses := "def:local-minimal-discriminant-exponent")
+:::definition "def:global-minimal-discriminant-data" (uses := "def:local-minimal-discriminant-exponent") (lean := "Heights.GlobalMinimalDiscriminantData")
 `GlobalMinimalDiscriminantData` supplies a nonzero integral ideal and proves
 that every prime multiplicity realizes the corresponding local minimum. It
 does not supply denominator divisibility or a comparison inequality.
 
-*Status: not started (certificate interface; existence for every curve is not claimed).*
+*Status: interface formalized; existence for every curve is not claimed.*
 :::
 
-:::definition "def:archimedean-period-data" (uses := "def:modular-j")
+:::definition "def:archimedean-period-data" (uses := "def:modular-j") (lean := "Heights.ArchimedeanPeriodData")
 `ArchimedeanPeriodData` supplies a fundamental-domain period ratio at each
 infinite place and identifies its modular $`j` with the embedded algebraic
 $`j`. It contains no analytic bound or target comparison.
 
-*Status: not started (certificate interface; existence for every curve is not claimed).*
+*Status: interface formalized; existence for every curve is not claimed.*
 :::
 
-:::definition "def:reduced-principal-ideal-data"
-`ReducedPrincipalIdealData` may temporarily package coprime numerator and
+:::definition "def:reduced-principal-ideal-data" (lean := "Heights.ReducedPrincipalIdealData")
+`ReducedPrincipalIdealData` temporarily packages coprime numerator and
 denominator ideals, their fractional-ideal equality, and the explicit zero
-normalization. It may not package the height identity or any comparison.
+normalization. It does not package the height identity or any comparison.
 
-*Status: not started (temporary interface only if construction API friction requires it).*
+*Status: temporary interface formalized; canonical construction remains open.*
 :::
 
 # Certificate-level height and comparisons
