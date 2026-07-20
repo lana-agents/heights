@@ -37,12 +37,14 @@ Unlinked items remain targets rather than claims.
 # Normalizations
 
 :::definition "def:normalized-log-height" (lean := "Heights.normalizedLogHeight")
-For a number field $`K`, the absolute logarithmic height is defined by
-$`h_K(x)=\operatorname{logHeight}_1(x)/[K:\mathbb Q]`. The division by the
-field degree is essential. Its nonnegativity is proved in
-`Heights.normalizedLogHeight_nonneg`.
+Mathlib's `logHeight₁` is the relative height: its local sum is naturally
+scaled by $`[K:\mathbb Q]`. Dividing by the degree produces the absolute height
+used in Silverman's comparison and makes the normalization insensitive to the
+field over which an algebraic number is viewed. Nonnegativity descends from the
+nonnegative relative height.
 
-*Status: formalized unconditionally.*
+*Status: `Heights.normalizedLogHeight` and
+`Heights.normalizedLogHeight_nonneg` are formalized unconditionally.*
 :::
 
 :::definition "def:log-ideal-norm" (lean := "Heights.logIdealNorm, Heights.absNorm_pos_of_ne_bot, Heights.logIdealNorm_nonneg")
@@ -54,29 +56,39 @@ and nonnegativity of its logarithm from $`I\ne 0`.
 :::
 
 :::definition "def:silverman-modular-discriminant" (lean := "Heights.silvermanModularDiscriminant, Heights.silvermanModularDiscriminant_ne_zero")
-Silverman's analytic normalization is
-$`\Delta_{\mathrm{Silv}}(\tau)=(2\pi)^{12}\Delta_{\mathrm{mathlib}}(\tau)`.
-The factor is retained explicitly, and the function is proved nonvanishing.
+Mathlib normalizes the discriminant as $`\eta^{24}=q\prod_{n\ge1}(1-q^n)^{24}`,
+whereas the discriminant in the archimedean metric formula carries the factor
+$`(2\pi)^{12}`. Retaining this factor gives the exact Proposition 1.1
+normalization rather than merely a height differing by an additive constant;
+nonvanishing follows from nonvanishing of both factors.
 
-*Status: formalized unconditionally.*
+*Status: `Heights.silvermanModularDiscriminant` and its nonvanishing theorem are
+formalized unconditionally.*
 :::
 
 :::definition "def:modular-j" (lean := "Heights.modularJ, Heights.modularJ_mul_discriminant, Heights.modularJ_eq_zero_iff, Heights.modularJ_smul, Heights.exists_mem_fd_modularJ_eq_of_surjective")
-Define $`j_{\mathrm{mod}}(\tau)=E_4(\tau)^3/\Delta_{\mathrm{mathlib}}(\tau)`.
-This is the $`q^{-1}+744+\cdots` normalization, without a factor of 1728.
-The denominator is proved nonzero and the normalization is checked against the
-$`E_4,E_6,\Delta` identity.
+The quotient $`E_4^3/\Delta` has leading term $`q^{-1}` and is therefore the
+$`q^{-1}+744+\cdots` modular invariant used in the height estimates, with no
+extra factor of $`1728`. The $`E_4,E_6,\Delta` identity checks this convention,
+while modular invariance permits a preimage to be moved into the standard
+fundamental domain.
 
-*Status: formalized unconditionally; the required global analytic bounds are proved in `prop:modular-estimates`.*
+*Status: `Heights.modularJ` and the linked normalization/invariance lemmas are
+formalized unconditionally; `prop:modular-estimates` proves the required global
+bounds.*
 :::
 
 # Unconditional mathematics
 
 :::proposition "prop:rational-height-arithmetic" (uses := "def:normalized-log-height") (lean := "Heights.normalizedLogHeight_rat, Heights.ratHeight_scaled_denominator")
-The exact numerator/denominator formula for rational logarithmic height and its
-positive-integer scaled variant hold, including for the zero rational.
+For a reduced rational $`a/b`, the local definition collapses to
+$`h(a/b)=\log\max(|a|,b)`. The proof starts from mathlib's exact rational-height
+formula; multiplying numerator and denominator by the same positive integer
+then pulls that factor through `max` and the logarithm. The zero rational is
+kept in the argument rather than removed by a nonzero hypothesis.
 
-*Status: proved unconditionally.*
+*Status: `Heights.normalizedLogHeight_rat` and
+`Heights.ratHeight_scaled_denominator` are proved unconditionally.*
 :::
 
 :::proposition "prop:epsilon-absorption" (lean := "Heights.six_logOneAdd_log_le_epsilon_log_add, Heights.six_logOneAdd_log_epsilon_absorption")
@@ -242,14 +254,15 @@ proved unconditionally; the remaining uniformization properties remain open.*
 :::
 
 :::proposition "prop:weighted-log-log" (lean := "Heights.weightedLogOneAdd_le, Heights.infinitePlaceWeightedLogOneAdd_bounds, Heights.infinitePlacePosLogAverage_le_normalizedLogHeight, Heights.infinitePlaceLogLogMax_bounds")
-The finite weighted Jensen estimate for $`\log(1+x)` holds for arbitrary
-nonnegative real weights and inputs. Specializing the weights to infinite-place
-multiplicities, bounding the omitted finite-place height terms by positivity,
-and applying the local log-log cutoff estimate proves equation (11):
-$`0 \le \sum_v n_v \log\log\max(|z|_v,e)
-\le [K:\mathbb Q]\log(1+h(z))` for the actual normalized Weil height.
+The proof isolates Silverman's arithmetic-geometric-mean step as weighted
+Jensen for the concave function $`\log(1+x)`. The infinite-place
+multiplicities are the weights and sum to $`[K:\mathbb Q]`; positivity of the
+finite-place terms lets the archimedean average be bounded by the full
+normalized Weil height. Applying the local cutoff identity then gives equation
+(11), including its lower bound.
 
-*Status: proved unconditionally.*
+*Status: `Heights.weightedLogOneAdd_le` and the linked infinite-place
+specializations are proved unconditionally.*
 :::
 
 # Realization interfaces
@@ -259,62 +272,81 @@ contain a height comparison, a complete height formula for a free real, or
 one of the desired inequalities.
 
 :::definition "def:integral-at" (lean := "Heights.IsIntegralAt")
-`IsIntegralAt` records coefficient integrality at one number-field prime via
-its multiplicative valuation.
+A coefficient lies in the local valuation ring exactly when its multiplicative
+valuation is at most $`1`; imposing this on all five Weierstrass coefficients
+records that one equation is integral at the chosen prime. This local predicate
+lets minimality be discussed without pretending that one equation is globally
+minimal.
 
-*Status: interface formalized; no existence claim.*
+*Status: the honest local interface `Heights.IsIntegralAt` is formalized; no
+existence claim is packaged in it.*
 :::
 
 :::definition "def:local-minimal-discriminant-exponent" (uses := "def:integral-at") (lean := "Heights.IsLocalMinimalDiscriminantExponent")
-`IsLocalMinimalDiscriminantExponent` stores an integral variable change, its
-discriminant exponent, and maximality among integral changes.
+Local minimality is represented by an integral change of variables whose
+discriminant valuation is $`\exp(-n)`. Because the valuation is multiplicative,
+minimizing the usual additive exponent means maximizing this value among all
+integral changes; the maximality field records precisely that condition and no
+height inequality.
 
-*Status: interface formalized; no existence claim.*
+*Status: the local realization interface
+`Heights.IsLocalMinimalDiscriminantExponent` is formalized; its fields do not
+assert global existence.*
 :::
 
 :::definition "def:global-minimal-discriminant-data" (uses := "def:local-minimal-discriminant-exponent") (lean := "Heights.GlobalMinimalDiscriminantData, Heights.globalMinimalDiscriminantDataRat")
-`GlobalMinimalDiscriminantData` supplies a nonzero integral ideal and proves
-that every prime multiplicity realizes the corresponding local minimum. It
-does not supply denominator divisibility or a comparison inequality. Mathlib's
-DVR minimal-model theorem can be assembled globally over $`\mathbb Q`, where a
-single integral equation bounds all local exponents; this produces
-`globalMinimalDiscriminantDataRat` for every elliptic rational curve.
+The minimal-discriminant ideal packages the finite contribution to the height
+formula by requiring each prime multiplicity to equal its local minimal
+exponent; it need not arise from one globally minimal equation. Over
+$`\mathbb Q`, a single integral model bounds every local exponent, so mathlib's
+DVR minimal-model theorem and ideal factorization assemble the required ideal.
+Neither denominator divisibility nor a comparison estimate is stored in the
+interface.
 
-*Status: interface formalized and existence proved over $`\mathbb Q`; general
-number-field existence remains open.*
+*Status: `Heights.GlobalMinimalDiscriminantData` is formalized and
+`Heights.globalMinimalDiscriminantDataRat` proves existence over $`\mathbb Q`;
+general number-field existence remains open.*
 :::
 
 :::definition "def:archimedean-period-data" (uses := "def:modular-j") (lean := "Heights.ArchimedeanPeriodData, Heights.nonempty_archimedeanPeriodData_of_modularJ_surjective")
-`ArchimedeanPeriodData` supplies a fundamental-domain period ratio at each
-infinite place and identifies its modular $`j` with the embedded algebraic
-$`j`. It contains no analytic bound or target comparison. Modular invariance
-shows that surjectivity of `modularJ` would construct this interface at every
-place; that surjectivity theorem remains the concrete analytic gap.
+A period ratio is chosen in the standard fundamental domain so that the
+$`\mathrm{SL}_2(\mathbb Z)` ambiguity is removed and the uniform modular bounds
+apply directly. Equality of modular and embedded algebraic $`j` is exactly the
+compatibility needed by the present height formula, but is deliberately weaker
+than constructing an analytic torus isomorphism. Modular invariance reduces
+existence of this data to surjectivity of `modularJ`.
 
-*Status: interface and surjectivity reduction formalized; unconditional
-existence for every curve is not claimed.*
+*Status: `Heights.ArchimedeanPeriodData` and
+`Heights.nonempty_archimedeanPeriodData_of_modularJ_surjective` formalize the
+interface and reduction; modular-$`j` surjectivity remains open.*
 :::
 
 :::definition "def:reduced-principal-ideal-data" (lean := "Heights.ReducedPrincipalIdealData, Heights.exists_reducedPrincipalIdealData, Heights.reducedPrincipalIdealData")
-`ReducedPrincipalIdealData` packages coprime numerator and denominator ideals,
-their fractional-ideal equality, and the explicit zero normalization. It does
-not package the height identity or any comparison. Such data is constructed
-unconditionally for every number-field element, and `reducedPrincipalIdealData`
-fixes a canonical choice for downstream statements.
+Factoring the principal fractional ideal separates positive prime exponents
+into a numerator and negative exponents into a coprime denominator. This is the
+finite-place input to Silverman's equation (10); the $`x=0` convention uses
+numerator $`0` and unit denominator so that curves with $`j=0` remain covered.
+The structure stores only this factorization, while the height identity is a
+separate theorem.
 
-*Status: interface and unconditional construction formalized.*
+*Status: `Heights.exists_reducedPrincipalIdealData` proves unconditional
+existence and `Heights.reducedPrincipalIdealData` fixes a canonical choice.*
 :::
 
 # Certificate-level height and comparisons
 
 :::definition "def:silverman-height" (uses := "def:silverman-modular-discriminant, def:global-minimal-discriminant-data, def:archimedean-period-data") (lean := "Heights.silvermanHeight, Heights.silvermanHeight_archimedean_log_arg_pos, Heights.silvermanHeight_denominator_pos")
-`silvermanHeight` is the displayed finite minimal-discriminant term minus the
-archimedean $`\log(|\Delta_{\mathrm{Silv}}(\tau)|\operatorname{Im}(\tau)^6)`
-term, divided by $`12[K:\mathbb Q]`. It is formula-defined and is not a free
-real called “Faltings height.” Every logarithm argument and the denominator are
-proved strictly positive.
+Silverman's formula balances the finite bad-reduction contribution
+$`\log N(\Delta_{\min})` against the archimedean norm of the discriminant
+differential, $`\log(|\Delta_{\mathrm{Silv}}(\tau)|\operatorname{Im}(\tau)^6)`.
+The factor $`12[K:\mathbb Q]` reflects use of the twelfth tensor power of the
+invariant-differential line. Here this expression is defined only from genuine
+minimal-ideal and period certificates, not renamed as an independently
+constructed Arakelov height.
 
-*Status: certificate-level definition formalized; no Arakelov identification is claimed.*
+*Status: `Heights.silvermanHeight` is formalized at certificate level, with
+positivity of every logarithm argument and denominator proved; no Arakelov
+identification is claimed.*
 :::
 
 :::proposition "prop:proposition-1-1-certified" (uses := "def:silverman-height")

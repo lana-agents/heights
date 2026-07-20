@@ -336,3 +336,10 @@ compactification. The total map `ℂ → LatticeCurvePoint τ` is continuous, an
 the quotient-map criterion proves its descended map from `ℂ/L` continuous.
 Analytic extension, group-law compatibility, bijectivity, and uniformization
 are still not claimed.
+
+The run also completed expository issue #103. Eleven Blueprint nodes now explain
+the normalization choices and proof ideas behind absolute height, rational
+height arithmetic, the modular discriminant and `j`, weighted Jensen, the five
+realization/formula interfaces, and their exact honesty boundaries. No private
+reference text was reproduced; the prose summarizes the mathematics in the
+repository's own words. Full CI remained clean with 326 declarations audited.
