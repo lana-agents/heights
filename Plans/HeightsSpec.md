@@ -355,9 +355,11 @@ There are two genuinely large realization gaps, one now partially discharged.
    `℘`, but no theorem producing periods from an algebraic elliptic curve over
    `ℂ` and no `ℂ/L` elliptic-curve equivalence. This repository now constructs
    the explicit curve attached to `(τ, 1)`, identifies its algebraic `j` with
-   `modularJ τ`, and packages the periodic affine-point map away from the
-   lattice; it still does not extend that map at the poles or descend it to a
-   torus. For the current, deliberately weak `ArchimedeanPeriodData` interface,
+   `modularJ τ`, extends the Weierstrass point map at lattice poles by the point
+   at infinity, and descends it set-theoretically to `ℂ/L`. It still does not
+   prove continuity or analyticity at the poles, group-law compatibility,
+   bijectivity, or a complex-torus equivalence. For the current, deliberately
+   weak `ArchimedeanPeriodData` interface,
    this repository proves that surjectivity of `modularJ` alone would suffice;
    that surjectivity theorem is also absent.
    See `Plans/ArchimedeanUniformizationFeasibility.md` and taxis #57.
@@ -465,9 +467,11 @@ The following was checked against `.lake/packages/mathlib/Mathlib/`.
   `Heights/LatticeWeierstrass.lean` constructs the associated short curve and
   identifies its algebraic `j` with `modularJ`; `Heights/LatticeAffinePoint.lean`
   packages `(℘, ℘′/2)` as an affine point away from the lattice and proves
-  invariance under lattice translation. Search still found no quotient torus
-  attached to a `PeriodPair` and no algebraic elliptic-curve uniformization
-  theorem.
+  invariance under lattice translation; and
+  `Heights/LatticeQuotientPoint.lean` extends that map at the poles and descends
+  it set-theoretically through `ℂ/L`. Search still found no analytic complex
+  torus attached to a `PeriodPair`, no continuity/analyticity result for this
+  descended map, and no algebraic elliptic-curve uniformization theorem.
 * `UpperHalfPlane`, its `SL₂` action, `qParam`, and the analytic ingredients are
   therefore present. The missing part is the bridge from an algebraic curve to
   this analytic data, not the modular discriminant itself.
@@ -600,7 +604,7 @@ mathematical content, not that the abandoned review ceremony was performed.
 | P5 | Complete: denominator divisibility, canonical unstable ideal, exact finite/archimedean decomposition, semistability. |
 | P6 | Complete: both certified Proposition 2.1 theorems and the expanded comparator target. |
 | P7 | Partially complete: rational arithmetic, equation (11), and ε-absorption are proved; no uncertified Faltings-height corollary is claimed. |
-| P8 | Arithmetic `ℚ` branch GO and complete; general arithmetic branch remains #56. Archimedean branch STOP as phase-sized work, although the explicit lattice curve and its periodic affine-point map away from poles are complete Route B slices; see `Plans/ArchimedeanUniformizationFeasibility.md` and #57. Arakelov identification remains unavailable. |
+| P8 | Arithmetic `ℚ` branch GO and complete; general arithmetic branch remains #56. Archimedean branch STOP as phase-sized work, although the explicit lattice curve, total point map, and set-theoretic descent through `ℂ/L` are complete Route B slices; see `Plans/ArchimedeanUniformizationFeasibility.md` and #57. Analytic uniformization and Arakelov identification remain unavailable. |
 | P9 | Not scheduled. Over `ℚ`, only `ArchimedeanPeriodData ℚ W` remains; general `K` also needs #56. |
 
 ### P0 — Bootstrap (already committed)

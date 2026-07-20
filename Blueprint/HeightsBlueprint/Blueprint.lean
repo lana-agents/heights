@@ -146,12 +146,28 @@ an actual affine point of the explicit lattice curve. Translation by any
 lattice element preserves this pole-free domain, and periodicity of $`\wp` and
 $`\wp'` proves that it leaves the packaged point unchanged.
 
-This is not a map on all of $`\mathbb C`, because the lattice points have not
-been assigned the point at infinity. Consequently it does not yet define a map
-from $`\mathbb C/L`, nor claim bijectivity, analyticity, or group-law
-compatibility.
+By itself this is not a map on all of $`\mathbb C`, because the lattice points
+have not been assigned the point at infinity. The successor construction in
+`prop:lattice-quotient-point-map` supplies that set-theoretic extension, but no
+analytic or group-theoretic conclusion.
 
 *Status: proved unconditionally on the complement of the lattice.*
+:::
+
+:::proposition "prop:lattice-quotient-point-map" (uses := "prop:lattice-affine-point-map") (lean := "Heights.latticePointMap, Heights.latticePointMap_of_mem, Heights.latticePointMap_of_notMem, Heights.latticePointMap_add_lattice, Heights.LatticeQuotient, Heights.latticeQuotientPointMap, Heights.latticeQuotientPointMap_mk")
+The point-valued Weierstrass map is extended to all of $`\mathbb C`: lattice
+elements are sent to the distinguished point at infinity and non-lattice
+elements retain the point $`(\wp(z),\wp'(z)/2)`. The total map is invariant
+under lattice translation, so quotient lifting gives a well-defined function
+$`\mathbb C/L\to E_\tau(\mathbb C)` that computes as the total map on every
+representative.
+
+This descent is purely set-theoretic. No continuity or analyticity at the
+poles, compatibility with the elliptic-curve group law, bijectivity, complex-
+torus equivalence, or uniformization of arbitrary curves is claimed.
+
+*Status: total extension and set-theoretic quotient descent proved
+unconditionally for the explicit lattice curve.*
 :::
 
 :::proposition "prop:weighted-log-log" (lean := "Heights.weightedLogOneAdd_le, Heights.infinitePlaceWeightedLogOneAdd_bounds, Heights.infinitePlacePosLogAverage_le_normalizedLogHeight, Heights.infinitePlaceLogLogMax_bounds")
