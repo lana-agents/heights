@@ -357,9 +357,10 @@ There are two genuinely large realization gaps, one now partially discharged.
    the explicit curve attached to `(τ, 1)`, identifies its algebraic `j` with
    `modularJ τ`, extends the Weierstrass point map at lattice poles by the point
    at infinity, descends it set-theoretically to `ℂ/L`, topologizes the source
-   quotient, and transports a one-point-compactification topology to a named
-   wrapper of the explicit target point type. It still does not prove
-   continuity or analyticity at the poles, group-law compatibility,
+   quotient, and transports a compact Hausdorff one-point-compactification
+   topology to a named wrapper of the explicit target point type, using
+   closedness and local compactness of its affine equation locus. It still does
+   not prove continuity or analyticity at the poles, group-law compatibility,
    bijectivity, or a complex-torus equivalence. For the current, deliberately
    weak `ArchimedeanPeriodData` interface,
    this repository proves that surjectivity of `modularJ` alone would suffice;

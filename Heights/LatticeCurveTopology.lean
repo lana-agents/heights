@@ -9,8 +9,10 @@ set_option linter.style.header false
 For the Weierstrass curve attached to `τ`, mathlib identifies its algebraic
 point type with the affine equation locus plus one distinguished point.  This
 file introduces a named wrapper around that point type and transports the
-one-point-compactification topology through the identification.  The resulting
-space is compact and `T1`, and its affine chart is an open embedding.
+one-point-compactification topology through the identification.  The affine
+locus is closed and locally compact, so the resulting space is compact and
+`T4` (in particular Hausdorff and regular), and its affine chart is an open
+embedding.
 
 This is deliberately restricted to the explicit lattice curve; no orphan
 topology is installed on arbitrary elliptic-curve point types.  Nothing here
@@ -94,6 +96,19 @@ theorem isOpenEmbedding_latticeCurvePointOfAffine (τ : ℍ) :
   (latticeCurvePointHomeomorph τ).symm.isOpenEmbedding.comp
     OnePoint.isOpenEmbedding_coe
 
+/-- The affine equation locus is closed in `ℂ × ℂ`. -/
+theorem isClosed_latticeCurveAffine (τ : ℍ) :
+    IsClosed {xy : ℂ × ℂ |
+      (latticeWeierstrassCurve τ).toAffine.Equation xy.1 xy.2} := by
+  simp_rw [(latticeWeierstrassCurve τ).toAffine.equation_iff]
+  exact isClosed_eq (by fun_prop) (by fun_prop)
+
+/-- As a closed subspace of `ℂ × ℂ`, the affine equation locus is locally
+compact. -/
+noncomputable instance latticeCurveAffineLocallyCompactSpace (τ : ℍ) :
+    LocallyCompactSpace (LatticeCurveAffine τ) :=
+  (isClosed_latticeCurveAffine τ).locallyCompactSpace
+
 /-- The one-point-compactification topology on the wrapped point type is
 compact. -/
 noncomputable instance latticeCurvePointCompactSpace (τ : ℍ) :
@@ -105,5 +120,13 @@ locus is a subtype of the Hausdorff space `ℂ × ℂ`. -/
 noncomputable instance latticeCurvePointT1Space (τ : ℍ) :
     T1Space (LatticeCurvePoint τ) :=
   (latticeCurvePointHomeomorph τ).symm.t1Space
+
+/-- The wrapped point type is `T4`, hence in particular Hausdorff and regular.
+This is the standard separation theorem for the one-point compactification of
+a locally compact Hausdorff space, transported across the point
+homeomorphism. -/
+noncomputable instance latticeCurvePointT4Space (τ : ℍ) :
+    T4Space (LatticeCurvePoint τ) :=
+  (latticeCurvePointHomeomorph τ).symm.t4Space
 
 end Heights

@@ -186,21 +186,24 @@ bijection, or an analytic equivalence.
 uniformization remains open.*
 :::
 
-:::proposition "prop:lattice-curve-topology" (uses := "prop:lattice-weierstrass-curve, prop:lattice-quotient-topology") (lean := "Heights.LatticeCurveAffine, Heights.LatticeCurvePoint, Heights.latticeCurvePointEquiv, Heights.latticeCurvePointHomeomorph, Heights.latticeCurvePointInfinity, Heights.latticeCurvePointOfAffine, Heights.latticeCurvePointHomeomorph_infinity, Heights.latticeCurvePointHomeomorph_affine, Heights.isOpenEmbedding_latticeCurvePointOfAffine, Heights.latticeCurvePointCompactSpace, Heights.latticeCurvePointT1Space")
+:::proposition "prop:lattice-curve-topology" (uses := "prop:lattice-weierstrass-curve, prop:lattice-quotient-topology") (lean := "Heights.LatticeCurveAffine, Heights.LatticeCurvePoint, Heights.latticeCurvePointEquiv, Heights.latticeCurvePointHomeomorph, Heights.latticeCurvePointInfinity, Heights.latticeCurvePointOfAffine, Heights.latticeCurvePointHomeomorph_infinity, Heights.latticeCurvePointHomeomorph_affine, Heights.isOpenEmbedding_latticeCurvePointOfAffine, Heights.isClosed_latticeCurveAffine, Heights.latticeCurveAffineLocallyCompactSpace, Heights.latticeCurvePointCompactSpace, Heights.latticeCurvePointT1Space, Heights.latticeCurvePointT4Space")
 For the explicit lattice curve only, a named wrapper around the algebraic point
 type is given the topology transported from the one-point compactification of
 its affine equation locus. The algebraic point equivalence becomes a
 homeomorphism, carrying the distinguished point to infinity and affine points
-to the open affine chart. Consequently the wrapped point space is compact and
-$`T_1`, and its affine chart is an open embedding.
+to the open affine chart. The affine Weierstrass equation cuts out a closed,
+hence locally compact, subspace of $`\mathbb C^2`. Consequently the wrapped
+point space is compact and $`T_4` (in particular Hausdorff and regular), and
+its affine chart is an open embedding.
 
 No topology is installed on arbitrary elliptic-curve point types. In
 particular, this does not prove continuity or analyticity of the descended
 Weierstrass point map at the pole, continuity of the group law, a homeomorphism
 $`\mathbb C/L\simeq E_\tau(\mathbb C)`, or arbitrary-curve uniformization.
 
-*Status: the conservative target topology is packaged unconditionally for the
-explicit lattice curve; analytic uniformization remains open.*
+*Status: the conservative compact Hausdorff target topology is packaged
+unconditionally for the explicit lattice curve; analytic uniformization
+remains open.*
 :::
 
 :::proposition "prop:weighted-log-log" (lean := "Heights.weightedLogOneAdd_le, Heights.infinitePlaceWeightedLogOneAdd_bounds, Heights.infinitePlacePosLogAverage_le_normalizedLogHeight, Heights.infinitePlaceLogLogMax_bounds")
