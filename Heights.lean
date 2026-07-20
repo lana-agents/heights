@@ -1,14 +1,13 @@
-import Mathlib
+import Heights.WeilHeight
 
 /-!
 # Heights
 
 Formalization of the comparison between (logarithmic) Weil heights and
-Faltings heights of elliptic curves (cf. [Silv], Proposition 2.1). See
-`Plans/HeightsSpec.md` for the honesty boundary and phased plan.
+Silverman's formula-defined elliptic-curve height (cf. [Silv], Proposition
+2.1). See `Plans/HeightsSpec.md` for the honesty boundary.
 
-This is the P0 bootstrap scaffold: it only checks that the package links
-against the pinned mathlib release.
+The current public API contains the unconditional Weil-height normalization
+and rational height arithmetic. It does not yet define or claim a Faltings
+height comparison.
 -/
-
-example : (1 : ℕ) + 1 = 2 := by norm_num
