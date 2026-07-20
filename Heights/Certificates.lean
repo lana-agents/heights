@@ -230,6 +230,56 @@ lemma exists_eq_exp_neg_nat
   rw [Int.toNat_of_nonneg (neg_nonneg.mpr hz)]
   simp [hx]
 
+/-- If the denominator of a rational number divides `d`, then multiplying
+by `d` gives an element of the ring of integers of `ℚ`. -/
+lemma exists_integer_mul_of_den_dvd (q : ℚ) (d : ℕ) (h : q.den ∣ d) :
+    ∃ z : 𝓞 ℚ, algebraMap (𝓞 ℚ) ℚ z = (d : ℚ) * q := by
+  obtain ⟨k, rfl⟩ := h
+  refine ⟨Rat.ringOfIntegersEquiv.symm (k * q.num), ?_⟩
+  rw [← Rat.ringOfIntegersEquiv_apply_coe]
+  simp only [RingEquiv.apply_symm_apply, Int.cast_mul, Int.cast_natCast]
+  rw [Nat.cast_mul, mul_comm (q.den : ℚ) (k : ℚ), mul_assoc,
+    Rat.den_mul_eq_num]
+
+/-- Every rational Weierstrass equation admits an integral equation after a
+single rational scaling change.
+
+The scaling factor is the product of the five coefficient denominators. Its
+powers clear the weighted denominators of `a₁`, `a₂`, `a₃`, `a₄`, and `a₆`. -/
+theorem exists_integralModel_change_rat (W : WeierstrassCurve ℚ) :
+    ∃ C : WeierstrassCurve.VariableChange ℚ,
+      WeierstrassCurve.IsIntegral (𝓞 ℚ) (C • W) := by
+  let d := W.a₁.den * W.a₂.den * W.a₃.den * W.a₄.den * W.a₆.den
+  have hd : d ≠ 0 := by simp [d]
+  let C : WeierstrassCurve.VariableChange ℚ :=
+    ⟨Units.mk0 (d : ℚ)⁻¹ (inv_ne_zero (Nat.cast_ne_zero.mpr hd)), 0, 0, 0⟩
+  have hd1 : W.a₁.den ∣ d :=
+    ⟨W.a₂.den * W.a₃.den * W.a₄.den * W.a₆.den, by simp [d]; ring⟩
+  have hd2 : W.a₂.den ∣ d :=
+    ⟨W.a₁.den * W.a₃.den * W.a₄.den * W.a₆.den, by simp [d]; ring⟩
+  have hd3 : W.a₃.den ∣ d :=
+    ⟨W.a₁.den * W.a₂.den * W.a₄.den * W.a₆.den, by simp [d]; ring⟩
+  have hd4 : W.a₄.den ∣ d :=
+    ⟨W.a₁.den * W.a₂.den * W.a₃.den * W.a₆.den, by simp [d]; ring⟩
+  have hd6 : W.a₆.den ∣ d :=
+    ⟨W.a₁.den * W.a₂.den * W.a₃.den * W.a₄.den, by simp [d]; ring⟩
+  refine ⟨C, WeierstrassCurve.isIntegral_of_exists_lift (𝓞 ℚ) ?_ ?_ ?_ ?_ ?_⟩
+  all_goals
+    simp only [WeierstrassCurve.variableChange_def, C, Units.val_inv_eq_inv_val,
+      Units.val_mk0, inv_inv, add_zero, mul_zero, sub_zero, zero_mul]
+    try norm_num only [zero_pow]
+    try simp only [sub_zero, add_zero, zero_mul]
+  · apply exists_integer_mul_of_den_dvd
+    exact hd1
+  · apply exists_integer_mul_of_den_dvd
+    exact hd2.trans (dvd_pow_self d (n := 2) (by omega))
+  · apply exists_integer_mul_of_den_dvd
+    exact hd3.trans (dvd_pow_self d (n := 3) (by omega))
+  · apply exists_integer_mul_of_den_dvd
+    exact hd4.trans (dvd_pow_self d (n := 4) (by omega))
+  · apply exists_integer_mul_of_den_dvd
+    exact hd6.trans (dvd_pow_self d (n := 6) (by omega))
+
 /-- Local minimal-discriminant data exists at every number-field prime.
 
 The proof applies mathlib's DVR minimal-model theorem to the valuation subring
