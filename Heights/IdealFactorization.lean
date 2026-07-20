@@ -12,7 +12,7 @@ elementary factorization and norm identities. Denominator divisibility is a
 theorem here, not a certificate field.
 -/
 
-open scoped NumberField nonZeroDivisors NNReal
+open scoped NumberField UpperHalfPlane nonZeroDivisors NNReal
 open NumberField IsDedekindDomain
 
 namespace Heights
@@ -623,5 +623,144 @@ theorem semistable_abs_comparison_of_corrected_bounds
       Real.log_nonneg (by linarith [normalizedLogHeight_nonneg K W.j])
     linarith [hh, hbounds.1]
   · exact hbounds.2
+
+/-- The two modular estimates used by Silverman combine pointwise into a
+bound for the complete local comparison term. The factor `6` comes from the
+Petersson metric's `im ^ 6` term. -/
+theorem modularComparisonTerm_sub_logLog_bound
+    (τ : ℍ) (CΔ Cy : ℝ)
+    (hΔ : |Real.posLog ‖modularJ τ‖ +
+        Real.log ‖silvermanModularDiscriminant τ‖| ≤ CΔ)
+    (hy : |Real.log τ.im -
+        Real.log (Real.log (max ‖modularJ τ‖ (Real.exp 1)))| ≤ Cy) :
+    |(Real.posLog ‖modularJ τ‖ +
+          Real.log (‖silvermanModularDiscriminant τ‖ * τ.im ^ 6)) -
+        6 * Real.log (Real.log (max ‖modularJ τ‖ (Real.exp 1)))| ≤
+      CΔ + 6 * Cy := by
+  have hΔne : ‖silvermanModularDiscriminant τ‖ ≠ 0 :=
+    (silvermanModularDiscriminant_norm_pos τ).ne'
+  have himne : τ.im ^ 6 ≠ 0 := (pow_pos τ.im_pos 6).ne'
+  rw [Real.log_mul hΔne himne, Real.log_pow]
+  have heq :
+      Real.posLog ‖modularJ τ‖ +
+          (Real.log ‖silvermanModularDiscriminant τ‖ + (6 : ℕ) * Real.log τ.im) -
+        6 * Real.log (Real.log (max ‖modularJ τ‖ (Real.exp 1))) =
+      (Real.posLog ‖modularJ τ‖ + Real.log ‖silvermanModularDiscriminant τ‖) +
+        6 * (Real.log τ.im -
+          Real.log (Real.log (max ‖modularJ τ‖ (Real.exp 1)))) := by
+    push_cast
+    ring
+  rw [heq]
+  calc
+    |(Real.posLog ‖modularJ τ‖ + Real.log ‖silvermanModularDiscriminant τ‖) +
+        6 * (Real.log τ.im -
+          Real.log (Real.log (max ‖modularJ τ‖ (Real.exp 1))))| ≤
+      |Real.posLog ‖modularJ τ‖ + Real.log ‖silvermanModularDiscriminant τ‖| +
+        |6 * (Real.log τ.im -
+          Real.log (Real.log (max ‖modularJ τ‖ (Real.exp 1))))| := abs_add_le _ _
+    _ = |Real.posLog ‖modularJ τ‖ + Real.log ‖silvermanModularDiscriminant τ‖| +
+        6 * |Real.log τ.im -
+          Real.log (Real.log (max ‖modularJ τ‖ (Real.exp 1)))| := by
+      rw [abs_mul]
+      norm_num
+    _ ≤ CΔ + 6 * Cy :=
+      add_le_add hΔ (mul_le_mul_of_nonneg_left hy (by norm_num))
+
+/-- Fundamental-domain estimates for the two modular terms imply the complete
+corrected Proposition 2.1 bounds, uniformly over every number field, curve,
+and realization certificate. This theorem performs the finite summation and
+uses equation (11); its hypotheses are purely analytic statements about the
+actual modular functions, not fields of a certificate. -/
+theorem correctedComparison_bounds_of_modular_estimates
+    {K : Type*} [Field K] [NumberField K]
+    (W : WeierstrassCurve K) [W.IsElliptic]
+    (m : GlobalMinimalDiscriminantData K W)
+    (r : ReducedPrincipalIdealData K W.j)
+    (p : ArchimedeanPeriodData K W)
+    (CΔ Cy : ℝ) (hCΔ : 0 ≤ CΔ) (hCy : 0 ≤ Cy)
+    (hΔ : ∀ τ : ℍ, τ ∈ ModularGroup.fd →
+      |Real.posLog ‖modularJ τ‖ +
+        Real.log ‖silvermanModularDiscriminant τ‖| ≤ CΔ)
+    (hy : ∀ τ : ℍ, τ ∈ ModularGroup.fd →
+      |Real.log τ.im -
+        Real.log (Real.log (max ‖modularJ τ‖ (Real.exp 1)))| ≤ Cy) :
+    0 ≤ CΔ + 6 * Cy ∧
+    (-(CΔ + 6 * Cy) ≤ normalizedLogHeight K W.j +
+          logIdealNorm (unstableMinimalDiscriminant m r) /
+            (Module.finrank ℚ K : ℝ) -
+        12 * silvermanHeight W m p ∧
+      normalizedLogHeight K W.j +
+          logIdealNorm (unstableMinimalDiscriminant m r) /
+            (Module.finrank ℚ K : ℝ) -
+        12 * silvermanHeight W m p ≤
+      6 * Real.log (1 + normalizedLogHeight K W.j) + (CΔ + 6 * Cy)) := by
+  let C := CΔ + 6 * Cy
+  let L : InfinitePlace K → ℝ := fun v =>
+    Real.log (Real.log (max (v W.j) (Real.exp 1)))
+  let A : InfinitePlace K → ℝ := fun v =>
+    Real.posLog ‖modularJ (p.τ v)‖ +
+      Real.log (‖silvermanModularDiscriminant (p.τ v)‖ * (p.τ v).im ^ 6)
+  have hlocal (v : InfinitePlace K) : |A v - 6 * L v| ≤ C := by
+    have hv := modularComparisonTerm_sub_logLog_bound (p.τ v) CΔ Cy
+      (hΔ (p.τ v) (p.mem_fd v)) (hy (p.τ v) (p.mem_fd v))
+    dsimp [A, L]
+    rw [← InfinitePlace.norm_embedding_eq v W.j, p.j_eq]
+    exact hv
+  have hC : 0 ≤ C := by
+    dsimp [C]
+    positivity
+  have hL := infinitePlaceLogLogMax_bounds K W.j
+  have hd : ∑ v : InfinitePlace K, (v.mult : ℝ) =
+      (Module.finrank ℚ K : ℝ) := by
+    exact_mod_cast InfinitePlace.sum_mult_eq (K := K)
+  refine ⟨hC, ?_⟩
+  rw [comparisonExpression_eq_archimedeanAverage W m r p]
+  change -(CΔ + 6 * Cy) ≤ (∑ v, (v.mult : ℝ) * A v) /
+      (Module.finrank ℚ K : ℝ) ∧ _
+  constructor
+  · rw [le_div_iff₀ (numberFieldDegree_pos K)]
+    calc
+      -(CΔ + 6 * Cy) * (Module.finrank ℚ K : ℝ) =
+          ∑ v : InfinitePlace K, (v.mult : ℝ) * (-C) := by
+        rw [← Finset.sum_mul, hd]
+        dsimp [C]
+        ring
+      _ ≤ ∑ v : InfinitePlace K, (v.mult : ℝ) * A v := by
+        apply Finset.sum_le_sum
+        intro v _
+        have hv := (abs_le.mp (hlocal v)).1
+        have hLv := (logLogMaxExpOne_bounds (v W.j)).1
+        exact mul_le_mul_of_nonneg_left
+          (by dsimp [L] at hv ⊢; linarith) (by positivity)
+  · rw [div_le_iff₀ (numberFieldDegree_pos K)]
+    calc
+      ∑ v : InfinitePlace K, (v.mult : ℝ) * A v ≤
+          ∑ v : InfinitePlace K, (v.mult : ℝ) * (6 * L v + C) := by
+        apply Finset.sum_le_sum
+        intro v _
+        have hv := (abs_le.mp (hlocal v)).2
+        exact mul_le_mul_of_nonneg_left (by linarith) (by positivity)
+      _ = 6 * (∑ v : InfinitePlace K, (v.mult : ℝ) * L v) +
+          C * (Module.finrank ℚ K : ℝ) := by
+        calc
+          ∑ v : InfinitePlace K, (v.mult : ℝ) * (6 * L v + C) =
+              ∑ v : InfinitePlace K,
+                (6 * ((v.mult : ℝ) * L v) + C * (v.mult : ℝ)) := by
+            apply Finset.sum_congr rfl
+            intro v _
+            ring
+          _ = 6 * (∑ v : InfinitePlace K, (v.mult : ℝ) * L v) +
+              C * (∑ v : InfinitePlace K, (v.mult : ℝ)) := by
+            rw [Finset.sum_add_distrib, Finset.mul_sum, Finset.mul_sum]
+          _ = _ := by rw [hd]
+      _ ≤ 6 * ((Module.finrank ℚ K : ℝ) *
+            Real.log (1 + normalizedLogHeight K W.j)) +
+          C * (Module.finrank ℚ K : ℝ) := by
+        gcongr
+        exact hL.2
+      _ = (6 * Real.log (1 + normalizedLogHeight K W.j) +
+          (CΔ + 6 * Cy)) * (Module.finrank ℚ K : ℝ) := by
+        dsimp [C]
+        ring
 
 end Heights

@@ -181,25 +181,24 @@ Arakelov/Hodge-bundle construction.
 *Status: not started (conditional/certificate-level target).*
 :::
 
-:::definition "def:certified-semistability" (uses := "def:global-minimal-discriminant-data")
-Define semistability place by place as good or multiplicative reduction for a
-minimal local model, and define the unstable minimal-discriminant ideal from
-proved denominator divisibility. The complementary ideal, its uniqueness, and
-its logarithmic norm decomposition are now formalized in
-`Heights.unstableMinimalDiscriminant` and
-`Heights.logIdealNorm_minimal_eq_denominator_add_unstable` once a divisibility
-proof is supplied.
+:::definition "def:certified-semistability" (uses := "def:global-minimal-discriminant-data") (lean := "Heights.IsSemistable, Heights.denominator_dvd_minimalDiscriminant, Heights.unstableMinimalDiscriminant_eq_top_of_semistable")
+Semistability is defined place by place as good or multiplicative reduction for
+a certified minimal local model. The reduced $`j`-denominator is proved to
+divide the minimal-discriminant ideal, defining its canonical complement, and
+semistability is proved to make that complement the unit ideal.
 
-*Status: complementary ideal formalized conditionally; denominator divisibility
-and certified semistability remain open.*
+*Status: formalized and proved conditionally on the stated realization data.*
 :::
 
-:::theorem "thm:proposition-2-1-certified" (uses := "prop:rational-height-arithmetic, prop:reduced-principal-ideals, prop:modular-estimates, prop:weighted-log-log, def:silverman-height")
-Prove one pair of absolute constants, quantified before the number field,
-curve, and certificates, giving Silverman's two-sided Proposition 2.1 estimate
-for normalized $`j`-height, the unstable ideal, and `silvermanHeight`.
+:::theorem "thm:proposition-2-1-certified" (uses := "prop:rational-height-arithmetic, prop:reduced-principal-ideals, prop:modular-estimates, prop:weighted-log-log, def:silverman-height") (lean := "Heights.comparisonExpression_eq_archimedeanAverage, Heights.correctedComparison_bounds_of_modular_estimates")
+One pair of absolute modular-estimate constants, quantified before the number
+field, curve, and certificates, gives Silverman's two-sided Proposition 2.1
+estimate for normalized $`j`-height, the unstable ideal, and
+`silvermanHeight`. The finite decomposition and weighted aggregation have been
+proved; only the unconditional existence of the two modular constants remains.
 
-*Status: not started (conditional/certificate-level; not an all-curves Faltings-height theorem).*
+*Status: reduced to `prop:modular-estimates` (conditional/certificate-level;
+not an all-curves Faltings-height theorem).*
 :::
 
 :::theorem "thm:proposition-2-1-semistable-certified" (uses := "thm:proposition-2-1-certified, def:certified-semistability")
@@ -207,7 +206,8 @@ After proving certified semistability makes the unstable ideal trivial, derive
 the absolute-value specialization comparing normalized $`j`-height with
 $`12\,\mathrm{silvermanHeight}`.
 
-*Status: not started (conditional/certificate-level; period and minimal data remain hypotheses).*
+*Status: the deduction from corrected bounds is proved; the remaining modular
+estimates and the period/minimal realization data remain explicit hypotheses.*
 :::
 
 The repository does not presently claim period construction, global minimal-
