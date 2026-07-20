@@ -399,6 +399,81 @@ theorem exists_localMinimalDiscriminantExponent
   rw [← hn]
   exact hequiv.le_iff_le.mpr hcan'
 
+/-- The multiplicity of a prime in a finite product of powers of distinct
+height-one primes is the selected exponent, provided the finite set contains
+the support of the exponent function. -/
+theorem multiplicity_finset_product
+    {R : Type*} [CommRing R] [IsDedekindDomain R]
+    (f : HeightOneSpectrum R → ℕ) (S : Finset (HeightOneSpectrum R))
+    (hf : ∀ v, f v ≠ 0 → v ∈ S) (v : HeightOneSpectrum R) :
+    multiplicity v.asIdeal (∏ w ∈ S, w.asIdeal ^ f w) = f v := by
+  classical
+  let I : Ideal R := ∏ w ∈ S, w.asIdeal ^ f w
+  have hI : I ≠ 0 := by
+    dsimp [I]
+    change (∏ w ∈ S, w.asIdeal ^ f w) ≠ (0 : Ideal R)
+    rw [Finset.prod_ne_zero_iff]
+    intro w hw
+    exact pow_ne_zero _ w.ne_bot
+  have hem := Finset.emultiplicity_prod v.prime S (fun w => w.asIdeal ^ f w)
+  rw [← ENat.coe_inj, ← FiniteMultiplicity.emultiplicity_eq_multiplicity
+    (FiniteMultiplicity.of_prime_left v.prime hI), hem]
+  by_cases hv : f v = 0
+  · rw [hv, ENat.coe_zero]
+    apply Finset.sum_eq_zero
+    intro i hi
+    by_cases hiv : i = v
+    · subst i
+      rw [hv, pow_zero, emultiplicity_eq_zero]
+      exact fun h => v.prime.not_unit (isUnit_iff_dvd_one.mpr h)
+    · rw [emultiplicity_pow v.prime,
+        emultiplicity_eq_zero_of_irreducible_ne v.irreducible i.irreducible]
+      · simp
+      · exact fun h => hiv (HeightOneSpectrum.ext h.symm)
+  · have hvS := hf v hv
+    rw [Finset.sum_eq_single v]
+    · simp [emultiplicity_pow_self_of_prime v.prime]
+    · intro w hw hwv
+      rw [emultiplicity_pow v.prime,
+        emultiplicity_eq_zero_of_irreducible_ne v.irreducible w.irreducible]
+      · simp
+      · exact fun h => hwv (HeightOneSpectrum.ext h.symm)
+    · exact fun h => (h hvS).elim
+
+/-- Any family of nonnegative prime exponents bounded by the multiplicities of
+a fixed nonzero ideal is realized by a nonzero integral ideal. -/
+theorem exists_ideal_with_multiplicities_of_le
+    {R : Type*} [CommRing R] [IsDedekindDomain R]
+    (f : HeightOneSpectrum R → ℕ) (J : Ideal R) (hJ : J ≠ ⊥)
+    (hf : ∀ v, f v ≤ multiplicity v.asIdeal J) :
+    ∃ I : Ideal R, I ≠ ⊥ ∧ ∀ v, multiplicity v.asIdeal I = f v := by
+  classical
+  have hinj : Function.Injective
+      (fun v : HeightOneSpectrum R => v.asIdeal) := by
+    intro v w h
+    exact HeightOneSpectrum.ext h
+  let S : Finset (HeightOneSpectrum R) :=
+    (UniqueFactorizationMonoid.normalizedFactors J).toFinset.preimage
+      (fun v => v.asIdeal) hinj.injOn
+  have hsupport : ∀ v, f v ≠ 0 → v ∈ S := by
+    intro v hv
+    change v ∈ (UniqueFactorizationMonoid.normalizedFactors J).toFinset.preimage
+      (fun v => v.asIdeal) hinj.injOn
+    rw [Finset.mem_preimage]
+    simp only [Multiset.mem_toFinset]
+    rw [← Multiset.count_ne_zero,
+      IsDedekindDomain.HeightOneSpectrum.count_normalizedFactors_eq_multiplicity hJ]
+    exact fun hm => hv (Nat.eq_zero_of_le_zero (hm ▸ hf v))
+  let I : Ideal R := ∏ v ∈ S, v.asIdeal ^ f v
+  have hI : I ≠ ⊥ := by
+    change (∏ v ∈ S, v.asIdeal ^ f v) ≠ (0 : Ideal R)
+    rw [Finset.prod_ne_zero_iff]
+    intro v hv
+    exact pow_ne_zero _ v.ne_bot
+  exact ⟨I, hI, fun v => by
+    dsimp only [I]
+    exact multiplicity_finset_product f S hsupport v⟩
+
 /-- Local minimality bounds the pole order of `j` by the minimal
 discriminant exponent.
 
