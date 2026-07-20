@@ -165,37 +165,35 @@ theorem denominator_dvd_minimalDiscriminant
   rw [hD.emultiplicity_eq_multiplicity, hm.emultiplicity_eq_multiplicity]
   exact_mod_cast h
 
-/-- The complementary (unstable) ideal obtained after removing the reduced
-`j`-denominator from the minimal-discriminant ideal. -/
+/-- The canonical complementary (unstable) ideal obtained by removing the
+reduced `j`-denominator from the minimal-discriminant ideal. Its construction
+uses the proved denominator-divisibility theorem, not extra certificate data. -/
 noncomputable def unstableMinimalDiscriminant
     {K : Type*} [Field K] [NumberField K]
     {W : WeierstrassCurve K} [W.IsElliptic]
     (m : GlobalMinimalDiscriminantData K W)
-    (r : ReducedPrincipalIdealData K W.j)
-    (hDvd : r.denominator ∣ m.ideal) : Ideal (𝓞 K) :=
-  Classical.choose hDvd
+    (r : ReducedPrincipalIdealData K W.j) : Ideal (𝓞 K) :=
+  Classical.choose (denominator_dvd_minimalDiscriminant m r)
 
-/-- The denominator times its chosen complement is the certified
+/-- The denominator times its canonical complement is the certified
 minimal-discriminant ideal. -/
 theorem denominator_mul_unstableMinimalDiscriminant
     {K : Type*} [Field K] [NumberField K]
     {W : WeierstrassCurve K} [W.IsElliptic]
     (m : GlobalMinimalDiscriminantData K W)
-    (r : ReducedPrincipalIdealData K W.j)
-    (hDvd : r.denominator ∣ m.ideal) :
-    r.denominator * unstableMinimalDiscriminant m r hDvd = m.ideal :=
-  (Classical.choose_spec hDvd).symm
+    (r : ReducedPrincipalIdealData K W.j) :
+    r.denominator * unstableMinimalDiscriminant m r = m.ideal :=
+  (Classical.choose_spec (denominator_dvd_minimalDiscriminant m r)).symm
 
-/-- The complementary unstable ideal is nonzero. -/
+/-- The canonical complementary unstable ideal is nonzero. -/
 theorem unstableMinimalDiscriminant_ne_bot
     {K : Type*} [Field K] [NumberField K]
     {W : WeierstrassCurve K} [W.IsElliptic]
     (m : GlobalMinimalDiscriminantData K W)
-    (r : ReducedPrincipalIdealData K W.j)
-    (hDvd : r.denominator ∣ m.ideal) :
-    unstableMinimalDiscriminant m r hDvd ≠ ⊥ := by
+    (r : ReducedPrincipalIdealData K W.j) :
+    unstableMinimalDiscriminant m r ≠ ⊥ := by
   intro h
-  have hm := denominator_mul_unstableMinimalDiscriminant m r hDvd
+  have hm := denominator_mul_unstableMinimalDiscriminant m r
   rw [h, Ideal.mul_bot] at hm
   exact m.ideal_ne_bot hm.symm
 
@@ -206,9 +204,8 @@ theorem unstableMinimalDiscriminant_unique
     {W : WeierstrassCurve K} [W.IsElliptic]
     (m : GlobalMinimalDiscriminantData K W)
     (r : ReducedPrincipalIdealData K W.j)
-    (hDvd : r.denominator ∣ m.ideal)
     (γ : Ideal (𝓞 K)) (hγ : r.denominator * γ = m.ideal) :
-    γ = unstableMinimalDiscriminant m r hDvd := by
+    γ = unstableMinimalDiscriminant m r := by
   apply mul_left_cancel₀ r.denominator_ne_bot
   rw [hγ, denominator_mul_unstableMinimalDiscriminant]
 
@@ -228,12 +225,11 @@ theorem logIdealNorm_minimal_eq_denominator_add_unstable
     {K : Type*} [Field K] [NumberField K]
     {W : WeierstrassCurve K} [W.IsElliptic]
     (m : GlobalMinimalDiscriminantData K W)
-    (r : ReducedPrincipalIdealData K W.j)
-    (hDvd : r.denominator ∣ m.ideal) :
+    (r : ReducedPrincipalIdealData K W.j) :
     logIdealNorm m.ideal = logIdealNorm r.denominator +
-      logIdealNorm (unstableMinimalDiscriminant m r hDvd) := by
-  rw [← denominator_mul_unstableMinimalDiscriminant m r hDvd,
+      logIdealNorm (unstableMinimalDiscriminant m r) := by
+  rw [← denominator_mul_unstableMinimalDiscriminant m r,
     logIdealNorm_mul _ _ r.denominator_ne_bot
-      (unstableMinimalDiscriminant_ne_bot m r hDvd)]
+      (unstableMinimalDiscriminant_ne_bot m r)]
 
 end Heights
