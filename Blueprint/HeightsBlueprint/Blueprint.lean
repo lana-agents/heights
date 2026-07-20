@@ -3,6 +3,7 @@ import VersoManual
 import VersoBlueprint
 import VersoBlueprint.Commands.Graph
 import VersoBlueprint.Commands.Summary
+import Heights
 
 open Verso.Genre
 open Verso.Genre.Manual
@@ -29,17 +30,18 @@ are two deliberately separate kinds of result:
   certificates exist for every elliptic curve, and they are not an
   unconditional construction of the Faltings height.
 
-Every item below is *not started in P1* and has no Lean declaration link.
-In particular, this document records targets rather than claiming proofs.
+Status is derived from the attached Lean declarations where proofs now exist.
+Unlinked items remain targets rather than claims.
 
 # Normalizations
 
-:::definition "def:normalized-log-height"
-For a number field $`K`, the absolute logarithmic height is to be defined by
+:::definition "def:normalized-log-height" (lean := "Heights.normalizedLogHeight")
+For a number field $`K`, the absolute logarithmic height is defined by
 $`h_K(x)=\operatorname{logHeight}_1(x)/[K:\mathbb Q]`. The division by the
-field degree is essential.
+field degree is essential. Its nonnegativity is proved in
+`Heights.normalizedLogHeight_nonneg`.
 
-*Status: not started (unconditional definition target).*
+*Status: formalized unconditionally.*
 :::
 
 :::definition "def:log-ideal-norm"
@@ -67,11 +69,11 @@ This is the $`q^{-1}+744+\cdots` normalization, without a factor of 1728.
 
 # Unconditional mathematics
 
-:::proposition "prop:rational-height-arithmetic" (uses := "def:normalized-log-height")
-Prove the exact numerator/denominator formula for rational logarithmic height
-and its positive-integer scaled variants.
+:::proposition "prop:rational-height-arithmetic" (uses := "def:normalized-log-height") (lean := "Heights.normalizedLogHeight_rat, Heights.ratHeight_scaled_denominator")
+The exact numerator/denominator formula for rational logarithmic height and its
+positive-integer scaled variant hold, including for the zero rational.
 
-*Status: not started (unconditional target).*
+*Status: proved unconditionally.*
 :::
 
 :::proposition "prop:reduced-principal-ideals" (uses := "def:log-ideal-norm")
@@ -92,11 +94,14 @@ functions, not certificate fields.
 *Status: not started (unconditional target).*
 :::
 
-:::proposition "prop:weighted-log-log"
-Prove the finite weighted Jensen/AM--GM estimate underlying equation (11),
-including that the infinite-place multiplicities sum to $`[K:\mathbb Q]`.
+:::proposition "prop:weighted-log-log" (lean := "Heights.weightedLogOneAdd_le, Heights.weightedLogOneAdd_nonneg, Heights.infinitePlaceWeightedLogOneAdd_bounds")
+The finite weighted Jensen estimate for $`\log(1+x)` holds for arbitrary
+nonnegative real weights and inputs. Specializing the weights to infinite-place
+multiplicities gives both bounds underlying equation (11), using that those
+multiplicities sum to $`[K:\mathbb Q]`.
 
-*Status: not started (unconditional target).*
+*Status: proved unconditionally; the later height decomposition must still
+bound the displayed weighted average by the $`j`-height.*
 :::
 
 # Realization interfaces
