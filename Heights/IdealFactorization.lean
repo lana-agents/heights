@@ -12,7 +12,7 @@ elementary factorization and norm identities. Denominator divisibility is a
 theorem here, not a certificate field.
 -/
 
-open scoped NumberField nonZeroDivisors
+open scoped NumberField nonZeroDivisors NNReal
 open NumberField IsDedekindDomain
 
 namespace Heights
@@ -106,6 +106,69 @@ lemma ReducedPrincipalIdealData.valuation_eq_exp_sub_multiplicity
         (multiplicity v.asIdeal r.numerator : ℤ) := by
     omega
   rw [← hlog, WithZero.exp_log ((Valuation.ne_zero_iff _).mpr hx)]
+
+/-- A reduced numerator/denominator representation gives an explicit formula
+for the finite-place absolute value in terms of the prime ideal norm. -/
+lemma ReducedPrincipalIdealData.adicAbv_eq_absNorm_zpow_sub_multiplicity
+    {K : Type*} [Field K] [NumberField K]
+    {x : K} (r : ReducedPrincipalIdealData K x) (hx : x ≠ 0)
+    (v : HeightOneSpectrum (𝓞 K)) :
+    NumberField.HeightOneSpectrum.adicAbv K v x =
+      ((Ideal.absNorm v.asIdeal : ℝ) : ℝ) ^
+        ((multiplicity v.asIdeal r.denominator : ℤ) -
+          (multiplicity v.asIdeal r.numerator : ℤ)) := by
+  let z : ℤ := (multiplicity v.asIdeal r.denominator : ℤ) -
+    (multiplicity v.asIdeal r.numerator : ℤ)
+  have hval : v.valuation K x = WithZero.exp z :=
+    r.valuation_eq_exp_sub_multiplicity hx v
+  rw [NumberField.HeightOneSpectrum.adicAbv_def, hval]
+  rw [WithZeroMulInt.toNNReal_neg_apply _ WithZero.exp_ne_zero]
+  have hu : WithZero.unzero (WithZero.exp_ne_zero : WithZero.exp z ≠ 0) =
+      Multiplicative.ofAdd z := by
+    rw [← WithZero.coe_inj, WithZero.coe_unzero]
+    rfl
+  rw [hu, toAdd_ofAdd]
+  simp [z]
+
+/-- At each finite place, the positive logarithm of a nonzero element is exactly
+its reduced denominator multiplicity times the logarithm of the prime norm. -/
+lemma ReducedPrincipalIdealData.finitePlace_posLog_eq
+    {K : Type*} [Field K] [NumberField K]
+    {x : K} (r : ReducedPrincipalIdealData K x) (hx : x ≠ 0)
+    (w : FinitePlace K) :
+    Real.posLog (w x) =
+      (multiplicity w.maximalIdeal.asIdeal r.denominator : ℝ) *
+        Real.log (Ideal.absNorm w.maximalIdeal.asIdeal : ℝ) := by
+  let v := w.maximalIdeal
+  have habv : w x = ((Ideal.absNorm v.asIdeal : ℝ) : ℝ) ^
+      ((multiplicity v.asIdeal r.denominator : ℤ) -
+        (multiplicity v.asIdeal r.numerator : ℤ)) := by
+    rw [← w.norm_embedding_eq x, FinitePlace.norm_embedding]
+    exact r.adicAbv_eq_absNorm_zpow_sub_multiplicity hx v
+  have hbase : (1 : ℝ) < (Ideal.absNorm v.asIdeal : ℝ) := by
+    exact_mod_cast NumberField.HeightOneSpectrum.one_lt_absNorm v
+  by_cases hD : multiplicity v.asIdeal r.denominator = 0
+  · rw [habv, hD, Nat.cast_zero, zero_sub]
+    simp only [Nat.cast_zero, zero_mul]
+    rw [Real.posLog_eq_zero_iff]
+    rw [abs_of_pos (zpow_pos (lt_trans (by norm_num) hbase) _)]
+    exact (zpow_le_one_iff_right₀ hbase).mpr
+      (neg_nonpos.mpr (Int.natCast_nonneg _))
+  have hA := r.numerator_ne_bot hx
+  have htop : multiplicity v.asIdeal (⊤ : Ideal (𝓞 K)) = 0 :=
+    multiplicity_eq_zero.mpr (by
+      simpa only [← Ideal.one_eq_top] using v.prime.not_dvd_one)
+  have hsup := v.multiplicity_sup hA r.denominator_ne_bot
+  rw [(Ideal.isCoprime_iff_sup_eq).mp r.coprime, htop] at hsup
+  have hA0 : multiplicity v.asIdeal r.numerator = 0 := by
+    rcases min_eq_bot.mp hsup.symm with hA0 | hD0
+    · exact hA0
+    · exact (hD hD0).elim
+  rw [habv, hA0, Nat.cast_zero, sub_zero]
+  have hposbase : (0 : ℝ) < Ideal.absNorm v.asIdeal :=
+    lt_trans (by norm_num) hbase
+  rw [zpow_natCast, Real.posLog_pow,
+    Real.posLog_eq_log (by rw [abs_of_pos hposbase]; exact hbase.le)]
 
 /-- Prime by prime, the reduced denominator multiplicity of `j` is at most the
 certified minimal-discriminant multiplicity. The zero-`j` normalization is
@@ -249,8 +312,9 @@ theorem twelve_mul_silvermanHeight_eq
               (‖silvermanModularDiscriminant (p.τ v)‖ * (p.τ v).im ^ 6)) /
         (Module.finrank ℚ K : ℝ) := by
   rw [silvermanHeight, logIdealNorm_minimal_eq_denominator_add_unstable]
-  have hd := (numberFieldDegree_pos K).ne'
-  field_simp
+  all_goals
+    have hd := (numberFieldDegree_pos K).ne'
+    field_simp
 
 /-- The comparison expression from Proposition 2.1 is exactly the normalized
 height minus the denominator contribution plus the archimedean metric sum.
@@ -272,8 +336,9 @@ theorem comparisonExpression_eq
               (‖silvermanModularDiscriminant (p.τ v)‖ * (p.τ v).im ^ 6)) /
             (Module.finrank ℚ K : ℝ) := by
   rw [silvermanHeight, logIdealNorm_minimal_eq_denominator_add_unstable]
-  have hd := (numberFieldDegree_pos K).ne'
-  field_simp
-  ring
+  all_goals
+    have hd := (numberFieldDegree_pos K).ne'
+    field_simp
+    ring
 
 end Heights
