@@ -624,6 +624,21 @@ theorem semistable_abs_comparison_of_corrected_bounds
     linarith [hh, hbounds.1]
   · exact hbounds.2
 
+/-- The usual discriminant-versus-`j` estimate is equivalent, in the direction
+needed below, to a bound on `log⁺ ‖j‖ + log ‖Δ‖`. -/
+theorem modularDeltaComparison_to_posLog
+    (τ : ℍ) (C : ℝ)
+    (h : |(-Real.log ‖silvermanModularDiscriminant τ‖) -
+      Real.log (max ‖modularJ τ‖ 1)| ≤ C) :
+    |Real.posLog ‖modularJ τ‖ +
+      Real.log ‖silvermanModularDiscriminant τ‖| ≤ C := by
+  rw [Real.posLog_eq_log_max_one (norm_nonneg _), max_comm]
+  rw [show Real.log (max ‖modularJ τ‖ 1) +
+      Real.log ‖silvermanModularDiscriminant τ‖ =
+    -((-Real.log ‖silvermanModularDiscriminant τ‖) -
+      Real.log (max ‖modularJ τ‖ 1)) by ring, abs_neg]
+  exact h
+
 /-- The two modular estimates used by Silverman combine pointwise into a
 bound for the complete local comparison term. The factor `6` comes from the
 Petersson metric's `im ^ 6` term. -/
@@ -819,5 +834,55 @@ theorem proposition_2_1_semistable_certified_of_modular_estimates
   intro K _ _ W _ m r p hs
   exact semistable_abs_comparison_of_corrected_bounds W m r p C hs
     (hall K W m r p)
+
+/-- Version of the quantifier bridge accepting the discriminant estimate in
+its standard `|-log ‖Δ‖ - log max (‖j‖, 1)|` form. -/
+theorem proposition_2_1_certified_of_standard_modular_estimates
+    (hΔexist : ∃ CΔ : ℝ, 0 ≤ CΔ ∧ ∀ τ : ℍ, τ ∈ ModularGroup.fd →
+      |(-Real.log ‖silvermanModularDiscriminant τ‖) -
+        Real.log (max ‖modularJ τ‖ 1)| ≤ CΔ)
+    (hyexist : ∃ Cy : ℝ, 0 ≤ Cy ∧ ∀ τ : ℍ, τ ∈ ModularGroup.fd →
+      |Real.log τ.im -
+        Real.log (Real.log (max ‖modularJ τ‖ (Real.exp 1)))| ≤ Cy) :
+    ∃ C : ℝ, 0 ≤ C ∧
+      ∀ (K : Type*) [Field K] [NumberField K]
+        (W : WeierstrassCurve K) [W.IsElliptic]
+        (m : GlobalMinimalDiscriminantData K W)
+        (r : ReducedPrincipalIdealData K W.j)
+        (p : ArchimedeanPeriodData K W),
+        -C ≤ normalizedLogHeight K W.j +
+              logIdealNorm (unstableMinimalDiscriminant m r) /
+                (Module.finrank ℚ K : ℝ) -
+            12 * silvermanHeight W m p ∧
+          normalizedLogHeight K W.j +
+              logIdealNorm (unstableMinimalDiscriminant m r) /
+                (Module.finrank ℚ K : ℝ) -
+            12 * silvermanHeight W m p ≤
+          6 * Real.log (1 + normalizedLogHeight K W.j) + C := by
+  apply proposition_2_1_certified_of_modular_estimates _ hyexist
+  rcases hΔexist with ⟨CΔ, hCΔ, hΔ⟩
+  exact ⟨CΔ, hCΔ, fun τ hτ => modularDeltaComparison_to_posLog τ CΔ (hΔ τ hτ)⟩
+
+/-- Semistable specialization accepting both modular estimates in their
+standard fundamental-domain form. -/
+theorem proposition_2_1_semistable_certified_of_standard_modular_estimates
+    (hΔexist : ∃ CΔ : ℝ, 0 ≤ CΔ ∧ ∀ τ : ℍ, τ ∈ ModularGroup.fd →
+      |(-Real.log ‖silvermanModularDiscriminant τ‖) -
+        Real.log (max ‖modularJ τ‖ 1)| ≤ CΔ)
+    (hyexist : ∃ Cy : ℝ, 0 ≤ Cy ∧ ∀ τ : ℍ, τ ∈ ModularGroup.fd →
+      |Real.log τ.im -
+        Real.log (Real.log (max ‖modularJ τ‖ (Real.exp 1)))| ≤ Cy) :
+    ∃ C : ℝ, 0 ≤ C ∧
+      ∀ (K : Type*) [Field K] [NumberField K]
+        (W : WeierstrassCurve K) [W.IsElliptic]
+        (m : GlobalMinimalDiscriminantData K W)
+        (_r : ReducedPrincipalIdealData K W.j)
+        (p : ArchimedeanPeriodData K W),
+        IsSemistable K W m →
+        |normalizedLogHeight K W.j - 12 * silvermanHeight W m p| ≤
+          6 * Real.log (1 + normalizedLogHeight K W.j) + C := by
+  apply proposition_2_1_semistable_certified_of_modular_estimates _ hyexist
+  rcases hΔexist with ⟨CΔ, hCΔ, hΔ⟩
+  exact ⟨CΔ, hCΔ, fun τ hτ => modularDeltaComparison_to_posLog τ CΔ (hΔ τ hτ)⟩
 
 end Heights

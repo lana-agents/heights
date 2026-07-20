@@ -190,7 +190,7 @@ semistability is proved to make that complement the unit ideal.
 *Status: formalized and proved conditionally on the stated realization data.*
 :::
 
-:::theorem "thm:proposition-2-1-certified" (uses := "prop:rational-height-arithmetic, prop:reduced-principal-ideals, prop:modular-estimates, prop:weighted-log-log, def:silverman-height") (lean := "Heights.comparisonExpression_eq_archimedeanAverage, Heights.correctedComparison_bounds_of_modular_estimates, Heights.proposition_2_1_certified_of_modular_estimates")
+:::theorem "thm:proposition-2-1-certified" (uses := "prop:rational-height-arithmetic, prop:reduced-principal-ideals, prop:modular-estimates, prop:weighted-log-log, def:silverman-height") (lean := "Heights.comparisonExpression_eq_archimedeanAverage, Heights.correctedComparison_bounds_of_modular_estimates, Heights.proposition_2_1_certified_of_modular_estimates, Heights.proposition_2_1_certified_of_standard_modular_estimates")
 One pair of absolute modular-estimate constants, quantified before the number
 field, curve, and certificates, gives Silverman's two-sided Proposition 2.1
 estimate for normalized $`j`-height, the unstable ideal, and
@@ -201,7 +201,7 @@ proved; only the unconditional existence of the two modular constants remains.
 not an all-curves Faltings-height theorem).*
 :::
 
-:::theorem "thm:proposition-2-1-semistable-certified" (uses := "thm:proposition-2-1-certified, def:certified-semistability") (lean := "Heights.semistable_abs_comparison_of_corrected_bounds, Heights.proposition_2_1_semistable_certified_of_modular_estimates")
+:::theorem "thm:proposition-2-1-semistable-certified" (uses := "thm:proposition-2-1-certified, def:certified-semistability") (lean := "Heights.semistable_abs_comparison_of_corrected_bounds, Heights.proposition_2_1_semistable_certified_of_modular_estimates, Heights.proposition_2_1_semistable_certified_of_standard_modular_estimates")
 After proving certified semistability makes the unstable ideal trivial, derive
 the absolute-value specialization comparing normalized $`j`-height with
 $`12\,\mathrm{silvermanHeight}`.
