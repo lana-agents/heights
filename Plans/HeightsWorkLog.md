@@ -155,3 +155,18 @@ concurrent `pi` processes plus orchestrator verification builds on this box.
 No commits existed in either worktree at the time, so nothing was lost;
 both were relaunched fresh and issue-100 completed normally on the second
 attempt.
+
+## Autonomous run 5 — 2026-07-20 (`6c97b53`, main line)
+
+Consumed #100's landing: removed every `ReducedPrincipalIdealData K W.j`
+hypothesis from `Heights/IdealFactorization.lean`, canonicalizing the
+unstable ideal and all downstream comparison/semistable theorems to use
+`Heights.reducedPrincipalIdealData` internally instead of taking it as a
+parameter — turning those results unconditional in that one respect.
+Updated `Plans/HeightsSpec.md` and the Blueprint to match (the headline
+`proposition_2_1_certified` signature in the spec no longer quantifies a
+witness `r`, using `unstableMinimalDiscriminant m` directly).
+`Comparator/config.json`/`Solution.lean` unaffected — neither configured
+target used that data, and the headline stays unexported pending the
+modular estimate. Independently re-verified: full `ci-checks.sh` passes,
+185 declarations audited, all within the permitted axiom set.
