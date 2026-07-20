@@ -356,6 +356,109 @@ theorem unstableMinimalDiscriminant_unique
   apply mul_left_cancel₀ r.denominator_ne_bot
   rw [hγ, denominator_mul_unstableMinimalDiscriminant]
 
+/-- A certified local minimal model has good reduction when its discriminant
+is a unit. This is the valuation characterization used by mathlib's
+`WeierstrassCurve.HasGoodReduction`. -/
+def IsLocalMinimalDiscriminantExponent.IsGoodReduction
+    {K : Type*} [Field K] [NumberField K]
+    {v : HeightOneSpectrum (𝓞 K)} {W : WeierstrassCurve K} {n : ℕ}
+    (h : IsLocalMinimalDiscriminantExponent K v W n) : Prop :=
+  v.valuation K (h.change • W).Δ = 1
+
+/-- A certified local minimal model has multiplicative reduction when its
+ discriminant is a nonunit and its `c₄` invariant is a unit. This is the
+ valuation characterization used by mathlib's
+ `WeierstrassCurve.HasMultiplicativeReduction`. -/
+def IsLocalMinimalDiscriminantExponent.IsMultiplicativeReduction
+    {K : Type*} [Field K] [NumberField K]
+    {v : HeightOneSpectrum (𝓞 K)} {W : WeierstrassCurve K} {n : ℕ}
+    (h : IsLocalMinimalDiscriminantExponent K v W n) : Prop :=
+  v.valuation K (h.change • W).Δ < 1 ∧
+    v.valuation K (h.change • W).c₄ = 1
+
+/-- A certified global minimal discriminant is semistable when every supplied
+local minimal model has good or multiplicative reduction. -/
+def IsSemistable
+    (K : Type*) [Field K] [NumberField K]
+    (W : WeierstrassCurve K) [W.IsElliptic]
+    (m : GlobalMinimalDiscriminantData K W) : Prop :=
+  ∀ v : HeightOneSpectrum (𝓞 K),
+    (m.realizes v).IsGoodReduction ∨
+      (m.realizes v).IsMultiplicativeReduction
+
+/-- At every finite place of a semistable certified curve, the reduced
+`j`-denominator multiplicity equals the minimal-discriminant multiplicity. -/
+lemma denominator_multiplicity_eq_minimal_of_semistable
+    {K : Type*} [Field K] [NumberField K]
+    {W : WeierstrassCurve K} [W.IsElliptic]
+    (m : GlobalMinimalDiscriminantData K W)
+    (r : ReducedPrincipalIdealData K W.j)
+    (hs : IsSemistable K W m)
+    (v : HeightOneSpectrum (𝓞 K)) :
+    multiplicity v.asIdeal r.denominator = multiplicity v.asIdeal m.ideal := by
+  let h := m.realizes v
+  let n := multiplicity v.asIdeal m.ideal
+  have hle := denominator_multiplicity_le_minimal m r v
+  rcases hs v with hgood | hmult
+  · have hexp : WithZero.exp (-(n : ℤ)) = 1 := h.exponent.symm.trans hgood
+    have hn : -(n : ℤ) = 0 := WithZero.exp_eq_one.mp hexp
+    omega
+  · have hval : v.valuation K W.j = WithZero.exp (n : ℤ) := by
+      rw [← W.variableChange_j h.change]
+      let E := h.change • W
+      let ν := v.valuation K
+      rw [WeierstrassCurve.j, map_mul, map_pow, Units.val_inv_eq_inv_val,
+        map_inv₀, WeierstrassCurve.coe_Δ']
+      change (ν E.Δ)⁻¹ * ν E.c₄ ^ 3 = WithZero.exp (n : ℤ)
+      rw [h.exponent, hmult.2, one_pow, mul_one, ← WithZero.exp_neg]
+      simp [n]
+    have hj0 : W.j ≠ 0 := (Valuation.ne_zero_iff _).mp (by
+      rw [hval]
+      exact WithZero.exp_ne_zero)
+    have hexp : WithZero.exp
+        ((multiplicity v.asIdeal r.denominator : ℤ) -
+          (multiplicity v.asIdeal r.numerator : ℤ)) =
+        WithZero.exp (n : ℤ) := by
+      rw [← r.valuation_eq_exp_sub_multiplicity hj0 v, hval]
+    have hz := WithZero.exp_injective hexp
+    omega
+
+/-- For a semistable certified curve, the reduced denominator of `j` is the
+entire minimal-discriminant ideal. -/
+theorem denominator_eq_minimalDiscriminant_of_semistable
+    {K : Type*} [Field K] [NumberField K]
+    {W : WeierstrassCurve K} [W.IsElliptic]
+    (m : GlobalMinimalDiscriminantData K W)
+    (r : ReducedPrincipalIdealData K W.j)
+    (hs : IsSemistable K W m) :
+    r.denominator = m.ideal := by
+  apply dvd_antisymm (denominator_dvd_minimalDiscriminant m r)
+  apply (UniqueFactorizationMonoid.dvd_iff_emultiplicity_le m.ideal_ne_bot).mpr
+  intro p hp
+  let v : HeightOneSpectrum (𝓞 K) :=
+    ⟨p, Ideal.isPrime_of_prime hp, hp.ne_zero⟩
+  have heq := denominator_multiplicity_eq_minimal_of_semistable m r hs v
+  have hm : FiniteMultiplicity p m.ideal :=
+    FiniteMultiplicity.of_prime_left hp m.ideal_ne_bot
+  have hD : FiniteMultiplicity p r.denominator :=
+    FiniteMultiplicity.of_prime_left hp r.denominator_ne_bot
+  rw [hm.emultiplicity_eq_multiplicity, hD.emultiplicity_eq_multiplicity]
+  exact_mod_cast heq.symm.le
+
+/-- Semistability kills the complementary unstable minimal-discriminant
+ideal. -/
+theorem unstableMinimalDiscriminant_eq_top_of_semistable
+    {K : Type*} [Field K] [NumberField K]
+    {W : WeierstrassCurve K} [W.IsElliptic]
+    (m : GlobalMinimalDiscriminantData K W)
+    (r : ReducedPrincipalIdealData K W.j)
+    (hs : IsSemistable K W m) :
+    unstableMinimalDiscriminant m r = ⊤ := by
+  symm
+  apply unstableMinimalDiscriminant_unique m r ⊤
+  rw [← Ideal.one_eq_top, mul_one,
+    denominator_eq_minimalDiscriminant_of_semistable m r hs]
+
 /-- Logarithmic ideal norm turns products of nonzero ideals into sums. -/
 theorem logIdealNorm_mul
     {K : Type*} [Field K] [NumberField K]
