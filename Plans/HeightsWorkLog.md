@@ -295,3 +295,21 @@ lattice Weierstrass curve and identify its algebraic `j` with `modularJ`.
 The minimal Route A blocker remains #128 (surjectivity of `modularJ`). Full CI
 passed with 239 declarations audited and only `propext`, `Quot.sound`, and
 `Classical.choice`.
+
+## Autonomous run 9 — 2026-07-20
+
+Completed #137, the second explicit slice of #57 Route B. The new focused
+module `Heights/LatticeWeierstrass.lean` defines the short Weierstrass curve
+`y² = x³ - g₂x/4 - g₃/4` attached to `(τ, 1)`. Mathlib's differential equation
+for `℘` proves `(℘(z), ℘'(z)/2)` lies on its affine equation away from the
+lattice. Direct invariant calculations give `c₄ = 12g₂` and
+`Δ_W = g₂³ - 27g₃² = 4096π¹²Δ(τ)`, yielding an honest
+`WeierstrassCurve.IsElliptic` instance and the exact identity
+`WeierstrassCurve.j = Heights.modularJ τ`.
+
+The Blueprint and feasibility report now mark Route B steps 1 and 2 complete.
+No quotient-torus descent, projective extension at lattice points, group-law
+compatibility, arbitrary-curve uniformization, or modular-`j` surjectivity is
+claimed; those remain the substantial Route B / Route A gaps. Full
+`LAKE_JOBS=6 ./scripts/ci-checks.sh` passed with 259 declarations audited and
+only `propext`, `Quot.sound`, and `Classical.choice`.

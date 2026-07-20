@@ -123,6 +123,23 @@ torus, descend $`\wp`, or uniformize an algebraic elliptic curve.
 *Status: proved unconditionally.*
 :::
 
+:::proposition "prop:lattice-weierstrass-curve" (uses := "prop:lattice-eisenstein-normalization, def:modular-j") (lean := "Heights.latticeWeierstrassCurve, Heights.weierstrassP_on_latticeWeierstrassCurve, Heights.latticeWeierstrassCurve_c4, Heights.latticeWeierstrassCurve_discriminant, Heights.latticeWeierstrassCurve_discriminant_eq_modularDiscriminant, Heights.latticeWeierstrassCurve_j")
+The lattice invariants define the short Weierstrass curve
+$`y^2=x^3-g_2x/4-g_3/4`. Away from the lattice, the differential equation for
+$`\wp` proves that $`(\wp(z),\wp'(z)/2)` lies on this curve. Its algebraic
+invariants satisfy
+$`c_4=12g_2` and
+$`\Delta_W=g_2^3-27g_3^2=4096\pi^{12}\Delta(\tau)`, so it is elliptic, and
+its algebraic $`j`-invariant is exactly $`j_{\mathrm{mod}}(\tau)`.
+
+This does not descend $`\wp` through $`\mathbb C/L`, handle the lattice points
+as projective points at infinity, or prove an arbitrary complex elliptic curve
+is uniformized by a lattice.
+
+*Status: proved unconditionally for the explicit curve attached to each
+$`\tau\in\mathfrak H`.*
+:::
+
 :::proposition "prop:weighted-log-log" (lean := "Heights.weightedLogOneAdd_le, Heights.infinitePlaceWeightedLogOneAdd_bounds, Heights.infinitePlacePosLogAverage_le_normalizedLogHeight, Heights.infinitePlaceLogLogMax_bounds")
 The finite weighted Jensen estimate for $`\log(1+x)` holds for arbitrary
 nonnegative real weights and inputs. Specializing the weights to infinite-place

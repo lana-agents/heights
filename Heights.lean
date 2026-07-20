@@ -1,6 +1,7 @@
 import Heights.WeilHeight
 import Heights.ModularJ
 import Heights.LatticeEisenstein
+import Heights.LatticeWeierstrass
 import Heights.Certificates
 import Heights.SilvermanHeight
 import Heights.IdealFactorization
