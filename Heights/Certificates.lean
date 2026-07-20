@@ -215,6 +215,21 @@ theorem IsIntegralAt.valuation_c₄_le_one
   · rw [map_mul]
     exact mul_le_one₀ (hconst 24) bot_le hb₄
 
+/-- Every nonzero value in `ℤᵐ⁰` at most one has a unique-style
+nonnegative additive order: it is `exp (-n)` for some natural number `n`.
+
+This is the elementary value-group conversion needed to record the
+nonnegative discriminant order of an integral local equation. -/
+lemma exists_eq_exp_neg_nat
+    {x : WithZero (Multiplicative ℤ)} (hx : x ≠ 0) (h : x ≤ 1) :
+    ∃ n : ℕ, x = WithZero.exp (-(n : ℤ)) := by
+  have hz : WithZero.log x ≤ 0 := by
+    rw [← WithZero.exp_le_exp]
+    simpa [hx] using h
+  refine ⟨(-WithZero.log x).toNat, ?_⟩
+  rw [Int.toNat_of_nonneg (neg_nonneg.mpr hz)]
+  simp [hx]
+
 /-- Local minimality bounds the pole order of `j` by the minimal
 discriminant exponent.
 
