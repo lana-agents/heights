@@ -101,6 +101,22 @@ cap. No `gh`/GitHub API PR token exists yet, so resolved sub-issue branches
 are self-merged into `main` by the orchestrator after independent
 verification, not opened as real PRs.
 
+## Autonomous run 4 — 2026-07-20 (`701fdaf`, main line, concurrent with the 3 sub-issue agents)
+
+Still avoided `Heights/ModularJ.lean` and `Heights/Certificates.lean`. Picked
+up its own run-3 follow-ups plus more: `5950764` (equation (11) specialized
+to the actual normalized Weil height, closing #113), `6bbe1dc` (the `ε`-
+absorption bound for the P7 rational specialization, closing #115),
+`7c1e921` (aggregates the pointwise modular estimates into the corrected
+comparison bounds), `a13b2aa` (certified comparison quantifier bridge, in
+the correct quantifier order), `701fdaf` (bridge accepting the standard
+modular-discriminant estimate form that issue-99's construction is expected
+to produce, so that merge should be low-friction once it lands). Blueprint
+updated to match. `LAKE_JOBS=6 ./scripts/ci-checks.sh` passed before commit;
+orchestrator re-verification is queued (the box is under real load from 3
+sub-issue agents running concurrently, so the verification build is slower
+than usual — not a correctness concern).
+
 **Orchestrator side-quest while run 2 was in flight:** filed and labeled
 `ready-to-clanck` (id 3) five self-contained, dedup-checked parallelizable
 subtasks under #32, chosen to not touch any file run 2 is currently editing
