@@ -5,6 +5,7 @@ import Heights.LatticeWeierstrass
 import Heights.LatticeAffinePoint
 import Heights.LatticeQuotientPoint
 import Heights.LatticeQuotientTopology
+import Heights.LatticeQuotientCompact
 import Heights.LatticeCurveTopology
 import Heights.LatticeAffinePointTopology
 import Heights.LatticePointMapTopology

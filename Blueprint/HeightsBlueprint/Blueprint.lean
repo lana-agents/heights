@@ -198,6 +198,20 @@ bijection, or an analytic equivalence.
 uniformization remains open.*
 :::
 
+:::proposition "prop:lattice-quotient-compactness" (uses := "prop:lattice-quotient-topology") (lean := "Heights.isCompact_range_latticeQuotientMk, Heights.isCompact_univ_latticeQuotient, Heights.latticeQuotientCompactSpace")
+The period lattice is a full $`\mathbb Z`-lattice in the real vector space
+$`\mathbb C`. Mathlib's compact-range theorem for continuous lattice-periodic
+maps applies to the canonical projection; because that projection is
+surjective, its compact range is the whole quotient $`\mathbb C/L`.
+
+This compactness concerns only the source topology. It does not establish
+injectivity or bijectivity of the descended point map, compatibility with the
+group laws, a homeomorphism, analyticity, or uniformization.
+
+*Status: the explicit complex lattice quotient is proved compact
+unconditionally.*
+:::
+
 :::proposition "prop:lattice-curve-topology" (uses := "prop:lattice-weierstrass-curve, prop:lattice-quotient-topology") (lean := "Heights.LatticeCurveAffine, Heights.LatticeCurvePoint, Heights.latticeCurvePointEquiv, Heights.latticeCurvePointHomeomorph, Heights.latticeCurvePointInfinity, Heights.latticeCurvePointOfAffine, Heights.latticeCurvePointHomeomorph_infinity, Heights.latticeCurvePointHomeomorph_affine, Heights.isOpenEmbedding_latticeCurvePointOfAffine, Heights.isClosed_latticeCurveAffine, Heights.latticeCurveAffineLocallyCompactSpace, Heights.latticeCurvePointCompactSpace, Heights.latticeCurvePointT1Space, Heights.latticeCurvePointT4Space")
 For the explicit lattice curve only, a named wrapper around the algebraic point
 type is given the topology transported from the one-point compactification of

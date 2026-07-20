@@ -343,3 +343,9 @@ height arithmetic, the modular discriminant and `j`, weighted Jensen, the five
 realization/formula interfaces, and their exact honesty boundaries. No private
 reference text was reproduced; the prose summarizes the mathematics in the
 repository's own words. Full CI remained clean with 326 declarations audited.
+
+Finally, #154 packages compactness of the source quotient. The continuous
+projection `ℂ → ℂ/L` is periodic under the full `ℤ`-lattice, so
+`IsZLattice.isCompact_range_of_periodic` makes its range compact; quotient
+surjectivity identifies that range with the whole space. This adds no
+injectivity, group-law, analyticity, or uniformization claim.

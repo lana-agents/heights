@@ -356,8 +356,8 @@ There are two genuinely large realization gaps, one now partially discharged.
    `ℂ` and no `ℂ/L` elliptic-curve equivalence. This repository now constructs
    the explicit curve attached to `(τ, 1)`, identifies its algebraic `j` with
    `modularJ τ`, extends the Weierstrass point map at lattice poles by the point
-   at infinity, descends it set-theoretically to `ℂ/L`, topologizes the source
-   quotient, transports a compact Hausdorff one-point-compactification topology
+   at infinity, descends it set-theoretically to `ℂ/L`, proves the source
+   quotient compact, transports a compact Hausdorff one-point-compactification topology
    to a named wrapper of the explicit target point type using closedness and
    local compactness of its affine equation locus. The order-two pole of `℘`
    proves convergence to infinity at every lattice point, so both the total map
@@ -476,7 +476,8 @@ The following was checked against `.lake/packages/mathlib/Mathlib/`.
   `Heights/LatticeQuotientPoint.lean` extends that map at the poles and descends
   it set-theoretically through `ℂ/L`. The quotient and target topologies are
   packaged in `Heights/LatticeQuotientTopology.lean` and
-  `Heights/LatticeCurveTopology.lean`; `Heights/LatticeAffinePointTopology.lean`
+  `Heights/LatticeCurveTopology.lean`, with source compactness proved in
+  `Heights/LatticeQuotientCompact.lean`; `Heights/LatticeAffinePointTopology.lean`
   proves continuity on the pole-free affine chart, and
   `Heights/LatticePointMapTopology.lean` uses the pole order to prove continuity
   of the total and descended maps at infinity. Search still found no analytic
@@ -614,7 +615,7 @@ mathematical content, not that the abandoned review ceremony was performed.
 | P5 | Complete: denominator divisibility, canonical unstable ideal, exact finite/archimedean decomposition, semistability. |
 | P6 | Complete: both certified Proposition 2.1 theorems and the expanded comparator target. |
 | P7 | Partially complete: rational arithmetic, equation (11), and ε-absorption are proved; no uncertified Faltings-height corollary is claimed. |
-| P8 | Arithmetic `ℚ` branch GO and complete; general arithmetic branch remains #56. Archimedean branch STOP as phase-sized work, although the explicit lattice curve, total point map, descent through `ℂ/L`, source quotient topology, conservative explicit-target topology, and continuity of the total/descended map (including at the poles) are complete Route B slices; see `Plans/ArchimedeanUniformizationFeasibility.md` and #57. Analytic extension, the remaining uniformization properties, and Arakelov identification remain unavailable. |
+| P8 | Arithmetic `ℚ` branch GO and complete; general arithmetic branch remains #56. Archimedean branch STOP as phase-sized work, although the explicit lattice curve, total point map, descent through `ℂ/L`, compact source quotient topology, conservative explicit-target topology, and continuity of the total/descended map (including at the poles) are complete Route B slices; see `Plans/ArchimedeanUniformizationFeasibility.md` and #57. Analytic extension, the remaining uniformization properties, and Arakelov identification remain unavailable. |
 | P9 | Not scheduled. Over `ℚ`, only `ArchimedeanPeriodData ℚ W` remains; general `K` also needs #56. |
 
 ### P0 — Bootstrap (already committed)

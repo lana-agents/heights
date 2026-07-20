@@ -82,7 +82,10 @@ function on the additive quotient `ℂ/L`.  The source quotient is now equipped
 with its standard topological-additive-group structure in
 `Heights/LatticeQuotientTopology.lean`: the canonical projection is proved
 continuous, open, and a quotient map, and closedness of the period lattice
-gives a `T1Space`.  The target of the descended map now also has a conservative,
+gives a `T1Space`.  `Heights/LatticeQuotientCompact.lean` applies mathlib's
+compact-range theorem for full-lattice-periodic maps to that surjective
+projection, proving `ℂ/L` compact.  The target of the descended map now also has
+a conservative,
 explicit-curve-only topology in `Heights/LatticeCurveTopology.lean`: a named
 wrapper around the lattice-curve point type is homeomorphic to the one-point
 compactification of its affine equation locus.  The affine Weierstrass equation
@@ -170,6 +173,7 @@ result.
 3. **Partially completed in `Heights/LatticeAffinePoint.lean`,
    `Heights/LatticeQuotientPoint.lean`,
    `Heights/LatticeQuotientTopology.lean`,
+   `Heights/LatticeQuotientCompact.lean`,
    `Heights/LatticeCurveTopology.lean`,
    `Heights/LatticeAffinePointTopology.lean`, and
    `Heights/LatticePointMapTopology.lean`:** package `(℘(z),℘'(z)/2)` as an
@@ -177,8 +181,9 @@ result.
    point at infinity, prove invariance of the total map under lattice
    translation, descend it set-theoretically through the additive quotient
    `ℂ/L`, package the quotient's standard topology (including continuity,
-   openness, and quotient-map status of `ℂ → ℂ/L`, and its `T1` separation),
-   and transport the one-point-compactification topology to a named wrapper of
+   openness, and quotient-map status of `ℂ → ℂ/L`, its `T1` separation, and
+   compactness from the full-lattice fundamental parallelepiped), and transport
+   the one-point-compactification topology to a named wrapper of
    the explicit curve-point target.  The affine equation locus is closed and
    locally compact, so the target wrapper is compact and `T4` (hence Hausdorff
    and regular), and its affine chart is an open embedding.  The pole-free
@@ -210,7 +215,7 @@ not acceptable.
 the shortest path to the repository's present headline theorem; Route B is the
 right long-term path if “period data” is to carry its full geometric meaning
 and if the formula-defined height is eventually to be related to a genuine
-Faltings height. The source quotient topology, a conservative compact
+Faltings height. The compact source quotient topology, a conservative compact
 Hausdorff one-point-compactification topology on the explicit target, and
 continuity of the total and descended point maps are now available, but they do
 not resolve analytic extension, group-law compatibility, bijectivity, or the
