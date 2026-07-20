@@ -174,9 +174,14 @@ Arakelov/Hodge-bundle construction.
 :::definition "def:certified-semistability" (uses := "def:global-minimal-discriminant-data")
 Define semistability place by place as good or multiplicative reduction for a
 minimal local model, and define the unstable minimal-discriminant ideal from
-proved denominator divisibility.
+proved denominator divisibility. The complementary ideal, its uniqueness, and
+its logarithmic norm decomposition are now formalized in
+`Heights.unstableMinimalDiscriminant` and
+`Heights.logIdealNorm_minimal_eq_denominator_add_unstable` once a divisibility
+proof is supplied.
 
-*Status: not started (certificate-level definition and theorem targets).*
+*Status: complementary ideal formalized conditionally; denominator divisibility
+and certified semistability remain open.*
 :::
 
 :::theorem "thm:proposition-2-1-certified" (uses := "prop:rational-height-arithmetic, prop:reduced-principal-ideals, prop:modular-estimates, prop:weighted-log-log, def:silverman-height")

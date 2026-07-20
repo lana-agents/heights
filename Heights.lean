@@ -2,6 +2,7 @@ import Heights.WeilHeight
 import Heights.ModularJ
 import Heights.Certificates
 import Heights.SilvermanHeight
+import Heights.IdealFactorization
 
 /-!
 # Heights
