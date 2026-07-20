@@ -52,19 +52,21 @@ the zero ideal.
 *Status: not started (unconditional definition target).*
 :::
 
-:::definition "def:silverman-modular-discriminant"
-Define Silverman's analytic normalization by
+:::definition "def:silverman-modular-discriminant" (lean := "Heights.silvermanModularDiscriminant, Heights.silvermanModularDiscriminant_ne_zero")
+Silverman's analytic normalization is
 $`\Delta_{\mathrm{Silv}}(\tau)=(2\pi)^{12}\Delta_{\mathrm{mathlib}}(\tau)`.
-The factor may not be silently dropped.
+The factor is retained explicitly, and the function is proved nonvanishing.
 
-*Status: not started (unconditional definition target).*
+*Status: formalized unconditionally.*
 :::
 
-:::definition "def:modular-j"
+:::definition "def:modular-j" (lean := "Heights.modularJ, Heights.modularJ_mul_discriminant, Heights.modularJ_eq_zero_iff")
 Define $`j_{\mathrm{mod}}(\tau)=E_4(\tau)^3/\Delta_{\mathrm{mathlib}}(\tau)`.
 This is the $`q^{-1}+744+\cdots` normalization, without a factor of 1728.
+The denominator is proved nonzero and the normalization is checked against the
+$`E_4,E_6,\Delta` identity.
 
-*Status: not started (unconditional definition target).*
+*Status: formalized unconditionally; global analytic bounds remain open.*
 :::
 
 # Unconditional mathematics
