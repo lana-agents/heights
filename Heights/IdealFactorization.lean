@@ -763,4 +763,61 @@ theorem correctedComparison_bounds_of_modular_estimates
         dsimp [C]
         ring
 
+/-- Once the two unconditional fundamental-domain estimates exist, their
+constants can be chosen before every number field, curve, and certificate.
+This is the exact quantifier-order bridge to certified Proposition 2.1. -/
+theorem proposition_2_1_certified_of_modular_estimates
+    (hΔexist : ∃ CΔ : ℝ, 0 ≤ CΔ ∧ ∀ τ : ℍ, τ ∈ ModularGroup.fd →
+      |Real.posLog ‖modularJ τ‖ +
+        Real.log ‖silvermanModularDiscriminant τ‖| ≤ CΔ)
+    (hyexist : ∃ Cy : ℝ, 0 ≤ Cy ∧ ∀ τ : ℍ, τ ∈ ModularGroup.fd →
+      |Real.log τ.im -
+        Real.log (Real.log (max ‖modularJ τ‖ (Real.exp 1)))| ≤ Cy) :
+    ∃ C : ℝ, 0 ≤ C ∧
+      ∀ (K : Type*) [Field K] [NumberField K]
+        (W : WeierstrassCurve K) [W.IsElliptic]
+        (m : GlobalMinimalDiscriminantData K W)
+        (r : ReducedPrincipalIdealData K W.j)
+        (p : ArchimedeanPeriodData K W),
+        -C ≤ normalizedLogHeight K W.j +
+              logIdealNorm (unstableMinimalDiscriminant m r) /
+                (Module.finrank ℚ K : ℝ) -
+            12 * silvermanHeight W m p ∧
+          normalizedLogHeight K W.j +
+              logIdealNorm (unstableMinimalDiscriminant m r) /
+                (Module.finrank ℚ K : ℝ) -
+            12 * silvermanHeight W m p ≤
+          6 * Real.log (1 + normalizedLogHeight K W.j) + C := by
+  rcases hΔexist with ⟨CΔ, hCΔ, hΔ⟩
+  rcases hyexist with ⟨Cy, hCy, hy⟩
+  refine ⟨CΔ + 6 * Cy, by positivity, ?_⟩
+  intro K _ _ W _ m r p
+  exact (correctedComparison_bounds_of_modular_estimates
+    W m r p CΔ Cy hCΔ hCy hΔ hy).2
+
+/-- Under the same two modular estimates, certified semistability removes the
+unstable-ideal correction and gives the absolute-value specialization. -/
+theorem proposition_2_1_semistable_certified_of_modular_estimates
+    (hΔexist : ∃ CΔ : ℝ, 0 ≤ CΔ ∧ ∀ τ : ℍ, τ ∈ ModularGroup.fd →
+      |Real.posLog ‖modularJ τ‖ +
+        Real.log ‖silvermanModularDiscriminant τ‖| ≤ CΔ)
+    (hyexist : ∃ Cy : ℝ, 0 ≤ Cy ∧ ∀ τ : ℍ, τ ∈ ModularGroup.fd →
+      |Real.log τ.im -
+        Real.log (Real.log (max ‖modularJ τ‖ (Real.exp 1)))| ≤ Cy) :
+    ∃ C : ℝ, 0 ≤ C ∧
+      ∀ (K : Type*) [Field K] [NumberField K]
+        (W : WeierstrassCurve K) [W.IsElliptic]
+        (m : GlobalMinimalDiscriminantData K W)
+        (_r : ReducedPrincipalIdealData K W.j)
+        (p : ArchimedeanPeriodData K W),
+        IsSemistable K W m →
+        |normalizedLogHeight K W.j - 12 * silvermanHeight W m p| ≤
+          6 * Real.log (1 + normalizedLogHeight K W.j) + C := by
+  rcases proposition_2_1_certified_of_modular_estimates hΔexist hyexist with
+    ⟨C, hC, hall⟩
+  refine ⟨C, hC, ?_⟩
+  intro K _ _ W _ m r p hs
+  exact semistable_abs_comparison_of_corrected_bounds W m r p C hs
+    (hall K W m r p)
+
 end Heights
