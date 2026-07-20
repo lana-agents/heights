@@ -44,3 +44,62 @@ fronts are the canonical reduced-principal-ideal/finite-place height identity,
 denominator divisibility from local minimality, and the absolute modular
 fundamental-domain estimates. The two realization gaps (#56 and #57) remain
 honestly certificate-level.
+
+## Autonomous run 2 — 2026-07-20 (`cd4aeb8`; orchestrator polled and pushed per-commit throughout)
+
+Landed (pushed as each commit appeared, per the revised push-after-every-commit
+protocol): `2f3ac46` (GitHub Actions CI + staged Verso blueprint Pages
+deployment — see the private-repo caveat below), `47aa6cd` (local `j`-pole
+bounds by minimal discriminants), `fe71948` (**proves**
+`denominator_dvd_minimalDiscriminant` — `D ∣ Δmin` is now a theorem, not a
+hypothesis, closing the gap round-1 P1 review flagged), `072467c` (canonical
+`unstableMinimalDiscriminant` built from that proof, replacing the free-`γ`
+interface), `01c5c12` (`twelve_mul_silvermanHeight_eq`,
+`comparisonExpression_eq` — the exact algebraic identity reducing Proposition
+2.1's certified comparison to a finite-place term plus the archimedean sum),
+`fe46dbc`–`1628547` (per-finite-place and global finite-place Weil-height
+identities, including `x = 0`), `cd4aeb8` (reduces the certified comparison
+expression to purely archimedean modular terms — the finite-place side of the
+certified Proposition 2.1 comparison is now essentially complete; the
+remaining open front is the archimedean modular fundamental-domain estimate,
+now being worked in parallel as issue #99).
+
+Run validated `LAKE_JOBS=6 lake build`, `Blueprint/scripts/ci-pages.sh`,
+`./scripts/ci-checks.sh`, and the trust/axiom audits before finishing;
+independently re-verified by the orchestrator. GitHub Pages for the blueprint
+will 404 until the repo is public (requires purging the copyrighted PDF from
+history first) or the org enables Pages for private repos.
+
+## Parallel sub-issue agents launched — 2026-07-20
+
+Per owner directive, launched 3 sub-issue pi agents in dedicated git
+worktrees off `main@fe46dbc` (each claimed via the `o-claimed` label +
+assignee + comment, each capped at `LAKE_JOBS=4`, cap of 3 concurrent
+sub-issue agents plus the 1 main-line agent): issue-99 (modular
+fundamental-domain estimate, `Heights/ModularJ.lean` only), issue-100
+(construct `ReducedPrincipalIdealData`, `Heights/Certificates.lean` only),
+issue-101 (construct `GlobalMinimalDiscriminantData` over `ℚ`, first slice of
+#56, `Heights/Certificates.lean` only). Also filed `ready-to-clanck` (label 3)
+#102 (audit tooling: verify blueprint `lean :=` links) and #103 (blueprint
+proof-sketch prose) for later pickup, left unclaimed under the concurrency
+cap. No `gh`/GitHub API PR token exists yet, so resolved sub-issue branches
+are self-merged into `main` by the orchestrator after independent
+verification, not opened as real PRs.
+
+**Orchestrator side-quest while run 2 was in flight:** filed and labeled
+`ready-to-clanck` (id 3) five self-contained, dedup-checked parallelizable
+subtasks under #32, chosen to not touch any file run 2 is currently editing
+(`Heights/IdealFactorization.lean`, `Heights/SilvermanHeight.lean`,
+`Heights/Certificates.lean`):
+* #99 — prove `modular_delta_j_fd_comparison` (the archimedean fundamental-domain
+  estimate; pure modular-forms analysis, `Heights/ModularJ.lean`).
+* #100 — construct `ReducedPrincipalIdealData` for any nonzero number-field
+  element (should be unconditionally provable via Dedekind factorization, not
+  certificate-level — currently only ever assumed as a hypothesis).
+* #101 — first slice of #56: construct `GlobalMinimalDiscriminantData` for
+  elliptic curves over `ℚ` specifically (tractable; general number fields
+  remain #56's harder open case).
+* #102 — audit tooling: verify the blueprint's `lean :=` links actually
+  resolve to real compiling declarations.
+* #103 — blueprint proof-sketch prose for already-`lean :=`-linked nodes
+  (currently signature restatements, not real exposition).
