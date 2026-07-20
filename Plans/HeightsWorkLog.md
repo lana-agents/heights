@@ -276,3 +276,22 @@ Filed ready-to-clanck #128 (modular-`j` surjectivity, the minimal route) and
 #129 (identify `PeriodPair.G` with `E₄/E₆`, the first genuine geometric route
 slice). Full CI passed with 227 public declarations audited and only
 `propext`, `Quot.sound`, and `Classical.choice`.
+
+## Autonomous run 8 — 2026-07-20
+
+Closed #129 with `72449c6`. The new focused module
+`Heights/LatticeEisenstein.lean` constructs the period pair `(τ, 1)`, transports
+`PeriodPair.G` through `latticeEquivProd` to mathlib's full integer-pair
+Eisenstein sum, and proves the exact normalizations
+`G₄ = π⁴ E₄ / 45` and `G₆ = 2 π⁶ E₆ / 945`. It also derives
+`g₂ = 4 π⁴ E₄ / 3`, `g₃ = 8 π⁶ E₆ / 27`, and
+`g₂³ - 27 g₃² = 4096 π¹² Δ`, including nonvanishing. This is the completed
+first slice of #57 Route B, not a quotient-torus or arbitrary-curve
+uniformization theorem.
+
+Updated the Blueprint, feasibility report, and spec to record the result and
+filed ready-to-clanck #137 for the next independent slice: construct the short
+lattice Weierstrass curve and identify its algebraic `j` with `modularJ`.
+The minimal Route A blocker remains #128 (surjectivity of `modularJ`). Full CI
+passed with 239 declarations audited and only `propext`, `Quot.sound`, and
+`Classical.choice`.
