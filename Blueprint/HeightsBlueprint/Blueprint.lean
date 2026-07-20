@@ -86,14 +86,14 @@ archimedean relative-height identity.
 *Status: not started (unconditional target).*
 :::
 
-:::proposition "prop:modular-estimates" (uses := "def:silverman-modular-discriminant, def:modular-j")
-Prove absolute-constant bounds on the standard fundamental domain comparing
+:::proposition "prop:modular-estimates" (uses := "def:silverman-modular-discriminant, def:modular-j") (lean := "Heights.modularDeltaJ_fd_comparison, Heights.modularIm_logLogJ_fd_comparison")
+There are absolute-constant bounds on the standard fundamental domain comparing
 $`-\log|\Delta_{\mathrm{Silv}}|` with $`\log\max(|j|,1)`, and comparing
 $`\log\operatorname{Im}(\tau)` with
-$`\log\log\max(|j|,e)`. The estimates must concern the actual modular
-functions, not certificate fields.
+$`\log\log\max(|j|,e)`. The proofs use the actual modular functions, their cusp
+limits and product expansion, and truncated-fundamental-domain compactness.
 
-*Status: not started (unconditional target).*
+*Status: proved unconditionally.*
 :::
 
 :::proposition "prop:weighted-log-log" (lean := "Heights.weightedLogOneAdd_le, Heights.weightedLogOneAdd_nonneg, Heights.infinitePlaceWeightedLogOneAdd_bounds")

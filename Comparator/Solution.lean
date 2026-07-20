@@ -7,6 +7,8 @@ This module re-exports only challenge targets for which a project proof exists.
 `Comparator/config.json` lists the same proved targets.
 -/
 
+open scoped UpperHalfPlane
+
 namespace Heights
 
 /-- Comparator export of the proved rational-height scaling identity. -/
@@ -23,5 +25,12 @@ theorem weighted_log_one_add_average
     ∑ i, w i * Real.log (1 + x i) ≤
       d * Real.log (1 + (∑ i, w i * x i) / d) :=
   weightedLogOneAdd_le w x d hw hx hd hd_pos
+
+/-- Comparator export of the fundamental-domain modular estimate. -/
+theorem modular_delta_j_fd_comparison :
+    ∃ C : ℝ, 0 ≤ C ∧ ∀ τ : ℍ, τ ∈ ModularGroup.fd →
+      |(-Real.log ‖silvermanModularDiscriminant τ‖) -
+          Real.log (max ‖modularJ τ‖ 1)| ≤ C :=
+  modularDeltaJ_fd_comparison
 
 end Heights
