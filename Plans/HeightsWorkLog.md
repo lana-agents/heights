@@ -316,3 +316,19 @@ only `propext`, `Quot.sound`, and `Classical.choice`. Filed ready-to-clanck
 #138 for the next independent Route B slice: package the off-lattice affine
 `(℘,℘′/2)` point and prove its invariance under lattice translation, without
 yet claiming a quotient descent or projective extension.
+
+## Autonomous run 15 — 2026-07-20
+
+Completed #152, the pole-free continuity slice of #57 Route B. The new module
+`Heights/LatticeAffinePointTopology.lean` factors the existing affine point map
+through the explicit affine equation locus and its open embedding into
+`LatticeCurvePoint τ`. Mathlib's differentiability theorems for `℘` and `℘′`
+away from the period lattice prove continuity of both the coordinate-valued
+map and the wrapped curve-point map on `LatticeComplement τ`.
+
+The Blueprint, specification, and archimedean feasibility report record the
+precise boundary: no limit at a lattice point, continuity of the total or
+descended map there, analytic extension across infinity, group-law
+compatibility, bijectivity, or uniformization is claimed. Full
+`LAKE_JOBS=6 ./scripts/ci-checks.sh` passed with 317 declarations audited and
+only `propext`, `Quot.sound`, and `Classical.choice`.

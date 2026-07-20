@@ -206,6 +206,22 @@ unconditionally for the explicit lattice curve; analytic uniformization
 remains open.*
 :::
 
+:::proposition "prop:lattice-affine-point-continuity" (uses := "prop:lattice-affine-point-map, prop:lattice-curve-topology") (lean := "Heights.latticeAffineCoordinateMap, Heights.latticeAffineCurvePointMap, Heights.latticeAffineCoordinateMap_val, Heights.latticeAffineCurvePointMap_eq, Heights.latticeAffineCurvePointMap_homeomorph, Heights.continuous_latticeAffineCoordinateMap, Heights.continuous_latticeAffineCurvePointMap")
+On the complement of the period lattice, the explicit point map factors through
+the affine equation locus as $`z\mapsto(\wp(z),\wp'(z)/2)`. Differentiability
+of both coordinate functions away from the lattice proves continuity of this
+coordinate map and hence continuity into the one-point-compactified curve-point
+space through its open affine chart.
+
+This is continuity only on the pole-free domain. It does not establish the
+limit at a lattice point, continuity of the total or descended map, analytic
+extension across infinity, group-law compatibility, bijectivity, or
+uniformization.
+
+*Status: pole-free continuity is proved unconditionally for the explicit
+lattice curve; continuity at infinity remains open.*
+:::
+
 :::proposition "prop:weighted-log-log" (lean := "Heights.weightedLogOneAdd_le, Heights.infinitePlaceWeightedLogOneAdd_bounds, Heights.infinitePlacePosLogAverage_le_normalizedLogHeight, Heights.infinitePlaceLogLogMax_bounds")
 The finite weighted Jensen estimate for $`\log(1+x)` holds for arbitrary
 nonnegative real weights and inputs. Specializing the weights to infinite-place

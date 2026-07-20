@@ -88,10 +88,14 @@ wrapper around the lattice-curve point type is homeomorphic to the one-point
 compactification of its affine equation locus.  The affine Weierstrass equation
 is proved to cut out a closed, locally compact subspace of `ℂ × ℂ`; therefore
 the wrapper is compact and `T4` (in particular Hausdorff and regular), and the
-affine chart is an open embedding.  This does not establish any regularity of
-the descended point map: continuity or analyticity at the poles, group-law
-compatibility, bijectivity, complex-torus equivalence, or arbitrary-curve
-uniformization has not been proved.
+affine chart is an open embedding.  Finally,
+`Heights/LatticeAffinePointTopology.lean` factors the pole-free point map
+through that affine chart and proves it continuous from the complement of the
+lattice, using differentiability of `℘` and `℘′`.  This does not establish the
+limit at a lattice point or continuity of the total/descended point map there;
+analytic extension across infinity, group-law compatibility, bijectivity,
+complex-torus equivalence, and arbitrary-curve uniformization have not been
+proved.
 
 ### Modular forms and the fundamental domain
 
@@ -162,8 +166,9 @@ result.
    its algebraic `j` is `Heights.modularJ τ`.
 3. **Partially completed in `Heights/LatticeAffinePoint.lean`,
    `Heights/LatticeQuotientPoint.lean`,
-   `Heights/LatticeQuotientTopology.lean`, and
-   `Heights/LatticeCurveTopology.lean`:** package `(℘(z),℘'(z)/2)` as an
+   `Heights/LatticeQuotientTopology.lean`,
+   `Heights/LatticeCurveTopology.lean`, and
+   `Heights/LatticeAffinePointTopology.lean`:** package `(℘(z),℘'(z)/2)` as an
    affine point away from the lattice, extend it at lattice points by the
    point at infinity, prove invariance of the total map under lattice
    translation, descend it set-theoretically through the additive quotient
@@ -172,10 +177,11 @@ result.
    and transport the one-point-compactification topology to a named wrapper of
    the explicit curve-point target.  The affine equation locus is closed and
    locally compact, so the target wrapper is compact and `T4` (hence Hausdorff
-   and regular), and its affine chart is an open embedding.  Still missing:
-   prove continuity and analyticity of the descended point map, especially at
-   the poles, then prove group-law compatibility, bijectivity, and analyticity
-   of the descended map.
+   and regular), and its affine chart is an open embedding.  The pole-free
+   point map is continuous into that chart.  Still missing: prove its limit at
+   every lattice point and hence continuity of the total and descended maps,
+   then prove analytic extension, group-law compatibility, bijectivity, and
+   analyticity of the descended map.
 4. In the converse direction, obtain a lattice from an arbitrary algebraic
    complex elliptic curve (normally via periods of a holomorphic differential
    or an inverse elliptic integral), then identify the resulting curve using
@@ -200,9 +206,9 @@ not acceptable.
 the shortest path to the repository's present headline theorem; Route B is the
 right long-term path if “period data” is to carry its full geometric meaning
 and if the formula-defined height is eventually to be related to a genuine
-Faltings height. The source quotient topology and a conservative compact
-Hausdorff one-point-compactification topology on the explicit target are now
-available, but these are topological packaging only and do not resolve
-continuity at the pole, analytic extension, or the uniformization gap. Until one route lands, the unconditional
+Faltings height. The source quotient topology, a conservative compact
+Hausdorff one-point-compactification topology on the explicit target, and
+continuity on its pole-free affine chart are now available, but they do not
+resolve continuity at the pole, analytic extension, or the uniformization gap. Until one route lands, the unconditional
 `K = ℚ` result correctly retains `ArchimedeanPeriodData ℚ W` as its sole
 remaining certificate.
