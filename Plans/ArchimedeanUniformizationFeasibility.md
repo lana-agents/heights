@@ -78,10 +78,14 @@ lattice element is proved to preserve that domain, and periodicity of `℘` and
 `℘′` proves invariance of the point map.  The successor module
 `Heights/LatticeQuotientPoint.lean` now sends every lattice element to the
 point at infinity, proves invariance of this total map, and descends it as a
-function on the additive quotient `ℂ/L`.  This descent is set-theoretic only:
-no continuity or analyticity at the poles, group-law compatibility,
-bijectivity, complex-torus equivalence, or arbitrary-curve uniformization has
-been proved.
+function on the additive quotient `ℂ/L`.  The source quotient is now equipped
+with its standard topological-additive-group structure in
+`Heights/LatticeQuotientTopology.lean`: the canonical projection is proved
+continuous, open, and a quotient map, and closedness of the period lattice
+gives a `T1Space`.  This does not establish any regularity of the descended
+point map: no topology on the elliptic-curve point type, continuity or
+analyticity at the poles, group-law compatibility, bijectivity, complex-torus
+equivalence, or arbitrary-curve uniformization has been proved.
 
 ### Modular forms and the fundamental domain
 
@@ -150,14 +154,18 @@ result.
    Weierstrass curve from `g₂,g₃`; prove that `(℘,℘'/2)` satisfies its affine
    equation away from the lattice, that its discriminant is nonzero, and that
    its algebraic `j` is `Heights.modularJ τ`.
-3. **Partially completed in `Heights/LatticeAffinePoint.lean` and
-   `Heights/LatticeQuotientPoint.lean`:** package `(℘(z),℘'(z)/2)` as an affine
-   point away from the lattice, extend it at lattice points by the point at
-   infinity, prove invariance of the total map under lattice translation, and
-   descend it set-theoretically through the additive quotient `ℂ/L`.  Still
-   missing: topologize this construction appropriately and prove continuity
-   and analyticity at the poles, then prove group-law compatibility,
-   bijectivity, and analyticity of the descended map.
+3. **Partially completed in `Heights/LatticeAffinePoint.lean`,
+   `Heights/LatticeQuotientPoint.lean`, and
+   `Heights/LatticeQuotientTopology.lean`:** package `(℘(z),℘'(z)/2)` as an
+   affine point away from the lattice, extend it at lattice points by the
+   point at infinity, prove invariance of the total map under lattice
+   translation, descend it set-theoretically through the additive quotient
+   `ℂ/L`, and package the quotient's standard topology (including continuity,
+   openness, and quotient-map status of `ℂ → ℂ/L`, and its `T1` separation).
+   Still missing: put the appropriate analytic topology on the curve-point
+   target and prove continuity and analyticity at the poles, then prove
+   group-law compatibility, bijectivity, and analyticity of the descended
+   map.
 4. In the converse direction, obtain a lattice from an arbitrary algebraic
    complex elliptic curve (normally via periods of a holomorphic differential
    or an inverse elliptic integral), then identify the resulting curve using
@@ -182,6 +190,8 @@ not acceptable.
 the shortest path to the repository's present headline theorem; Route B is the
 right long-term path if “period data” is to carry its full geometric meaning
 and if the formula-defined height is eventually to be related to a genuine
-Faltings height. Until one route lands, the unconditional `K = ℚ` result
-correctly retains `ArchimedeanPeriodData ℚ W` as its sole remaining
-certificate.
+Faltings height. The source quotient topology is now available, but this is
+only generic quotient-group infrastructure and does not resolve the analytic
+extension or uniformization gap. Until one route lands, the unconditional
+`K = ℚ` result correctly retains `ArchimedeanPeriodData ℚ W` as its sole
+remaining certificate.

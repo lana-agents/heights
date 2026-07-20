@@ -170,6 +170,22 @@ torus equivalence, or uniformization of arbitrary curves is claimed.
 unconditionally for the explicit lattice curve.*
 :::
 
+:::proposition "prop:lattice-quotient-topology" (uses := "prop:lattice-quotient-point-map") (lean := "Heights.latticeQuotientMk, Heights.continuous_latticeQuotientMk, Heights.isOpenMap_latticeQuotientMk, Heights.isQuotientMap_latticeQuotientMk, Heights.latticeQuotientT1Space, Heights.latticeQuotient_nhds_mk")
+The additive quotient $`\mathbb C/L` carries mathlib's standard quotient
+topology. Its canonical projection from $`\mathbb C` is continuous, open, and
+a quotient map. Since the period lattice is closed, the quotient is a
+$`T_1` topological additive group. Neighborhoods of a quotient class are the
+images of neighborhoods of any chosen representative.
+
+These facts topologize only the source of the descended point map. They do not
+put a topology on the algebraic elliptic-curve point type or prove that the
+point map is continuous or analytic at its poles, a group homomorphism, a
+bijection, or an analytic equivalence.
+
+*Status: the source quotient topology is packaged unconditionally; analytic
+uniformization remains open.*
+:::
+
 :::proposition "prop:weighted-log-log" (lean := "Heights.weightedLogOneAdd_le, Heights.infinitePlaceWeightedLogOneAdd_bounds, Heights.infinitePlacePosLogAverage_le_normalizedLogHeight, Heights.infinitePlaceLogLogMax_bounds")
 The finite weighted Jensen estimate for $`\log(1+x)` holds for arbitrary
 nonnegative real weights and inputs. Specializing the weights to infinite-place
