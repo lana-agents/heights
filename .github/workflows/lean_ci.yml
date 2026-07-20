@@ -1,0 +1,28 @@
+name: Lean CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.repository }}-lean-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Build root package
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout project
+        uses: actions/checkout@v4
+
+      - name: Build Lean project
+        uses: leanprover/lean-action@v1
+        with:
+          build-args: '-j 6'
