@@ -140,6 +140,20 @@ is uniformized by a lattice.
 $`\tau\in\mathfrak H`.*
 :::
 
+:::proposition "prop:lattice-affine-point-map" (uses := "prop:lattice-weierstrass-curve") (lean := "Heights.LatticeComplement, Heights.LatticeComplement.translate, Heights.latticeAffinePoint, Heights.latticeAffinePoint_pointEquiv, Heights.latticeAffinePointMap, Heights.latticeAffinePointMap_pointEquiv, Heights.add_lattice_notMem_iff, Heights.latticeAffinePoint_add_lattice, Heights.latticeAffinePointMap_translate")
+On the complement of the period lattice, $`(\wp(z),\wp'(z)/2)` is packaged as
+an actual affine point of the explicit lattice curve. Translation by any
+lattice element preserves this pole-free domain, and periodicity of $`\wp` and
+$`\wp'` proves that it leaves the packaged point unchanged.
+
+This is not a map on all of $`\mathbb C`, because the lattice points have not
+been assigned the point at infinity. Consequently it does not yet define a map
+from $`\mathbb C/L`, nor claim bijectivity, analyticity, or group-law
+compatibility.
+
+*Status: proved unconditionally on the complement of the lattice.*
+:::
+
 :::proposition "prop:weighted-log-log" (lean := "Heights.weightedLogOneAdd_le, Heights.infinitePlaceWeightedLogOneAdd_bounds, Heights.infinitePlacePosLogAverage_le_normalizedLogHeight, Heights.infinitePlaceLogLogMax_bounds")
 The finite weighted Jensen estimate for $`\log(1+x)` holds for arbitrary
 nonnegative real weights and inputs. Specializing the weights to infinite-place

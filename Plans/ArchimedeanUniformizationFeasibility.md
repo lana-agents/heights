@@ -71,8 +71,12 @@ discriminant is nonzero. These lattice-sum normalization results feed the explic
 `y² = x³ - g₂x/4 - g₃/4`, proves `(℘(z), ℘'(z)/2)` satisfies the affine
 equation away from the lattice, computes its algebraic discriminant as
 `g₂³ - 27g₃²`, instantiates `WeierstrassCurve.IsElliptic`, and identifies its
-algebraic `j` with `Heights.modularJ τ`.  This is still not a descent to a
-torus or an arbitrary-curve uniformization.
+algebraic `j` with `Heights.modularJ τ`.  The next pole-free slice is also now
+formalized in `Heights/LatticeAffinePoint.lean`: the coordinate pair is
+packaged as an actual affine elliptic-curve point on `ℂ \ L`, translation by a
+lattice element is proved to preserve that domain, and periodicity of `℘` and
+`℘′` proves invariance of the point map.  This is still not a total map on
+`ℂ`, a descent to a torus, or an arbitrary-curve uniformization.
 
 ### Modular forms and the fundamental domain
 
@@ -141,9 +145,13 @@ result.
    Weierstrass curve from `g₂,g₃`; prove that `(℘,℘'/2)` satisfies its affine
    equation away from the lattice, that its discriminant is nonzero, and that
    its algebraic `j` is `Heights.modularJ τ`.
-3. Descend `(℘,℘')` through the additive quotient `ℂ/L` to projective points,
-   including the lattice points mapping to infinity; prove compatibility with
-   the elliptic-curve group law and prove bijectivity/analyticity.
+3. **Partially completed in `Heights/LatticeAffinePoint.lean`:** package
+   `(℘(z),℘'(z)/2)` as an affine point away from the lattice and prove its
+   invariance under lattice translation.  Still missing: extend the map at
+   lattice points by the projective point at infinity, prove the resulting
+   total map has the continuity/analyticity needed to descend through the
+   additive quotient `ℂ/L`, and then prove group-law compatibility,
+   bijectivity, and analyticity of the descended map.
 4. In the converse direction, obtain a lattice from an arbitrary algebraic
    complex elliptic curve (normally via periods of a holomorphic differential
    or an inverse elliptic integral), then identify the resulting curve using
@@ -157,9 +165,9 @@ major new infrastructure, not glue code.
 ## 4. Judgment
 
 **STOP** for a single heights phase/run. Even after completing the explicit
-lattice curve and invariant computation, neither modular-`j` surjectivity nor
-full algebraic/analytic uniformization is currently a phase-sized consequence
-of the pinned APIs. Attempting to manufacture `ArchimedeanPeriodData` from a
+lattice curve, invariant computation, and periodic affine-point map away from
+its poles, neither modular-`j` surjectivity nor full algebraic/analytic
+uniformization is currently a phase-sized consequence of the pinned APIs. Attempting to manufacture `ArchimedeanPeriodData` from a
 stronger assumption that already supplies the desired `τ`, or adding an
 isomorphism as an unproved structure field, would merely move the gap and is
 not acceptable.
