@@ -457,8 +457,10 @@ The following was checked against `.lake/packages/mathlib/Mathlib/`.
   `PeriodPair.derivWeierstrassP`, lattice invariants `PeriodPair.g₂` and
   `PeriodPair.g₃`, and proves `PeriodPair.derivWeierstrassP_sq`. Its own TODO
   says to connect lattice Eisenstein series to the modular-forms library.
-  Search found no quotient torus attached to a `PeriodPair`, no algebraic
-  elliptic-curve uniformization theorem, and no relation to
+  `Heights/LatticeEisenstein.lean` now supplies the exact `G₄/G₆` to `E₄/E₆`
+  normalization and proves the resulting lattice discriminant nonzero. Search
+  still found no quotient torus attached to a `PeriodPair`, no algebraic
+  elliptic-curve uniformization theorem, and no existing relation to
   `WeierstrassCurve.j`.
 * `UpperHalfPlane`, its `SL₂` action, `qParam`, and the analytic ingredients are
   therefore present. The missing part is the bridge from an algebraic curve to

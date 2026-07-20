@@ -107,6 +107,22 @@ limits and product expansion, and truncated-fundamental-domain compactness.
 *Status: proved unconditionally.*
 :::
 
+:::proposition "prop:lattice-eisenstein-normalization" (uses := "def:modular-j") (lean := "Heights.periodPairOfUpperHalfPlane, Heights.periodPair_G_eq_tsum_eisSummand, Heights.periodPair_G_eq_two_mul_riemannZeta_mul_E, Heights.periodPair_G_four, Heights.periodPair_G_six, Heights.periodPair_invariant_discriminant, Heights.periodPair_invariant_discriminant_ne_zero")
+For $`\tau\in\mathfrak H`, the basis $`(\tau,1)` defines the usual lattice
+$`\mathbb Z+\mathbb Z\tau`. Its full lattice sums satisfy the exact
+normalizations
+$`G_4=\pi^4E_4/45` and $`G_6=2\pi^6E_6/945`. Consequently
+$`g_2=4\pi^4E_4/3`, $`g_3=8\pi^6E_6/27`, and
+$`g_2^3-27g_3^2=4096\pi^{12}\Delta`, which is nonzero. The proof transports
+`PeriodPair.G` through the lattice basis equivalence and then uses mathlib's
+full-pair Eisenstein-sum theorem and exact zeta values.
+
+This is only a lattice-series normalization. It does not construct a quotient
+torus, descend $`\wp`, or uniformize an algebraic elliptic curve.
+
+*Status: proved unconditionally.*
+:::
+
 :::proposition "prop:weighted-log-log" (lean := "Heights.weightedLogOneAdd_le, Heights.infinitePlaceWeightedLogOneAdd_bounds, Heights.infinitePlacePosLogAverage_le_normalizedLogHeight, Heights.infinitePlaceLogLogMax_bounds")
 The finite weighted Jensen estimate for $`\log(1+x)` holds for arbitrary
 nonnegative real weights and inputs. Specializing the weights to infinite-place
