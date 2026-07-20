@@ -7,6 +7,7 @@ import Heights.LatticeQuotientPoint
 import Heights.LatticeQuotientTopology
 import Heights.LatticeCurveTopology
 import Heights.LatticeAffinePointTopology
+import Heights.LatticePointMapTopology
 import Heights.Certificates
 import Heights.SilvermanHeight
 import Heights.IdealFactorization

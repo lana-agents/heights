@@ -359,9 +359,9 @@ There are two genuinely large realization gaps, one now partially discharged.
    at infinity, descends it set-theoretically to `ℂ/L`, topologizes the source
    quotient, transports a compact Hausdorff one-point-compactification topology
    to a named wrapper of the explicit target point type using closedness and
-   local compactness of its affine equation locus, and proves that the point map
-   is continuous on the complement of the lattice. It still does not prove the
-   limit at a pole, continuity of the total/descended map there, analytic
+   local compactness of its affine equation locus. The order-two pole of `℘`
+   proves convergence to infinity at every lattice point, so both the total map
+   and its quotient descent are continuous. It still does not prove analytic
    extension across infinity, group-law compatibility, bijectivity, or a
    complex-torus equivalence. For the current, deliberately
    weak `ArchimedeanPeriodData` interface,
@@ -476,10 +476,11 @@ The following was checked against `.lake/packages/mathlib/Mathlib/`.
   `Heights/LatticeQuotientPoint.lean` extends that map at the poles and descends
   it set-theoretically through `ℂ/L`. The quotient and target topologies are
   packaged in `Heights/LatticeQuotientTopology.lean` and
-  `Heights/LatticeCurveTopology.lean`, while
-  `Heights/LatticeAffinePointTopology.lean` proves continuity on the pole-free
-  affine chart. Search still found no analytic complex torus attached to a
-  `PeriodPair`, no continuity result at the poles or analytic extension across
+  `Heights/LatticeCurveTopology.lean`; `Heights/LatticeAffinePointTopology.lean`
+  proves continuity on the pole-free affine chart, and
+  `Heights/LatticePointMapTopology.lean` uses the pole order to prove continuity
+  of the total and descended maps at infinity. Search still found no analytic
+  complex torus attached to a `PeriodPair`, no analytic extension across
   infinity, and no algebraic elliptic-curve uniformization theorem.
 * `UpperHalfPlane`, its `SL₂` action, `qParam`, and the analytic ingredients are
   therefore present. The missing part is the bridge from an algebraic curve to
@@ -613,7 +614,7 @@ mathematical content, not that the abandoned review ceremony was performed.
 | P5 | Complete: denominator divisibility, canonical unstable ideal, exact finite/archimedean decomposition, semistability. |
 | P6 | Complete: both certified Proposition 2.1 theorems and the expanded comparator target. |
 | P7 | Partially complete: rational arithmetic, equation (11), and ε-absorption are proved; no uncertified Faltings-height corollary is claimed. |
-| P8 | Arithmetic `ℚ` branch GO and complete; general arithmetic branch remains #56. Archimedean branch STOP as phase-sized work, although the explicit lattice curve, total point map, set-theoretic descent through `ℂ/L`, source quotient topology, conservative explicit-target topology, and pole-free continuity are complete Route B slices; see `Plans/ArchimedeanUniformizationFeasibility.md` and #57. Continuity at the pole, analytic uniformization, and Arakelov identification remain unavailable. |
+| P8 | Arithmetic `ℚ` branch GO and complete; general arithmetic branch remains #56. Archimedean branch STOP as phase-sized work, although the explicit lattice curve, total point map, descent through `ℂ/L`, source quotient topology, conservative explicit-target topology, and continuity of the total/descended map (including at the poles) are complete Route B slices; see `Plans/ArchimedeanUniformizationFeasibility.md` and #57. Analytic extension, the remaining uniformization properties, and Arakelov identification remain unavailable. |
 | P9 | Not scheduled. Over `ℚ`, only `ArchimedeanPeriodData ℚ W` remains; general `K` also needs #56. |
 
 ### P0 — Bootstrap (already committed)

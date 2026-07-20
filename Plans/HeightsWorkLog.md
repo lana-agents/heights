@@ -326,9 +326,13 @@ through the explicit affine equation locus and its open embedding into
 away from the period lattice prove continuity of both the coordinate-valued
 map and the wrapped curve-point map on `LatticeComplement τ`.
 
-The Blueprint, specification, and archimedean feasibility report record the
-precise boundary: no limit at a lattice point, continuity of the total or
-descended map there, analytic extension across infinity, group-law
-compatibility, bijectivity, or uniformization is claimed. Full
-`LAKE_JOBS=6 ./scripts/ci-checks.sh` passed with 317 declarations audited and
-only `propext`, `Quot.sound`, and `Classical.choice`.
+Commit `0a24904` recorded the precise pole-free boundary and passed full CI
+with 317 declarations audited. The same run then filed and completed #153 in
+`Heights/LatticePointMapTopology.lean`: `PeriodPair.order_weierstrassP` makes
+`℘` leave every compact set near a lattice point, and projecting any compact
+subset of the affine curve to its first coordinate transfers this escape to
+the affine point map. It therefore converges to infinity in the one-point
+compactification. The total map `ℂ → LatticeCurvePoint τ` is continuous, and
+the quotient-map criterion proves its descended map from `ℂ/L` continuous.
+Analytic extension, group-law compatibility, bijectivity, and uniformization
+are still not claimed.

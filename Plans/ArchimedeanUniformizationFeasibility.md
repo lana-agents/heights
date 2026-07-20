@@ -91,9 +91,12 @@ the wrapper is compact and `T4` (in particular Hausdorff and regular), and the
 affine chart is an open embedding.  Finally,
 `Heights/LatticeAffinePointTopology.lean` factors the pole-free point map
 through that affine chart and proves it continuous from the complement of the
-lattice, using differentiability of `℘` and `℘′`.  This does not establish the
-limit at a lattice point or continuity of the total/descended point map there;
-analytic extension across infinity, group-law compatibility, bijectivity,
+lattice, using differentiability of `℘` and `℘′`.  The successor
+`Heights/LatticePointMapTopology.lean` uses the order-two pole theorem for `℘`
+to prove that the affine coordinates leave every compact set near a lattice
+point.  Thus the total map is continuous into the one-point compactification,
+and the quotient-map criterion proves its descent `ℂ/L → Eτ(ℂ)` continuous.
+Analytic extension across infinity, group-law compatibility, bijectivity,
 complex-torus equivalence, and arbitrary-curve uniformization have not been
 proved.
 
@@ -167,8 +170,9 @@ result.
 3. **Partially completed in `Heights/LatticeAffinePoint.lean`,
    `Heights/LatticeQuotientPoint.lean`,
    `Heights/LatticeQuotientTopology.lean`,
-   `Heights/LatticeCurveTopology.lean`, and
-   `Heights/LatticeAffinePointTopology.lean`:** package `(℘(z),℘'(z)/2)` as an
+   `Heights/LatticeCurveTopology.lean`,
+   `Heights/LatticeAffinePointTopology.lean`, and
+   `Heights/LatticePointMapTopology.lean`:** package `(℘(z),℘'(z)/2)` as an
    affine point away from the lattice, extend it at lattice points by the
    point at infinity, prove invariance of the total map under lattice
    translation, descend it set-theoretically through the additive quotient
@@ -178,10 +182,10 @@ result.
    the explicit curve-point target.  The affine equation locus is closed and
    locally compact, so the target wrapper is compact and `T4` (hence Hausdorff
    and regular), and its affine chart is an open embedding.  The pole-free
-   point map is continuous into that chart.  Still missing: prove its limit at
-   every lattice point and hence continuity of the total and descended maps,
-   then prove analytic extension, group-law compatibility, bijectivity, and
-   analyticity of the descended map.
+   point map is continuous into that chart; the order-two pole of `℘` proves
+   convergence to infinity at lattice points, hence continuity of the total
+   and descended maps.  Still missing: prove analytic extension, group-law
+   compatibility, bijectivity, and analyticity of the descended map.
 4. In the converse direction, obtain a lattice from an arbitrary algebraic
    complex elliptic curve (normally via periods of a holomorphic differential
    or an inverse elliptic integral), then identify the resulting curve using
@@ -208,7 +212,8 @@ right long-term path if “period data” is to carry its full geometric meaning
 and if the formula-defined height is eventually to be related to a genuine
 Faltings height. The source quotient topology, a conservative compact
 Hausdorff one-point-compactification topology on the explicit target, and
-continuity on its pole-free affine chart are now available, but they do not
-resolve continuity at the pole, analytic extension, or the uniformization gap. Until one route lands, the unconditional
+continuity of the total and descended point maps are now available, but they do
+not resolve analytic extension, group-law compatibility, bijectivity, or the
+uniformization gap. Until one route lands, the unconditional
 `K = ℚ` result correctly retains `ArchimedeanPeriodData ℚ W` as its sole
 remaining certificate.

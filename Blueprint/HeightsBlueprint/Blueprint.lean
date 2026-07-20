@@ -219,7 +219,26 @@ extension across infinity, group-law compatibility, bijectivity, or
 uniformization.
 
 *Status: pole-free continuity is proved unconditionally for the explicit
-lattice curve; continuity at infinity remains open.*
+lattice curve; the successor `prop:lattice-point-map-continuity` supplies
+continuity at infinity.*
+:::
+
+:::proposition "prop:lattice-point-map-continuity" (uses := "prop:lattice-affine-point-continuity, prop:lattice-quotient-topology") (lean := "Heights.latticeCurvePointMap, Heights.latticeCurvePointMap_eq, Heights.tendsto_weierstrassP_cocompact_at_lattice, Heights.tendsto_latticeCurvePointMap_homeomorph_at_lattice, Heights.continuousAt_latticeCurvePointMap_of_mem, Heights.continuous_latticeCurvePointMap, Heights.latticeQuotientCurvePointMap, Heights.latticeQuotientCurvePointMap_mk, Heights.continuous_latticeQuotientCurvePointMap")
+At each period-lattice point, the order-two pole theorem for $`\wp` shows that
+its first coordinate leaves every compact subset of $`\mathbb C`. The first-
+coordinate image of a compact subset of the affine equation locus is compact,
+so the affine point map leaves every compact subset of that locus and therefore
+converges to infinity in its one-point compactification. Together with pole-free
+continuity, this proves the total map $`\mathbb C\to E_\tau(\mathbb C)` is
+continuous. The quotient-map criterion then proves continuity of its descent
+$`\mathbb C/L\to E_\tau(\mathbb C)`.
+
+This is a topological result for the explicit lattice curve. It does not prove
+analyticity across infinity, compatibility with either group law, bijectivity,
+a complex-torus equivalence, or uniformization of arbitrary algebraic curves.
+
+*Status: continuity of the total and descended explicit lattice point maps is
+proved unconditionally; the remaining uniformization properties remain open.*
 :::
 
 :::proposition "prop:weighted-log-log" (lean := "Heights.weightedLogOneAdd_le, Heights.infinitePlaceWeightedLogOneAdd_bounds, Heights.infinitePlacePosLogAverage_le_normalizedLogHeight, Heights.infinitePlaceLogLogMax_bounds")
