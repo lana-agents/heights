@@ -104,6 +104,83 @@ structure ReducedPrincipalIdealData
     FractionalIdeal.coeIdeal numerator /
       FractionalIdeal.coeIdeal denominator
 
+/-- Every number-field element admits a reduced principal-ideal representation.
+
+For a nonzero `x`, first write `x = n / d`. The sum of the principal ideals
+`(n)` and `(d)` is their ideal-theoretic gcd. Cancelling it from both ideals
+produces a coprime numerator and denominator. At zero we use the normalization
+specified by `ReducedPrincipalIdealData`: numerator `⊥` and denominator `⊤`. -/
+theorem exists_reducedPrincipalIdealData
+    (K : Type*) [Field K] [NumberField K] (x : K) :
+    Nonempty (ReducedPrincipalIdealData K x) := by
+  by_cases hx : x = 0
+  · subst x
+    exact ⟨
+      { numerator := ⊥
+        denominator := ⊤
+        denominator_ne_bot := top_ne_bot
+        numerator_ne_bot := fun h => (h rfl).elim
+        zero_normalization := fun _ => ⟨rfl, rfl⟩
+        coprime := (Ideal.isCoprime_iff_sup_eq).mpr (by simp)
+        span_eq := by simp }⟩
+  · obtain ⟨n, d, hnd⟩ := IsLocalization.exists_mk'_eq (𝓞 K)⁰ x
+    have hn : n ≠ 0 := by
+      intro hn
+      apply hx
+      rw [← hnd, hn, IsFractionRing.mk'_eq_div, map_zero, zero_div]
+    have hd : (d : 𝓞 K) ≠ 0 := nonZeroDivisors.coe_ne_zero d
+    let N : Ideal (𝓞 K) := Ideal.span {n}
+    let Q : Ideal (𝓞 K) := Ideal.span {(d : 𝓞 K)}
+    let G : Ideal (𝓞 K) := N ⊔ Q
+    have hN : N ≠ ⊥ := mt Ideal.span_singleton_eq_bot.mp hn
+    have hQ : Q ≠ ⊥ := mt Ideal.span_singleton_eq_bot.mp hd
+    have hG : G ≠ ⊥ := by
+      intro h
+      apply hN
+      exact le_bot_iff.mp (h ▸ le_sup_left)
+    have hGN : G ∣ N := Ideal.dvd_iff_le.mpr le_sup_left
+    have hGQ : G ∣ Q := Ideal.dvd_iff_le.mpr le_sup_right
+    let A : Ideal (𝓞 K) := Classical.choose hGN
+    let D : Ideal (𝓞 K) := Classical.choose hGQ
+    have hNA : N = G * A := Classical.choose_spec hGN
+    have hQD : Q = G * D := Classical.choose_spec hGQ
+    have hA : A ≠ ⊥ := by
+      intro h
+      apply hN
+      rw [hNA, h, Ideal.mul_bot]
+    have hD : D ≠ ⊥ := by
+      intro h
+      apply hQ
+      rw [hQD, h, Ideal.mul_bot]
+    refine ⟨
+      { numerator := A
+        denominator := D
+        denominator_ne_bot := hD
+        numerator_ne_bot := fun _ => hA
+        zero_normalization := fun h => (hx h).elim
+        coprime := (Ideal.isCoprime_iff_sup_eq).mpr ?_
+        span_eq := ?_ }⟩
+    · apply mul_left_cancel₀ hG
+      rw [Ideal.mul_sup, ← hNA, ← hQD]
+      simp [G]
+    · rw [← hnd, IsFractionRing.mk'_eq_div,
+        ← FractionalIdeal.spanSingleton_div_spanSingleton,
+        ← FractionalIdeal.coeIdeal_span_singleton,
+        ← FractionalIdeal.coeIdeal_span_singleton]
+      change (N : FractionalIdeal (𝓞 K)⁰ K) / (Q : FractionalIdeal (𝓞 K)⁰ K) =
+        (A : FractionalIdeal (𝓞 K)⁰ K) / (D : FractionalIdeal (𝓞 K)⁰ K)
+      rw [hNA, hQD,
+        FractionalIdeal.coeIdeal_mul, FractionalIdeal.coeIdeal_mul]
+      exact mul_div_mul_left _ _ (FractionalIdeal.coeIdeal_ne_zero.mpr hG)
+
+/-- A chosen reduced principal-ideal representation of any number-field
+element. This removes the need to assume `ReducedPrincipalIdealData` as
+external certificate data. -/
+noncomputable def reducedPrincipalIdealData
+    (K : Type*) [Field K] [NumberField K] (x : K) :
+    ReducedPrincipalIdealData K x :=
+  Classical.choice (exists_reducedPrincipalIdealData K x)
+
 /-- The `c₄` invariant of an equation integral at `v` is integral at `v`.
 
 This is the elementary polynomial part of the finite-place argument: all
