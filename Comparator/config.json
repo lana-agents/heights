@@ -4,7 +4,8 @@
   "theorem_names": [
     "rat_height_scaled_denominator",
     "weighted_log_one_add_average",
-    "modular_delta_j_fd_comparison"
+    "modular_delta_j_fd_comparison",
+    "silverman_proposition_2_1_certified"
   ],
   "definition_names": [],
   "permitted_axioms": ["propext", "Quot.sound", "Classical.choice"]

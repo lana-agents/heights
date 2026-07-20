@@ -208,3 +208,11 @@ fundamental-domain estimates directly, so their only remaining inputs are
 specialization) certified semistability. Updated the Blueprint proof links and
 status text accordingly. Full `ci-checks.sh` passes; 191 public declarations
 were audited, all within the permitted axiom set.
+
+The frozen expanded comparator target also proved compatible with the new
+certificate-level theorem. Added uniqueness of the denominator in any reduced
+principal-ideal representation, used it to identify the comparator's supplied
+ideal with the canonical denominator, assembled the two realization
+certificates, and exported `silverman_proposition_2_1_certified`. The complete
+four-target comparator is now configured. A second full check passed with 198
+public declarations audited.

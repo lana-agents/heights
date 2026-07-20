@@ -90,6 +90,53 @@ lemma ReducedPrincipalIdealData.count_spanSingleton
     fractionalIdealCount_coe_eq_multiplicity v r.denominator_ne_bot]
   ring
 
+/-- The denominator ideal in a reduced principal-ideal representation is
+unique. This allows expanded interfaces carrying their own reduced numerator
+and denominator to be compared with the project's canonical choice. -/
+theorem ReducedPrincipalIdealData.denominator_eq
+    {K : Type*} [Field K] [NumberField K]
+    {x : K} (r s : ReducedPrincipalIdealData K x) :
+    r.denominator = s.denominator := by
+  by_cases hx : x = 0
+  · rw [(r.zero_normalization hx).2, (s.zero_normalization hx).2]
+  have hmult (v : HeightOneSpectrum (𝓞 K)) :
+      multiplicity v.asIdeal r.denominator =
+        multiplicity v.asIdeal s.denominator := by
+    have hcount := (r.count_spanSingleton hx v).symm.trans
+      (s.count_spanSingleton hx v)
+    have htop : multiplicity v.asIdeal (⊤ : Ideal (𝓞 K)) = 0 :=
+      multiplicity_eq_zero.mpr (by
+        simpa only [← Ideal.one_eq_top] using v.prime.not_dvd_one)
+    have hr := v.multiplicity_sup (r.numerator_ne_bot hx) r.denominator_ne_bot
+    have hs := v.multiplicity_sup (s.numerator_ne_bot hx) s.denominator_ne_bot
+    rw [(Ideal.isCoprime_iff_sup_eq).mp r.coprime, htop] at hr
+    rw [(Ideal.isCoprime_iff_sup_eq).mp s.coprime, htop] at hs
+    rcases min_eq_bot.mp hr.symm with hrA | hrD <;>
+      rcases min_eq_bot.mp hs.symm with hsA | hsD <;> omega
+  apply dvd_antisymm
+  · apply (UniqueFactorizationMonoid.dvd_iff_emultiplicity_le
+      r.denominator_ne_bot).mpr
+    intro q hq
+    let v : HeightOneSpectrum (𝓞 K) :=
+      ⟨q, Ideal.isPrime_of_prime hq, hq.ne_zero⟩
+    have hr : FiniteMultiplicity q r.denominator :=
+      FiniteMultiplicity.of_prime_left hq r.denominator_ne_bot
+    have hs : FiniteMultiplicity q s.denominator :=
+      FiniteMultiplicity.of_prime_left hq s.denominator_ne_bot
+    rw [hr.emultiplicity_eq_multiplicity, hs.emultiplicity_eq_multiplicity]
+    exact_mod_cast (hmult v).le
+  · apply (UniqueFactorizationMonoid.dvd_iff_emultiplicity_le
+      s.denominator_ne_bot).mpr
+    intro q hq
+    let v : HeightOneSpectrum (𝓞 K) :=
+      ⟨q, Ideal.isPrime_of_prime hq, hq.ne_zero⟩
+    have hs : FiniteMultiplicity q s.denominator :=
+      FiniteMultiplicity.of_prime_left hq s.denominator_ne_bot
+    have hr : FiniteMultiplicity q r.denominator :=
+      FiniteMultiplicity.of_prime_left hq r.denominator_ne_bot
+    rw [hs.emultiplicity_eq_multiplicity, hr.emultiplicity_eq_multiplicity]
+    exact_mod_cast (hmult v).ge
+
 /-- At a prime, a reduced numerator/denominator representation computes the
 valuation as `exp (ord_v D - ord_v A)`. -/
 lemma ReducedPrincipalIdealData.valuation_eq_exp_sub_multiplicity
