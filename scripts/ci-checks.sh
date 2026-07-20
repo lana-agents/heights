@@ -33,6 +33,11 @@ check_comparator() {
   lake env lean Comparator/Solution.lean
 }
 
+check_blueprint_links() {
+  cd "$repo_root"
+  ./scripts/test_audit_blueprint_links.sh
+}
+
 check_trust() {
   cd "$repo_root"
   ./scripts/test_audit_trust.sh
@@ -47,6 +52,7 @@ check_axioms() {
 run_stage "root bounded build" build_root
 run_stage "blueprint bounded build" build_blueprint
 run_stage "comparator elaboration" check_comparator
+run_stage "blueprint declaration-link audit and negative fixture" check_blueprint_links
 run_stage "trust audit and negative fixtures" check_trust
 run_stage "axiom audit and orphan fixture" check_axioms
 
