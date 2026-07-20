@@ -78,6 +78,15 @@ positive-integer scaled variant hold, including for the zero rational.
 *Status: proved unconditionally.*
 :::
 
+:::proposition "prop:epsilon-absorption" (lean := "Heights.six_logOneAdd_log_le_epsilon_log_add, Heights.six_logOneAdd_log_epsilon_absorption")
+For every $`\varepsilon>0`, there is a nonnegative constant $`C_\varepsilon`
+such that, uniformly for $`t\ge 1`,
+$`6\log(1+\log t)\le \varepsilon\log t+C_\varepsilon`.
+An explicit valid choice is $`C_\varepsilon=6\log(1+6/\varepsilon)`.
+
+*Status: proved unconditionally.*
+:::
+
 :::proposition "prop:reduced-principal-ideals" (uses := "def:log-ideal-norm")
 Construct coprime numerator and denominator ideals for a principal fractional
 ideal, including the required $`x=0` convention, and prove the finite-plus-

@@ -227,4 +227,52 @@ theorem infinitePlaceLogLogMax_bounds
           Real.log (1 + normalizedLogHeight K z) :=
         (infinitePlaceWeightedLogOneAdd_posLog_bounds K z).2
 
+/-- An explicit `ε`-absorption estimate for the log-log error. This is the
+elementary analytic inequality used in the rational specialization of
+Silverman's Corollary 2.3. -/
+theorem six_logOneAdd_log_le_epsilon_log_add
+    (ε t : ℝ) (hε : 0 < ε) (ht : 1 ≤ t) :
+    6 * Real.log (1 + Real.log t) ≤
+      ε * Real.log t + 6 * Real.log (1 + 6 / ε) := by
+  let x := Real.log t
+  let δ := ε / 6
+  let A := 1 + 6 / ε
+  have hx : 0 ≤ x := Real.log_nonneg ht
+  have hδ : 0 < δ := div_pos hε (by norm_num)
+  have hA : 1 ≤ A := by
+    dsimp [A]
+    have : 0 < 6 / ε := div_pos (by norm_num) hε
+    linarith
+  have hA_pos : 0 < A := lt_of_lt_of_le (by norm_num) hA
+  have hinner : 0 < 1 + δ * x := by positivity
+  have hscale : 1 + x ≤ A * (1 + δ * x) := by
+    have hAδ : A * δ = 1 + δ := by
+      dsimp [A, δ]
+      field_simp
+      ring
+    rw [mul_add, mul_one, ← mul_assoc, hAδ]
+    nlinarith [mul_nonneg hδ.le hx]
+  have hlogscale : Real.log (1 + x) ≤
+      Real.log A + Real.log (1 + δ * x) := by
+    rw [← Real.log_mul hA_pos.ne' hinner.ne']
+    exact Real.strictMonoOn_log.monotoneOn (Set.mem_Ioi.mpr (by linarith))
+      (Set.mem_Ioi.mpr (mul_pos hA_pos hinner)) hscale
+  have hloginner : Real.log (1 + δ * x) ≤ δ * x := by
+    have := Real.log_le_sub_one_of_pos hinner
+    linarith
+  dsimp [x, δ, A] at hlogscale hloginner ⊢
+  nlinarith
+
+/-- Big-`O_ε` form of `six_logOneAdd_log_le_epsilon_log_add`: for every
+positive `ε`, one nonnegative constant works uniformly for every `t ≥ 1`. -/
+theorem six_logOneAdd_log_epsilon_absorption (ε : ℝ) (hε : 0 < ε) :
+    ∃ C : ℝ, 0 ≤ C ∧ ∀ t : ℝ, 1 ≤ t →
+      6 * Real.log (1 + Real.log t) ≤ ε * Real.log t + C := by
+  refine ⟨6 * Real.log (1 + 6 / ε), ?_, ?_⟩
+  · apply mul_nonneg (by norm_num) (Real.log_nonneg ?_)
+    have : 0 < 6 / ε := div_pos (by norm_num) hε
+    linarith
+  · intro t ht
+    exact six_logOneAdd_log_le_epsilon_log_add ε t hε ht
+
 end Heights
