@@ -104,4 +104,61 @@ structure ReducedPrincipalIdealData
     FractionalIdeal.coeIdeal numerator /
       FractionalIdeal.coeIdeal denominator
 
+/-- The `c₄` invariant of an equation integral at `v` is integral at `v`.
+
+This is the elementary polynomial part of the finite-place argument: all
+coefficients occurring in `c₄` have valuation at most one, and a valuation is
+nonarchimedean. -/
+theorem IsIntegralAt.valuation_c₄_le_one
+    {K : Type*} [Field K] [NumberField K]
+    {v : HeightOneSpectrum (𝓞 K)} {W : WeierstrassCurve K}
+    (h : IsIntegralAt K v W) :
+    v.valuation K W.c₄ ≤ 1 := by
+  let ν := v.valuation K
+  have hconst (n : ℕ) : ν (n : K) ≤ 1 := by
+    simpa using v.valuation_le_one (K := K) (n : 𝓞 K)
+  have hb₂ : ν W.b₂ ≤ 1 := by
+    rw [WeierstrassCurve.b₂]
+    refine (ν.map_add _ _).trans (max_le ?_ ?_)
+    · rw [map_pow]
+      exact pow_le_one₀ bot_le h.a₁
+    · rw [map_mul]
+      exact mul_le_one₀ (hconst 4) bot_le h.a₂
+  have hb₄ : ν W.b₄ ≤ 1 := by
+    rw [WeierstrassCurve.b₄]
+    refine (ν.map_add _ _).trans (max_le ?_ ?_)
+    · rw [map_mul]
+      exact mul_le_one₀ (hconst 2) bot_le h.a₄
+    · rw [map_mul]
+      exact mul_le_one₀ h.a₁ bot_le h.a₃
+  rw [WeierstrassCurve.c₄]
+  refine (ν.map_sub _ _).trans (max_le ?_ ?_)
+  · rw [map_pow]
+    exact pow_le_one₀ bot_le hb₂
+  · rw [map_mul]
+    exact mul_le_one₀ (hconst 24) bot_le hb₄
+
+/-- Local minimality bounds the pole order of `j` by the minimal
+discriminant exponent.
+
+For the integral equation supplied by the certificate,
+`j = Δ⁻¹ c₄³`; the preceding lemma bounds the `c₄` factor by one, while
+the certificate identifies the discriminant valuation with `exp (-n)`. -/
+theorem IsLocalMinimalDiscriminantExponent.valuation_j_le_exp
+    {K : Type*} [Field K] [NumberField K]
+    {v : HeightOneSpectrum (𝓞 K)} {W : WeierstrassCurve K}
+    [W.IsElliptic] {n : ℕ}
+    (h : IsLocalMinimalDiscriminantExponent K v W n) :
+    v.valuation K W.j ≤ WithZero.exp (n : ℤ) := by
+  rw [← W.variableChange_j h.change]
+  let E := h.change • W
+  let ν := v.valuation K
+  have hc₄ : ν E.c₄ ≤ 1 := h.integral.valuation_c₄_le_one
+  rw [WeierstrassCurve.j, map_mul, map_pow, Units.val_inv_eq_inv_val,
+    map_inv₀, WeierstrassCurve.coe_Δ']
+  change (ν E.Δ)⁻¹ * ν E.c₄ ^ 3 ≤ WithZero.exp (n : ℤ)
+  rw [h.exponent, ← WithZero.exp_neg]
+  simp only [neg_neg]
+  exact mul_le_of_le_one_right bot_le (pow_le_one₀ bot_le hc₄)
+
 end Heights
