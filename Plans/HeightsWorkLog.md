@@ -197,3 +197,14 @@ current `main`, with instructions to commit incrementally) has already
 produced at least one commit mid-run this time, unlike its first ~4-hour
 attempt which produced none — the incremental-commit mitigation appears to
 be working.
+
+## Autonomous run 6 — 2026-07-20 (main line)
+
+Closed the final wiring gap in certified Proposition 2.1. The new public
+`proposition_2_1_certified` and
+`proposition_2_1_semistable_certified` theorems apply the two unconditional
+fundamental-domain estimates directly, so their only remaining inputs are
+`GlobalMinimalDiscriminantData`, `ArchimedeanPeriodData`, and (for the
+specialization) certified semistability. Updated the Blueprint proof links and
+status text accordingly. Full `ci-checks.sh` passes; 191 public declarations
+were audited, all within the permitted axiom set.

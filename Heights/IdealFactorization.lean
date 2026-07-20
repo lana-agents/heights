@@ -887,4 +887,40 @@ theorem proposition_2_1_semistable_certified_of_standard_modular_estimates
   rcases hΔexist with ⟨CΔ, hCΔ, hΔ⟩
   exact ⟨CΔ, hCΔ, fun τ hτ => modularDeltaComparison_to_posLog τ CΔ (hΔ τ hτ)⟩
 
+/-- Silverman's certified two-sided comparison, conditional only on the
+minimal-discriminant and archimedean-period realization certificates. The
+absolute constant is supplied by the unconditional fundamental-domain
+estimates for the actual modular functions. -/
+theorem proposition_2_1_certified :
+    ∃ C : ℝ, 0 ≤ C ∧
+      ∀ (K : Type*) [Field K] [NumberField K]
+        (W : WeierstrassCurve K) [W.IsElliptic]
+        (m : GlobalMinimalDiscriminantData K W)
+        (p : ArchimedeanPeriodData K W),
+        -C ≤ normalizedLogHeight K W.j +
+              logIdealNorm (unstableMinimalDiscriminant m) /
+                (Module.finrank ℚ K : ℝ) -
+            12 * silvermanHeight W m p ∧
+          normalizedLogHeight K W.j +
+              logIdealNorm (unstableMinimalDiscriminant m) /
+                (Module.finrank ℚ K : ℝ) -
+            12 * silvermanHeight W m p ≤
+          6 * Real.log (1 + normalizedLogHeight K W.j) + C :=
+  proposition_2_1_certified_of_standard_modular_estimates
+    modularDeltaJ_fd_comparison modularIm_logLogJ_fd_comparison
+
+/-- The semistable specialization of certified Proposition 2.1, conditional
+only on the same two realization certificates and certified semistability. -/
+theorem proposition_2_1_semistable_certified :
+    ∃ C : ℝ, 0 ≤ C ∧
+      ∀ (K : Type*) [Field K] [NumberField K]
+        (W : WeierstrassCurve K) [W.IsElliptic]
+        (m : GlobalMinimalDiscriminantData K W)
+        (p : ArchimedeanPeriodData K W),
+        IsSemistable K W m →
+        |normalizedLogHeight K W.j - 12 * silvermanHeight W m p| ≤
+          6 * Real.log (1 + normalizedLogHeight K W.j) + C :=
+  proposition_2_1_semistable_certified_of_standard_modular_estimates
+    modularDeltaJ_fd_comparison modularIm_logLogJ_fd_comparison
+
 end Heights
