@@ -356,8 +356,10 @@ There are two genuinely large realization gaps, one now partially discharged.
    `ℂ` and no `ℂ/L` elliptic-curve equivalence. This repository now constructs
    the explicit curve attached to `(τ, 1)`, identifies its algebraic `j` with
    `modularJ τ`, extends the Weierstrass point map at lattice poles by the point
-   at infinity, and descends it set-theoretically to `ℂ/L`. It still does not
-   prove continuity or analyticity at the poles, group-law compatibility,
+   at infinity, descends it set-theoretically to `ℂ/L`, topologizes the source
+   quotient, and transports a one-point-compactification topology to a named
+   wrapper of the explicit target point type. It still does not prove
+   continuity or analyticity at the poles, group-law compatibility,
    bijectivity, or a complex-torus equivalence. For the current, deliberately
    weak `ArchimedeanPeriodData` interface,
    this repository proves that surjectivity of `modularJ` alone would suffice;
@@ -604,7 +606,7 @@ mathematical content, not that the abandoned review ceremony was performed.
 | P5 | Complete: denominator divisibility, canonical unstable ideal, exact finite/archimedean decomposition, semistability. |
 | P6 | Complete: both certified Proposition 2.1 theorems and the expanded comparator target. |
 | P7 | Partially complete: rational arithmetic, equation (11), and ε-absorption are proved; no uncertified Faltings-height corollary is claimed. |
-| P8 | Arithmetic `ℚ` branch GO and complete; general arithmetic branch remains #56. Archimedean branch STOP as phase-sized work, although the explicit lattice curve, total point map, and set-theoretic descent through `ℂ/L` are complete Route B slices; see `Plans/ArchimedeanUniformizationFeasibility.md` and #57. Analytic uniformization and Arakelov identification remain unavailable. |
+| P8 | Arithmetic `ℚ` branch GO and complete; general arithmetic branch remains #56. Archimedean branch STOP as phase-sized work, although the explicit lattice curve, total point map, set-theoretic descent through `ℂ/L`, source quotient topology, and conservative explicit-target topology are complete Route B slices; see `Plans/ArchimedeanUniformizationFeasibility.md` and #57. Continuity at the pole, analytic uniformization, and Arakelov identification remain unavailable. |
 | P9 | Not scheduled. Over `ℚ`, only `ArchimedeanPeriodData ℚ W` remains; general `K` also needs #56. |
 
 ### P0 — Bootstrap (already committed)

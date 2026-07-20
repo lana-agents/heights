@@ -5,6 +5,7 @@ import Heights.LatticeWeierstrass
 import Heights.LatticeAffinePoint
 import Heights.LatticeQuotientPoint
 import Heights.LatticeQuotientTopology
+import Heights.LatticeCurveTopology
 import Heights.Certificates
 import Heights.SilvermanHeight
 import Heights.IdealFactorization
