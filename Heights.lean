@@ -19,6 +19,7 @@ import Heights.VariableChangeAnalytic
 import Heights.WeierstrassFiniteAnalytic
 import Heights.WeierstrassFiniteManifold
 import Heights.WeierstrassInfinityAnalytic
+import Heights.WeierstrassCompactCharts
 import Heights.LatticeCurveTopology
 import Heights.LatticeAffinePointTopology
 import Heights.LatticePointMapTopology
@@ -62,9 +63,11 @@ biholomorphism for these independently constructed structures. In the
 projective `Y ≠ 0` chart at infinity, the homogenized equation now has an
 explicit implicit-function branch chart with holomorphic inverse, and its
 punctured branch is identified with the affine curve by the rational overlap
-formulas. Its natural map to the one-point compactification is continuous at
-the branch origin. The project still does not prove that this map is a local
-homeomorphism onto a neighborhood of infinity or assemble a complex atlas on
-the compact curve, prove the uniformization analytic,
+formulas. An explicit cubic properness estimate proves that the whole branch
+is homeomorphic to the open compact-curve neighborhood obtained by deleting
+the affine `y = 0` locus. Lifting the finite and infinity charts through their
+open embeddings gives a compact `ChartedSpace ℂ` on the independently defined
+topology. The project still does not package the mixed finite/infinity
+transitions into an `IsManifold` instance, prove the uniformization analytic,
 formalize periods by integration, or construct an Arakelov Faltings height.
 -/

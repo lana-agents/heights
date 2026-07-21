@@ -582,11 +582,25 @@ private theorem norm_fst_le_complexWeierstrassCurveNormBound (W : WeierstrassCur
             ≤ ‖y ^ 2‖ + ‖W.a₁ * x * y‖ + ‖W.a₃ * y‖ +
                 ‖W.a₂ * x ^ 2‖ + ‖W.a₄ * x‖ + ‖W.a₆‖ := by
               calc
-                _ ≤ ‖y ^ 2 + W.a₁ * x * y + W.a₃ * y - W.a₂ * x ^ 2 - W.a₄ * x‖ + ‖W.a₆‖ := norm_sub_le _ _
-                _ ≤ (‖y ^ 2 + W.a₁ * x * y + W.a₃ * y - W.a₂ * x ^ 2‖ + ‖W.a₄ * x‖) + ‖W.a₆‖ := by gcongr; exact norm_sub_le _ _
-                _ ≤ ((‖y ^ 2 + W.a₁ * x * y + W.a₃ * y‖ + ‖W.a₂ * x ^ 2‖) + ‖W.a₄ * x‖) + ‖W.a₆‖ := by gcongr; exact norm_sub_le _ _
-                _ ≤ (((‖y ^ 2 + W.a₁ * x * y‖ + ‖W.a₃ * y‖) + ‖W.a₂ * x ^ 2‖) + ‖W.a₄ * x‖) + ‖W.a₆‖ := by gcongr; exact norm_add_le _ _
-                _ ≤ ((((‖y ^ 2‖ + ‖W.a₁ * x * y‖) + ‖W.a₃ * y‖) + ‖W.a₂ * x ^ 2‖) + ‖W.a₄ * x‖) + ‖W.a₆‖ := by gcongr; exact norm_add_le _ _
+                _ ≤ ‖y ^ 2 + W.a₁ * x * y + W.a₃ * y -
+                      W.a₂ * x ^ 2 - W.a₄ * x‖ + ‖W.a₆‖ :=
+                    norm_sub_le _ _
+                _ ≤ (‖y ^ 2 + W.a₁ * x * y + W.a₃ * y -
+                      W.a₂ * x ^ 2‖ + ‖W.a₄ * x‖) + ‖W.a₆‖ := by
+                    gcongr
+                    exact norm_sub_le _ _
+                _ ≤ ((‖y ^ 2 + W.a₁ * x * y + W.a₃ * y‖ +
+                      ‖W.a₂ * x ^ 2‖) + ‖W.a₄ * x‖) + ‖W.a₆‖ := by
+                    gcongr
+                    exact norm_sub_le _ _
+                _ ≤ (((‖y ^ 2 + W.a₁ * x * y‖ + ‖W.a₃ * y‖) +
+                      ‖W.a₂ * x ^ 2‖) + ‖W.a₄ * x‖) + ‖W.a₆‖ := by
+                    gcongr
+                    exact norm_add_le _ _
+                _ ≤ ((((‖y ^ 2‖ + ‖W.a₁ * x * y‖) + ‖W.a₃ * y‖) +
+                      ‖W.a₂ * x ^ 2‖) + ‖W.a₄ * x‖) + ‖W.a₆‖ := by
+                    gcongr
+                    exact norm_add_le _ _
         _ = _ := by simp only [norm_pow, norm_mul]
     have hx_sq : ‖x‖ ≤ ‖x‖ ^ 2 := by nlinarith [sq_nonneg (‖x‖ - 1)]
     have hyy : ‖y‖ ^ 2 ≤ B ^ 2 * ‖x‖ ^ 2 := by
@@ -905,7 +919,9 @@ noncomputable def complexWeierstrassInfinityBranchOpenPartialHomeomorph
           intro hy
           apply hP
           exact ⟨P, hy, rfl⟩
-        exact (continuousAt_complexWeierstrassOnePointToInfinityBranch_coe_of_ne W P hy).continuousWithinAt
+        exact
+          (continuousAt_complexWeierstrassOnePointToInfinityBranch_coe_of_ne
+            W P hy).continuousWithinAt
 
 /-- The projective branch embedded into the independently topologized compact
 Weierstrass point space. -/
