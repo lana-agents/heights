@@ -1,5 +1,7 @@
 import Heights.WeierstrassFibers
 import Heights.LatticePointMapNegation
+import Heights.LatticePointMapTopology
+import Heights.LatticeQuotientCompact
 
 set_option linter.style.header false
 
@@ -11,7 +13,9 @@ Weierstrass map identifies exactly the complex numbers differing by a period.
 It follows immediately that the descended map from `ℂ/L` to the explicit
 elliptic curve is injective.
 
-This is one half of set-theoretic uniformization. Surjectivity, the Weierstrass
+This is one half of set-theoretic uniformization. Combined with the existing
+continuity theorem and compact/Hausdorff instances, it also makes the wrapped
+descended map a closed topological embedding. Surjectivity, the Weierstrass
 addition theorem, group-law compatibility, and an arbitrary-curve
 uniformization theorem remain open.
 -/
@@ -19,6 +23,8 @@ uniformization theorem remain open.
 open scoped UpperHalfPlane
 noncomputable section
 namespace Heights
+
+open Topology
 
 /-- The total lattice point map identifies exactly the points differing by a period. -/
 theorem latticePointMap_eq_iff_sub_mem (τ : ℍ) (z w : ℂ) :
@@ -73,5 +79,12 @@ theorem latticeQuotientPointMap_injective (τ : ℍ) :
             (periodPairOfUpperHalfPlane τ).lattice.toAddSubgroup w
       apply QuotientAddGroup.eq_iff_sub_mem.mpr
       exact (latticePointMap_eq_iff_sub_mem τ z w).mp heq
+
+/-- The continuous injective map from the compact lattice quotient into the
+Hausdorff wrapped curve-point space is a closed topological embedding. -/
+theorem isClosedEmbedding_latticeQuotientCurvePointMap (τ : ℍ) :
+    IsClosedEmbedding (latticeQuotientCurvePointMap τ) :=
+  (continuous_latticeQuotientCurvePointMap τ).isClosedEmbedding
+    (latticeQuotientPointMap_injective τ)
 
 end Heights

@@ -111,7 +111,9 @@ analytic continuation: equal `(℘,℘′)` values differ by a period, and equal
 values differ by a period up to sign. Consequently
 `Heights/LatticePointMapInjectivity.lean` proves that the total map identifies
 exactly period translates and that the descended map `ℂ/L → Eτ(ℂ)` is
-injective. The Weierstrass addition formula itself, analytic extension across
+injective. Compactness of the source and Hausdorffness of the target then make
+the continuous descended map a closed topological embedding. The Weierstrass
+addition formula itself, analytic extension across
 infinity, compatibility with addition, surjectivity, complex-torus
 equivalence, and arbitrary-curve uniformization have not been proved.
 
@@ -207,7 +209,9 @@ result.
    `Heights/WeierstrassFibers.lean` uses ODE uniqueness, analytic continuation,
    and the pole order to prove the exact fibers of `℘` and `(℘,℘′)`; hence
    `Heights/LatticePointMapInjectivity.lean` proves injectivity after quotient
-   descent. Still missing: the addition formula itself, analytic extension,
+   descent and packages the continuous map as a closed embedding using the
+   compact/Hausdorff topology already constructed. Still missing: the addition
+   formula itself, analytic extension,
    compatibility with addition, surjectivity, and analyticity of the descended
    map.
 4. In the converse direction, obtain a lattice from an arbitrary algebraic
@@ -238,7 +242,7 @@ Faltings height. The compact source quotient topology, a conservative compact
 Hausdorff one-point-compactification topology on the explicit target,
 continuity of the total and descended point maps, their zero/negation
 compatibility, the second-order Weierstrass ODE, the exact Weierstrass fibers,
-and injectivity of the descended map are now available, but they do not resolve
+and closed-embedding status of the descended map are now available, but they do not resolve
 the addition formula, analytic extension, compatibility with addition,
 surjectivity, or the uniformization gap. Until one
 route lands, the comparison over every number field correctly

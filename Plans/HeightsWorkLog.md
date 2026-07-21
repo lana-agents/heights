@@ -405,8 +405,10 @@ modulo `L`.
 
 `Heights/LatticePointMapInjectivity.lean` consumes this result to prove
 `latticePointMap_eq_iff_sub_mem` and
-`latticeQuotientPointMap_injective`. This completes the injective half of the
-explicit set-theoretic parameterization. It remains an honest intermediate
+`latticeQuotientPointMap_injective`. Together with compactness, Hausdorffness,
+and continuity, `isClosedEmbedding_latticeQuotientCurvePointMap` packages the
+descent as a closed topological embedding. This completes the injective half of
+the explicit set-theoretic parameterization. It remains an honest intermediate
 result toward #155, not the Weierstrass addition formula: addition
 compatibility, the group-homomorphism package, surjectivity, and uniformization
 remain open. The now-separable surjectivity half of the explicit quotient map
