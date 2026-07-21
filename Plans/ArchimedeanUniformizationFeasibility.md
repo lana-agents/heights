@@ -3,10 +3,10 @@
 **Date:** 2026-07-20  
 **Scope:** taxis #57; `ArchimedeanPeriodData` in
 `Heights/Certificates.lean`; mathlib `v4.32.0`  
-**Decision (updated 2026-07-21, run 25):** **GO for the formula certificate
-and its algebraic realization; both are complete.** Full integration-based
-arbitrary-curve analytic uniformization remains a separate mathlib-scale
-project.
+**Decision (updated 2026-07-21, run 26):** **GO for the formula certificate,
+its algebraic realization, and point-level additive transport; all are
+complete.** Full integration-based arbitrary-curve analytic uniformization
+remains a separate mathlib-scale project.
 
 ## 1. The exact blocker is smaller than full uniformization
 
@@ -42,11 +42,12 @@ torus. Run 23 completed this route:
 
 Thus the earlier twisting caveat was too pessimistic: twists disappear after
 the specified complex base change, and the chosen `τ` algebraically realizes
-that base change. What remains absent is narrower but still substantial. The
-repository does **not** define periods by integrating an invariant differential
-on `W`, package the variable change as a point-level analytic/additive
-isomorphism, or identify the formula-defined `silvermanHeight` with an
-Arakelov/Hodge-bundle Faltings height.
+that base change. What remains absent is narrower but still substantial. The repository now
+packages the variable change as an additive equivalence of affine point types
+and composes it with the explicit lattice uniformization. It still does **not**
+define periods by integrating an invariant differential on `W`, topologize the
+arbitrary target point type or prove that equivalence analytic, or identify the
+formula-defined `silvermanHeight` with an Arakelov/Hodge-bundle Faltings height.
 
 ## 2. What mathlib already supplies
 
@@ -281,17 +282,19 @@ principle, and Rouché theorem.
    curve, and same-`j` classification over `ℂ` supplies an admissible variable
    change between their equations. The invariant-differential denominator is
    proved to scale by `u³`, and the resulting rational differential coefficient
-   is proved to scale by `u⁻¹`. Still missing: package the variable change on point types, prove its
-   additive/analytic compatibility, define the invariant differential and its
-   integrals, and connect those integrals to the lattice.
+   is proved to scale by `u⁻¹`. `Heights/VariableChangePoint.lean` packages the
+   variable change on point types, proves its additive compatibility, and
+   composes it with the lattice quotient equivalence. Still missing: topology
+   and analyticity on the arbitrary target, an invariant differential and its
+   integrals, and a connection from those integrals to the lattice.
 
 Mathlib has generic quotient-group infrastructure, but the pinned elliptic
 files contain no complex-torus object carrying the required analytic structure.
 This repository now supplies both a descended topological equivalence and a
 descended additive equivalence for the explicit lattice curve, plus an actual
-algebraic variable change to every embedded input curve. It does not yet
-package the latter as a point equivalence, combine the structures into an
-analytic Lie-group equivalence, or formalize integration of the invariant
+algebraic variable change and additive point equivalence to every embedded
+input curve. It does not combine the structures into an analytic Lie-group
+equivalence on the arbitrary target or formalize integration of the invariant
 differential. Those remaining analytic steps require new infrastructure rather
 than merely the same-`j` classification.
 
@@ -316,8 +319,11 @@ infinity), the secant candidates' pole-free first-order ODE, exact Weierstrass
 fibers, surjectivity, the global addition formula, unconditional compatibility
 with the affine elliptic-curve group law, a homeomorphism, and an additive
 equivalence from the quotient to the explicit lattice curve are now available.
-They do not resolve analyticity of that equivalence or integration-based
-arbitrary-curve uniformization. The minimal `ArchimedeanPeriodData K W`
+The generic `VariableChange.pointAddEquiv` and the specialized
+`ArchimedeanPeriodData.latticeQuotientToEmbeddedPointAddEquiv` now transport
+this additive uniformization to the affine point type of every embedded input
+curve. They do not topologize that arbitrary target or resolve analyticity or
+integration-based period theory. The minimal `ArchimedeanPeriodData K W`
 interface is constructed unconditionally from modular-`j` surjectivity, as is
 global minimal-discriminant data; its parameters are now also proved to
 algebraically realize every embedded input curve. The remaining choice

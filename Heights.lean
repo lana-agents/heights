@@ -38,8 +38,9 @@ height, and certified and all-curves forms of Proposition 2.1. The
 archimedean construction uses surjectivity of modular `j` to choose a matching
 fundamental-domain parameter. Same-`j` classification over `ℂ` then supplies an
 actual algebraic variable change between the embedded input curve and the
-explicit lattice curve, eliminating the complex twisting objection. The
-project still does not formalize periods by integration, an analytic
-uniformization theorem for arbitrary curve-point types, or an Arakelov
-Faltings height.
+explicit lattice curve, eliminating the complex twisting objection. Its
+coordinate map transports the lattice quotient uniformization to the embedded
+input curve as an additive equivalence. The project still does not formalize
+periods by integration, topologize that arbitrary target or prove the
+equivalence analytic, or construct an Arakelov Faltings height.
 -/

@@ -317,17 +317,20 @@ Thus `silvermanHeight` is independent of the qualifying period-data choice.
 Moreover, `ArchimedeanPeriodData.exists_variableChange_to_latticeCurve` proves
 that `j_eq` supplies an actual admissible algebraic variable change from the
 complex base change of `W` to the explicit lattice curve; the complex twisting
-obstruction therefore disappears. The exact `u³` scaling of
-`2y + a₁x + a₃` and the resulting exact `u⁻¹` rational differential
+obstruction therefore disappears. `WeierstrassCurve.VariableChange.pointAddEquiv`
+packages the induced coordinate map as an additive equivalence on affine point
+types, and composition with `latticeQuotientPointMapAddEquiv` gives
+`ArchimedeanPeriodData.latticeQuotientToEmbeddedPointAddEquiv`. The exact `u³`
+scaling of `2y + a₁x + a₃` and the resulting exact `u⁻¹` rational differential
 coefficient are also proved. The formula still uses the actual
 `silvermanModularDiscriminant` (including `(2π)^12`) and the actual `τ.im`, so
 both archimedean factors of Proposition 1.1 remain visible.
 
-A stronger future interface may package the variable change as an additive and
-analytic point equivalence, define invariant differentials and their integrals,
-and derive the period lattice in that language. That stronger object is
-preferable for an Arakelov interpretation, but it is not required to prove the
-analytic comparison from Proposition 1.1's formula.
+A stronger future interface must upgrade the now-proved additive point
+equivalence to an analytic equivalence, define invariant differentials and
+their integrals, and derive the period lattice in that language. That stronger
+object is preferable for an Arakelov interpretation, but it is not required to
+prove the analytic comparison from Proposition 1.1's formula.
 
 #### Reduced principal fractional ideals
 
@@ -627,7 +630,7 @@ mathematical content, not that the abandoned review ceremony was performed.
 | P5 | Complete: denominator divisibility, canonical unstable ideal, exact finite/archimedean decomposition, semistability. |
 | P6 | Complete: both certified Proposition 2.1 theorems and the expanded comparator target. |
 | P7 | Partially complete: rational arithmetic, equation (11), and ε-absorption are proved; no uncertified Faltings-height corollary is claimed. |
-| P8 | Arithmetic branch GO and complete over every number field (#56). Archimedean Route A and its algebraic strengthening are complete: `modularJ_surjective` constructs `ArchimedeanPeriodData`, and same-`j` classification gives an actual variable change to every embedded input curve (#57/#128). Route B also gives a topological and additive uniformization of the explicit lattice curve. Point-level arbitrary-curve analytic uniformization, integration, and Arakelov identification remain unavailable (#174). |
+| P8 | Arithmetic branch GO and complete over every number field (#56). Archimedean Route A and its algebraic strengthening are complete: `modularJ_surjective` constructs `ArchimedeanPeriodData`, same-`j` classification gives an actual variable change to every embedded input curve (#57/#128), and #174 transports the explicit lattice additive uniformization to every embedded affine point type. Route B gives a topological and additive uniformization of the explicit lattice curve. Arbitrary-target topology/analyticity, differential integration, and Arakelov identification remain unavailable. |
 | P9 | Complete for the formula-defined object: `silvermanHeightOfCurve`, `proposition_2_1`, and its semistable specialization have no realization-certificate arguments. No comparison with an independently constructed Arakelov Faltings height is claimed. |
 
 ### P0 — Bootstrap (already committed)

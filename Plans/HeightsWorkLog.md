@@ -566,3 +566,27 @@ for an arbitrary Weierstrass curve, and no Arakelov/Hodge metric. The result
 therefore still does not identify `silvermanHeightOfCurve` with an independently
 constructed Faltings height. Filed ready-to-clanck #174 for the separable
 point-level variable-change equivalence and additive compatibility.
+
+## Autonomous run 26 — 2026-07-21
+
+Run 26 completes #174 in `Heights/VariableChangePoint.lean`. For an admissible
+change `C`, the file proves the exact transformed equation, explicit forward
+and inverse coordinate identities, negation and secant/tangent slope formulas,
+and transformed addition coordinates. These package the documented coordinate
+map as
+
+`C.pointAddEquiv W : (C • W).toAffine.Point ≃+ W.toAffine.Point`.
+
+The additivity proof covers vertical, secant, and tangent cases against
+mathlib's actual affine group law; it is not merely a transported operation.
+Specializing to the chosen same-`j` change gives
+`ArchimedeanPeriodData.latticeCurvePointAddEquiv`, and composing with the
+already-proved explicit lattice equivalence gives
+
+`LatticeQuotient (p.τ v) ≃+ (W.map v.embedding).toAffine.Point`.
+
+Thus arbitrary embedded input curves now have an honest algebraic additive
+uniformization at the point-type level. The target has not been given a
+topology, the equivalence is not claimed continuous or analytic, and no
+invariant differential has been defined or integrated. Those remain the exact
+boundary before an Arakelov/Faltings interpretation.

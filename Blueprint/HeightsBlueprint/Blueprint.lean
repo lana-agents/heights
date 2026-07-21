@@ -225,7 +225,7 @@ analytic or group-theoretic conclusion.
 *Status: proved unconditionally on the complement of the lattice.*
 :::
 
-:::proposition "prop:lattice-quotient-point-map" (uses := "prop:lattice-affine-point-map, prop:weierstrass-fibers") (lean := "Heights.latticePointMap, Heights.latticePointMap_of_mem, Heights.latticePointMap_of_notMem, Heights.latticePointMap_add_lattice, Heights.LatticeQuotient, Heights.latticeQuotientPointMap, Heights.latticeQuotientPointMap_mk, Heights.latticePointMap_zero, Heights.latticePointMap_neg, Heights.latticeQuotientPointMap_zero, Heights.latticeQuotientPointMap_neg, Heights.latticePointMap_eq_iff_sub_mem, Heights.latticeQuotientPointMap_injective, Heights.exists_notMem_lattice_weierstrassP_eq, Heights.weierstrassP_surjective, Heights.latticePointMap_surjective, Heights.latticeQuotientPointMap_surjective")
+:::proposition "prop:lattice-quotient-point-map" (uses := "prop:lattice-affine-point-map, prop:weierstrass-fibers") (lean := "Heights.latticePointMap, Heights.latticePointMap_of_mem, Heights.latticePointMap_of_notMem, Heights.latticePointMap_add_lattice, Heights.LatticeQuotient, Heights.latticeQuotientPointMap, Heights.latticeQuotientPointMap_mk, Heights.latticePointMap_zero, Heights.latticePointMap_neg, Heights.latticeQuotientPointMap_zero, Heights.latticeQuotientPointMap_neg, Heights.latticePointMap_eq_iff_sub_mem, Heights.latticeQuotientPointMap_injective, Heights.exists_notMem_lattice_weierstrassP_eq, Heights.weierstrassP_surjective, Heights.latticePointMap_surjective, Heights.latticeQuotientPointMap_surjective, Heights.latticePointMap_add, Heights.latticeQuotientPointMapAddEquiv")
 The point-valued Weierstrass map is extended to all of $`\mathbb C`: lattice
 elements are sent to the distinguished point at infinity and non-lattice
 elements retain the point $`(\wp(z),\wp'(z)/2)`. The total map is invariant
@@ -243,9 +243,10 @@ make it constant, contradicting its nonzero value away from the lattice. Thus
 two possible signs of `℘′` then prove that both the total and descended point
 maps are surjective.
 
-The later global addition theorem proves that this descent is also a group
-homomorphism. Analytic equivalence and point-level uniformization of arbitrary
-curves remain open.
+The global addition theorem proves that this descent is also a group
+homomorphism and packages it as an additive equivalence. A later
+variable-change theorem transports it to every embedded input curve. Analytic
+equivalence remains open.
 
 *Status: total extension, quotient descent, zero/negation compatibility,
 bijectivity, and (in the later addition node) additivity are proved
@@ -336,12 +337,15 @@ makes this embedding onto, yielding a homeomorphism
 $`\mathbb C/L\simeq E_\tau(\mathbb C)` for the explicitly attached curve.
 
 This is a topological result for the explicit lattice curve. It does not prove
-analyticity across infinity, compatibility with addition, or uniformization of
-an arbitrary algebraic complex elliptic curve.
+analyticity across infinity or compatibility with addition. Later algebraic
+results prove addition compatibility and transport the resulting additive
+equivalence to arbitrary embedded complex elliptic curves, without transporting
+this topology or proving analyticity there.
 
 *Status: continuity, bijectivity, closed-embedding status, and the resulting
 topological equivalence are proved unconditionally for the descended explicit
-lattice point map; the analytic and group-theoretic properties remain open.*
+lattice point map. Group compatibility is proved separately; analyticity
+remains open.*
 :::
 
 :::proposition "prop:weighted-log-log" (lean := "Heights.weightedLogOneAdd_le, Heights.infinitePlaceWeightedLogOneAdd_bounds, Heights.infinitePlacePosLogAverage_le_normalizedLogHeight, Heights.infinitePlaceLogLogMax_bounds")
@@ -413,7 +417,7 @@ construction, but the next node proves it algebraically realizes the embedded
 curve.*
 :::
 
-:::proposition "prop:archimedean-algebraic-realization" (uses := "def:archimedean-period-data, prop:lattice-weierstrass-curve") (lean := "Heights.variableChange_invariantDifferentialDenominator, Heights.variableChange_invariantDifferentialCoefficient, Heights.ArchimedeanPeriodData.exists_variableChange_to_latticeCurve, Heights.ArchimedeanPeriodData.variableChangeToLatticeCurve, Heights.ArchimedeanPeriodData.variableChangeToLatticeCurve_smul, Heights.ArchimedeanPeriodData.variableChangeToLatticeCurve_differentialDenominator, Heights.ArchimedeanPeriodData.variableChangeToLatticeCurve_differentialCoefficient")
+:::proposition "prop:archimedean-algebraic-realization" (uses := "def:archimedean-period-data, prop:lattice-weierstrass-curve, prop:lattice-quotient-point-map") (lean := "Heights.variableChange_invariantDifferentialDenominator, Heights.variableChange_invariantDifferentialCoefficient, Heights.ArchimedeanPeriodData.exists_variableChange_to_latticeCurve, Heights.ArchimedeanPeriodData.variableChangeToLatticeCurve, Heights.ArchimedeanPeriodData.variableChangeToLatticeCurve_smul, Heights.ArchimedeanPeriodData.variableChangeToLatticeCurve_differentialDenominator, Heights.ArchimedeanPeriodData.variableChangeToLatticeCurve_differentialCoefficient, Heights.ArchimedeanPeriodData.latticeCurvePointAddEquiv, Heights.ArchimedeanPeriodData.latticeQuotientToEmbeddedPointAddEquiv")
 Over the separably closed field $`\mathbb C`, elliptic Weierstrass curves with
 the same $`j`-invariant differ by an admissible change of variables. Therefore
 each selected lattice curve is algebraically isomorphic to the base change of
@@ -421,12 +425,16 @@ the input curve along the corresponding infinite-place embedding: twists do
 not survive this base change. The coordinate calculation also shows that
 $`2y+a_1x+a_3` scales by $`u^3`; together with the $`u^2` scaling of the
 x-coordinate derivative, this is the usual $`u^{-1}` invariant-differential
-factor.
+factor. The documented coordinate map is proved to preserve mathlib's affine
+group law and is packaged as an additive equivalence. Composing it with the
+explicit lattice equivalence gives
+$`\mathbb C/L\simeq E(\mathbb C)` as additive groups for every embedded input
+curve represented by the period data.
 
-*Status: proved. This is an actual algebraic variable change, not merely an
-abstract equality of invariants. A point-level additive/analytic equivalence,
-invariant differential integration, and an Arakelov metric are not yet
-formalized.*
+*Status: proved. This is an actual algebraic variable change and point-level
+additive equivalence, not merely an abstract equality of invariants. No topology
+is installed on the arbitrary target point type; analyticity, invariant
+differential integration, and an Arakelov metric are not yet formalized.*
 :::
 
 :::definition "def:reduced-principal-ideal-data" (lean := "Heights.ReducedPrincipalIdealData, Heights.exists_reducedPrincipalIdealData, Heights.reducedPrincipalIdealData")
@@ -508,10 +516,12 @@ The repository proves modular-$`j` surjectivity, constructs
 formula-defined `silvermanHeightOfCurve`. It also gives topological and
 additive uniformization of each explicit lattice curve. Same-$`j`
 classification now supplies an actual algebraic variable change from that
-lattice curve to every embedded input curve, eliminating the twisting caveat.
-It does not yet package this as an analytic point equivalence, define periods
-by integrating an invariant differential, or construct an Arakelov Faltings
-height. The precise archimedean findings are recorded in
+lattice curve to every embedded input curve, eliminating the twisting caveat;
+the induced point map is packaged as an additive equivalence and composed with
+the lattice quotient equivalence. It does not topologize the arbitrary target
+or package this as an analytic point equivalence, define periods by integrating
+an invariant differential, or construct an Arakelov Faltings height. The precise
+archimedean findings are recorded in
 `Plans/ArchimedeanUniformizationFeasibility.md`.
 
 {blueprint_graph}
