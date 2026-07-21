@@ -3,10 +3,10 @@ import Mathlib
 /-!
 # Heights comparator challenge
 
-Each theorem below is a standalone, `Mathlib`-only target.  Its body is one
-reviewed placeholder.  Transparent helper definitions contain no proof holes.
-The expanded headline target is provisional until the P4 interface gate freezes
-its exact casts and ideal representation.
+Each theorem below is a standalone, `Mathlib`-only target. Its body is one
+reviewed placeholder. Transparent helper definitions contain no proof holes.
+The expanded headline target uses the casts and ideal representation frozen by
+the completed certificate-interface work.
 -/
 
 open scoped NumberField UpperHalfPlane nonZeroDivisors
@@ -46,6 +46,17 @@ theorem modular_delta_j_fd_comparison :
           Real.log (max ‖challengeModularJ τ‖ 1)| ≤ C := by
   sorry
 
+/-- The actual modular `j`-function is onto the complex plane. -/
+theorem modular_j_surjective : Function.Surjective challengeModularJ := by
+  sorry
+
+/-- The Petersson-normalized discriminant metric depends only on modular `j`. -/
+theorem modular_height_metric_eq_of_same_j
+    (τ τ' : ℍ) (hj : challengeModularJ τ = challengeModularJ τ') :
+    ‖challengeSilvermanModularDiscriminant τ‖ * τ.im ^ 6 =
+      ‖challengeSilvermanModularDiscriminant τ'‖ * τ'.im ^ 6 := by
+  sorry
+
 /-- Direct local integrality predicate used only to make the challenge
 project-independent. -/
 def ChallengeIsIntegralAt
@@ -80,13 +91,12 @@ noncomputable def challengeUnstableMinimalDiscriminant
     (Δmin D : Ideal (𝓞 K)) (hDvd : D ∣ Δmin) : Ideal (𝓞 K) :=
   Classical.choose hDvd
 
-/-- Provisional P1 expanded statement of the certified Proposition 2.1.
+/-- Expanded standalone statement of the certified Proposition 2.1.
 
 The hypotheses expose only reduced-principal-ideal data, local-minimal-model
-data, and compatible periods.  In particular, denominator divisibility, an
+data, and compatible periods. In particular, denominator divisibility, an
 arbitrary complementary ideal, an arbitrary height, and comparison inequalities
-are not inputs.  P4 will freeze the exact standalone signature after the project
-certificate interfaces compile.
+are not inputs.
 -/
 theorem silverman_proposition_2_1_certified :
     ∃ C : ℝ, 0 ≤ C ∧

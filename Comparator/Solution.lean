@@ -34,6 +34,17 @@ theorem modular_delta_j_fd_comparison :
           Real.log (max ‖modularJ τ‖ 1)| ≤ C :=
   modularDeltaJ_fd_comparison
 
+/-- Comparator export of surjectivity of the actual modular `j`-function. -/
+theorem modular_j_surjective : Function.Surjective modularJ :=
+  modularJ_surjective
+
+/-- Comparator export of canonicity of the modular height metric. -/
+theorem modular_height_metric_eq_of_same_j
+    (τ τ' : ℍ) (hj : modularJ τ = modularJ τ') :
+    ‖silvermanModularDiscriminant τ‖ * τ.im ^ 6 =
+      ‖silvermanModularDiscriminant τ'‖ * τ'.im ^ 6 :=
+  silvermanModularDiscriminant_norm_mul_im_pow_eq_of_modularJ_eq τ τ' hj
+
 /-- Comparator export of the expanded certified Proposition 2.1 target. -/
 theorem silverman_proposition_2_1_certified :
     ∃ C : ℝ, 0 ≤ C ∧

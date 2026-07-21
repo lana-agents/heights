@@ -21,13 +21,13 @@ open Informal
 > public release. This blueprint does not reproduce substantial source text.
 
 This blueprint tracks the program specified in `Plans/HeightsSpec.md`. There
-are two deliberately separate kinds of result:
+are two deliberately separate layers:
 
-* *Unconditional targets* are to be proved from mathlib without elliptic
-  uniformization certificates.
-* *Certificate-level targets* expose explicit local-minimal-model and
-  archimedean-period realization data. Reduced principal-ideal, global minimal,
-  and archimedean data are now all constructed unconditionally. The
+* *Unconditional results* are proved from mathlib without externally supplied
+  elliptic-uniformization certificates.
+* *Certificate interfaces* expose explicit local-minimal-model and
+  archimedean-parameter realization data. Reduced principal-ideal, global
+  minimal, and archimedean data are now all constructed unconditionally. The
   archimedean data algebraically realizes every embedded curve, but these
   interfaces still do not construct an Arakelov Faltings height.
 
@@ -278,9 +278,9 @@ maps applies to the canonical projection; because that projection is
 surjective, its compact range is the whole quotient $`\mathbb C/L`.
 
 This compactness concerns only the source topology. Later results combine it
-with continuity and the now-proved bijectivity of the descended point map to
-obtain a homeomorphism; compatibility with addition, analyticity, and
-arbitrary-curve uniformization remain separate.
+with continuity and bijectivity to obtain a homeomorphism, prove compatibility
+with addition, and transport the additive equivalence to every embedded curve.
+Analyticity and an intrinsic topology on the arbitrary target remain separate.
 
 *Status: the explicit complex lattice quotient is proved compact
 unconditionally.*
@@ -451,7 +451,7 @@ separate theorem.
 existence and `Heights.reducedPrincipalIdealData` fixes a canonical choice.*
 :::
 
-# Certificate-level height and comparisons
+# Formula-defined height and comparisons
 
 :::definition "def:silverman-height" (uses := "def:silverman-modular-discriminant, def:global-minimal-discriminant-data, prop:archimedean-algebraic-realization") (lean := "Heights.silvermanHeight, Heights.silvermanHeight_periodData_independent, Heights.silvermanHeightOfPeriods, Heights.silvermanHeightOfCurve, Heights.silvermanHeightOfPeriods_eq_silvermanHeightOfCurve, Heights.silvermanHeight_archimedean_log_arg_pos, Heights.silvermanHeight_denominator_pos")
 Silverman's formula balances the finite bad-reduction contribution
@@ -472,12 +472,13 @@ positive. Period integration and an Arakelov identification remain unproved.*
 
 :::proposition "prop:proposition-1-1-certified" (uses := "def:silverman-height")
 The preceding expression is the formula corresponding to Proposition 1.1.
-Both minimal formula-level data interfaces are now constructed, and the period
-parameter has an algebraic/additive realization. This node would additionally
-identify that expression with an independently constructed
-Arakelov/Hodge-bundle height; no such object is yet available.
+Both formula-level data interfaces are constructed, and the selected parameter
+has an algebraic/additive realization. A stronger theorem would identify this
+expression with an independently constructed Arakelov/Hodge-bundle height; no
+such object is yet available.
 
-*Status: not started (conditional/certificate-level target).*
+*Status: formula instantiated for every curve; independent Arakelov
+identification remains beyond the current formalization.*
 :::
 
 :::definition "def:certified-semistability" (uses := "def:global-minimal-discriminant-data") (lean := "Heights.IsSemistable, Heights.denominator_dvd_minimalDiscriminant, Heights.unstableMinimalDiscriminant_eq_top_of_semistable")
@@ -493,9 +494,9 @@ is now constructed over every number field.*
 
 :::theorem "thm:proposition-2-1-certified" (uses := "prop:rational-height-arithmetic, prop:reduced-principal-ideals, prop:modular-estimates, prop:weighted-log-log, def:silverman-height") (lean := "Heights.comparisonExpression_eq_archimedeanAverage, Heights.correctedComparison_bounds_of_modular_estimates, Heights.proposition_2_1_certified, Heights.proposition_2_1_of_periods, Heights.proposition_2_1")
 One pair of absolute modular-estimate constants, quantified before the number
-field, curve, and remaining realization data, gives Silverman's two-sided
-Proposition 2.1 estimate for normalized $`j`-height, the canonical unstable
-ideal, and `silvermanHeight`. The theorem no longer assumes reduced
+field, curve, and (in the certified form) realization data, gives Silverman's
+two-sided Proposition 2.1 estimate for normalized $`j`-height, the canonical
+unstable ideal, and `silvermanHeight`. The theorem no longer assumes reduced
 principal-ideal data or analytic estimates: the unconditional fundamental-
 domain theorems supply the two absolute constants directly.
 

@@ -619,3 +619,21 @@ types and variable-change homeomorphisms). Posted the narrowed feasibility
 judgment to umbrella issue #57. The analytic-period frontier is GO only as this
 decomposed infrastructure project; an Arakelov/Faltings identification remains
 a further, larger layer.
+
+## Autonomous run 28 — 2026-07-21
+
+Audited the mature specification, Blueprint, and comparator against the current
+all-curves formula-defined theorem. Removed stale phase-gate and pre-additive-
+uniformization wording, made the Proposition 1.1 boundary explicit, and updated
+the recorded source layout. The comparator now also exercises modular `j`
+surjectivity and canonicity of the Petersson-normalized discriminant metric,
+the two P8/P9 facts responsible for existence and choice-independence of
+`silvermanHeightOfCurve`.
+
+Added `scripts/audit_comparator.sh` and a negative fixture so CI rejects a
+configured theorem absent from the challenge or a solution theorem list that
+differs from the config. All six challenge targets retain exactly one reviewed
+proof placeholder, while their solution exports compile and pass the public
+axiom audit. Full `LAKE_JOBS=6 ./scripts/ci-checks.sh` passes; 618 public
+declarations use only `propext`, `Quot.sound`, and `Classical.choice`. No
+analytic-period or Arakelov claim was added.

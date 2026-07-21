@@ -153,6 +153,8 @@ else:
         "rat_height_scaled_denominator",
         "weighted_log_one_add_average",
         "modular_delta_j_fd_comparison",
+        "modular_j_surjective",
+        "modular_height_metric_eq_of_same_j",
         "silverman_proposition_2_1_certified",
     ]
     declarations = re.findall(r"(?m)^theorem\s+([A-Za-z0-9_']+)", challenge_text)

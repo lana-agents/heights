@@ -1,4 +1,4 @@
-# Heights: phase-gated implementation specification
+# Heights: implementation specification and record
 
 **Status:** living specification and implementation record. The original
 phase-gated workflow has been superseded by autonomous development; the current
@@ -226,11 +226,10 @@ Proposition 2.1 and therefore does not bypass this gap. Its elementary rational
 identities and the formula-defined comparison are proved, but a version stated
 for an independently constructed Arakelov Faltings height remains unavailable.
 
-### 2.2 Exact interface signatures for missing geometric realization
+### 2.2 Realization interface signatures
 
-The signatures below are proposed API shapes. P4 must compile-check and may make
-minor namespace/cast changes without strengthening their mathematical content.
-The declarations compile in the following scoped environment:
+The signatures below record the implemented API shapes and their honesty
+boundary. They compile in the following scoped environment:
 
 ```lean
 open scoped NumberField UpperHalfPlane nonZeroDivisors
@@ -269,10 +268,9 @@ stores a variable change; a `Prop`-valued structure may contain only proof
 fields. The order is correct for mathlib's multiplicative valuation: additive
 order `n` is represented by `exp (-n)`, and a minimal discriminant exponent gives
 the maximal multiplicative valuation among integral changes. This signature is a
-restatement of local minimality, not of any height comparison. P4 must prove its
-compatibility with `WeierstrassCurve.IsIntegral`,
-`WeierstrassCurve.IsMinimal`, and `WeierstrassCurve.valuation_Δ_aux` after
-localization whenever the required instances synthesize.
+restatement of local minimality, not of any height comparison. The global
+construction relates this valuation formulation to mathlib's localized DVR
+minimal-model API; no compatibility assertion is stored in the structure.
 
 #### Global minimal-discriminant realization
 
@@ -335,8 +333,8 @@ prove the analytic comparison from Proposition 1.1's formula.
 
 #### Reduced principal fractional ideals
 
-This is expected to be proved rather than assumed. If mathlib API friction makes
-a temporary data object useful, its maximum permitted content is:
+This is proved rather than assumed. The implemented data object has exactly the
+following permitted content:
 
 ```lean
 structure ReducedPrincipalIdealData
@@ -527,27 +525,29 @@ Comparator/config.json
 its body is exactly one reviewed `sorry`. Helper definitions may be included but
 may contain no proof holes. `Solution.lean` imports the project and re-exports a
 proved project theorem at exactly the challenge type. `config.json` lists only
-targets whose project proofs currently compile; an unproved challenge remains in
-`Challenge.lean` but is absent from the config.
+targets whose project proofs currently compile; a future unproved challenge may
+remain in `Challenge.lean` only while absent from the config and solution module.
 
-Planned targets:
+Configured targets:
 
-| ID | Standalone content | Planned phase | Why it is diagnostic |
+| ID | Standalone content | Milestone | Why it is diagnostic |
 |---|---|---:|---|
 | `rat_height_scaled_denominator` | For `q : ℚ` and positive `n : ℕ`, `Height.logHeight₁ q + log n = log (max (q.num.natAbs*n) (q.den*n))` with explicit casts. | P2 | Checks the exact rational normalization used in Corollary 2.3. |
 | `weighted_log_one_add_average` | Weighted Jensen/AM–GM inequality for `∑ wᵢ log(1+xᵢ)` with nonnegative `xᵢ` and `∑wᵢ=d>0`. | P2 | Isolates equation (11), including degree normalization. |
 | `modular_delta_j_fd_comparison` | Existence of an absolute constant bounding `-log ‖(2π)^12 Δ(τ)‖ - log(max ‖E₄(τ)^3/Δ(τ)‖ 1)` for `τ ∈ ModularGroup.fd`. | P3 | Exercises the genuinely analytic heart and the [Silv]/mathlib normalization rather than an abstract proxy. |
+| `modular_j_surjective` | Surjectivity of the actual quotient `E₄³/Δ : ℍ → ℂ`. | P8 | Tests the analytic input that constructs formula-level archimedean data for every embedded curve. |
+| `modular_height_metric_eq_of_same_j` | Equality of `‖(2π)¹²Δ(τ)‖ Im(τ)⁶` for equal modular `j`-values. | P9 | Tests that the formula-defined height is independent of the selected parameter. |
 | `silverman_proposition_2_1_certified` | The expanded, project-independent statement of the certified two-sided estimate, quantifying `W`, ideals, and periods directly and defining the Silverman height by the displayed finite-plus-archimedean formula. | P6 | Headline comparison; it cannot be passed by naming an arbitrary real “Faltings height.” |
 
-The final target's exact expanded type is frozen at the P4 interface gate, after
-all casts and ideal quotient representations compile. It must import only
+The final target's exact expanded type was frozen at the P4 interface gate after
+all casts and ideal quotient representations compiled. It imports only
 `Mathlib`; it may duplicate transparent helper definitions from the challenge,
 but may not import `Heights` or include an assumption equivalent to either final
 inequality.
 
-Initially `config.json` is empty. P2 adds the first two IDs, P3 adds the third,
-and P6 adds the headline ID. A CI check compares config entries against
-`Solution.lean` declarations and rejects stale or aspirational entries.
+The config now contains all six proved targets. CI compares configured entries
+against the challenge and solution declarations and rejects missing, stale, or
+aspirational entries before elaborating both modules.
 
 ## 4. Repository conventions, trust audit, and phase gates
 
@@ -555,21 +555,17 @@ and P6 adds the headline ID. A CI check compares config entries against
 
 ```text
 Heights/
-  WeilHeight.lean
-  IdealFactorization.lean
-  ModularJ.lean
-  ModularBounds.lean
-  Certificates.lean
-  SilvermanHeight.lean
-  Comparison.lean
-  Semistable.lean
+  WeilHeight.lean, IdealFactorization.lean, Certificates.lean
+  ModularJ.lean, ModularJFibers.lean, SilvermanHeight.lean
+  Lattice*.lean, Weierstrass*.lean, PeriodPairScaling.lean
+  VariableChangePoint.lean, ArchimedeanAlgebraicRealization.lean
 Comparator/
 Blueprint/                 # Verso blueprint, based on blueprint-verso
 scripts/
 Plans/
 ```
 
-`Heights.lean` becomes the public umbrella import. Public declarations receive
+`Heights.lean` is the public umbrella import. Public declarations receive
 docstrings and source citations. Definitions are kept separate from uncertain
 realization theorems. No source file may import anything from `references/`.
 
