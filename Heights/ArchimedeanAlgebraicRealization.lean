@@ -44,6 +44,23 @@ theorem variableChange_invariantDifferentialDenominator
   field_simp [Units.ne_zero]
   ring
 
+/-- The coefficient of the pulled-back invariant differential scales exactly
+by `u⁻¹`: the transformed x-coordinate contributes `u²`, while the preceding
+denominator contributes `u³`. This is an identity of rational-function values,
+including at zeros under Lean's totalized field division; it still does not
+define or integrate a differential form. -/
+theorem variableChange_invariantDifferentialCoefficient
+    {F : Type*} [Field F] (W : WeierstrassCurve F)
+    (C : WeierstrassCurve.VariableChange F) (x y : F) :
+    (C.u : F) ^ 2 /
+        (2 * (C.u ^ 3 * y + C.u ^ 2 * C.s * x + C.t) +
+          W.a₁ * (C.u ^ 2 * x + C.r) + W.a₃) =
+      (C.u⁻¹ : F) /
+        (2 * y + (C • W).a₁ * x + (C • W).a₃) := by
+  rw [variableChange_invariantDifferentialDenominator]
+  rw [div_eq_mul_inv, div_eq_mul_inv, mul_inv]
+  field_simp [Units.ne_zero]
+
 /-- Every qualifying archimedean parameter gives an actual admissible
 algebraic change of variables from the embedded input curve to the explicit
 lattice curve.  Thus twists do not survive the base change to `ℂ`.
@@ -99,6 +116,26 @@ theorem ArchimedeanPeriodData.variableChangeToLatticeCurve_differentialDenominat
   dsimp only
   rw [← p.variableChangeToLatticeCurve_smul W v]
   exact variableChange_invariantDifferentialDenominator
+    (W.map v.embedding) (p.variableChangeToLatticeCurve W v) x y
+
+/-- The rational coefficient of the invariant differential for the chosen
+algebraic realization scales by the expected unit `u⁻¹`. The left numerator is
+the derivative coefficient of the transformed x-coordinate. -/
+theorem ArchimedeanPeriodData.variableChangeToLatticeCurve_differentialCoefficient
+    {K : Type*} [Field K] [NumberField K]
+    (W : WeierstrassCurve K) [W.IsElliptic]
+    (p : ArchimedeanPeriodData K W) (v : InfinitePlace K) (x y : ℂ) :
+    let C := p.variableChangeToLatticeCurve W v
+    (C.u : ℂ) ^ 2 /
+        (2 * (C.u ^ 3 * y + C.u ^ 2 * C.s * x + C.t) +
+          (W.map v.embedding).a₁ * (C.u ^ 2 * x + C.r) +
+          (W.map v.embedding).a₃) =
+      (C.u⁻¹ : ℂ) /
+        (2 * y + (latticeWeierstrassCurve (p.τ v)).a₁ * x +
+          (latticeWeierstrassCurve (p.τ v)).a₃) := by
+  dsimp only
+  rw [← p.variableChangeToLatticeCurve_smul W v]
+  exact variableChange_invariantDifferentialCoefficient
     (W.map v.embedding) (p.variableChangeToLatticeCurve W v) x y
 
 end Heights

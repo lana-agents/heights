@@ -554,9 +554,8 @@ field `ℂ` produce an actual admissible variable change
 
 `Heights/ArchimedeanAlgebraicRealization.lean` proves this existence theorem,
 fixes a chosen change, and records its equation equality. It also proves the
-exact `u³` scaling of `2y + a₁x + a₃`; together with the evident `u²` derivative
-of the transformed x-coordinate, this is the controlled algebraic calculation
-behind the standard `u⁻¹` scaling of the invariant differential. Thus the
+exact `u³` scaling of `2y + a₁x + a₃` and the resulting exact `u⁻¹` scaling of
+the rational invariant-differential coefficient. Thus the
 selected lattice genuinely algebraically realizes the specified complex base
 change, and twists do not remain over `ℂ`.
 

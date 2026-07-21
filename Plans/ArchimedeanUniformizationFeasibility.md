@@ -200,8 +200,8 @@ produces a suitable `τ`. `Heights/ArchimedeanAlgebraicRealization.lean` combine
 these facts with same-`j` classification: for every infinite place it produces
 an admissible variable change from the embedded input curve to the explicit
 lattice curve. It also proves the exact `u³` transformation of
-`2y + a₁x + a₃`, isolating the algebraic calculation behind the usual `u⁻¹`
-scaling of the invariant differential. The missing step is no longer an
+`2y + a₁x + a₃` and the resulting exact `u⁻¹` rational coefficient scaling
+for the invariant differential. The missing step is no longer an
 algebraic converse; it is point-level analytic/differential infrastructure.
 
 ## 3. Concrete missing theorem stack
@@ -280,8 +280,8 @@ principle, and Rouché theorem.
    supplies a lattice curve with the same invariant as the embedded arbitrary
    curve, and same-`j` classification over `ℂ` supplies an admissible variable
    change between their equations. The invariant-differential denominator is
-   proved to scale by `u³` (with the x-coordinate derivative scaling by `u²`).
-   Still missing: package the variable change on point types, prove its
+   proved to scale by `u³`, and the resulting rational differential coefficient
+   is proved to scale by `u⁻¹`. Still missing: package the variable change on point types, prove its
    additive/analytic compatibility, define the invariant differential and its
    integrals, and connect those integrals to the lattice.
 

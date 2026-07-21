@@ -318,8 +318,8 @@ Moreover, `ArchimedeanPeriodData.exists_variableChange_to_latticeCurve` proves
 that `j_eq` supplies an actual admissible algebraic variable change from the
 complex base change of `W` to the explicit lattice curve; the complex twisting
 obstruction therefore disappears. The exact `u³` scaling of
-`2y + a₁x + a₃` is also proved, isolating the usual invariant-differential
-scaling calculation. The formula still uses the actual
+`2y + a₁x + a₃` and the resulting exact `u⁻¹` rational differential
+coefficient are also proved. The formula still uses the actual
 `silvermanModularDiscriminant` (including `(2π)^12`) and the actual `τ.im`, so
 both archimedean factors of Proposition 1.1 remain visible.
 

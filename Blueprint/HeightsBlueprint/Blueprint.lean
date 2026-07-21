@@ -413,7 +413,7 @@ construction, but the next node proves it algebraically realizes the embedded
 curve.*
 :::
 
-:::proposition "prop:archimedean-algebraic-realization" (uses := "def:archimedean-period-data, prop:lattice-weierstrass-curve") (lean := "Heights.variableChange_invariantDifferentialDenominator, Heights.ArchimedeanPeriodData.exists_variableChange_to_latticeCurve, Heights.ArchimedeanPeriodData.variableChangeToLatticeCurve, Heights.ArchimedeanPeriodData.variableChangeToLatticeCurve_smul, Heights.ArchimedeanPeriodData.variableChangeToLatticeCurve_differentialDenominator")
+:::proposition "prop:archimedean-algebraic-realization" (uses := "def:archimedean-period-data, prop:lattice-weierstrass-curve") (lean := "Heights.variableChange_invariantDifferentialDenominator, Heights.variableChange_invariantDifferentialCoefficient, Heights.ArchimedeanPeriodData.exists_variableChange_to_latticeCurve, Heights.ArchimedeanPeriodData.variableChangeToLatticeCurve, Heights.ArchimedeanPeriodData.variableChangeToLatticeCurve_smul, Heights.ArchimedeanPeriodData.variableChangeToLatticeCurve_differentialDenominator, Heights.ArchimedeanPeriodData.variableChangeToLatticeCurve_differentialCoefficient")
 Over the separably closed field $`\mathbb C`, elliptic Weierstrass curves with
 the same $`j`-invariant differ by an admissible change of variables. Therefore
 each selected lattice curve is algebraically isomorphic to the base change of
