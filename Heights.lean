@@ -3,10 +3,12 @@ import Heights.ModularJ
 import Heights.LatticeEisenstein
 import Heights.WeierstrassPrincipalPart
 import Heights.WeierstrassDifferential
+import Heights.PeriodPairScaling
 import Heights.WeierstrassAdditionDifferential
 import Heights.WeierstrassAddition
 import Heights.WeierstrassFibers
 import Heights.LatticeWeierstrass
+import Heights.ModularJFibers
 import Heights.LatticeAffinePoint
 import Heights.LatticeQuotientPoint
 import Heights.LatticeQuotientTopology
