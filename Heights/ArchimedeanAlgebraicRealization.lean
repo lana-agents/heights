@@ -1,5 +1,6 @@
 import Heights.Certificates
 import Heights.LatticePointMapAddition
+import Heights.WeierstrassCurveTopology
 import Heights.VariableChangePoint
 import Mathlib.AlgebraicGeometry.EllipticCurve.IsomOfJ
 
@@ -15,12 +16,14 @@ supplies an admissible change of Weierstrass variables from the embedded curve
 to the explicit lattice curve.
 
 This removes the possible twisting obstruction after base change to `ℂ`.
-The result is algebraic, however. The induced point map is packaged below as
-an additive equivalence, but the repository still has no invariant holomorphic
-differential on an arbitrary Weierstrass curve, integration of such a
-differential, or analytic structure on its point type. Consequently this file
-does not identify the formula-defined height with an independently constructed
-Arakelov/Faltings height.
+The induced point map is packaged below as an additive equivalence. Separately,
+`WeierstrassCurveTopology` proves every admissible change is a homeomorphism
+for the topology independently constructed from each equation. The repository
+still has no complex-manifold atlas or invariant
+holomorphic differential on an arbitrary Weierstrass curve, nor integration of
+such a differential. Consequently this file does not identify the
+formula-defined height with an independently constructed Arakelov/Faltings
+height.
 -/
 
 open scoped NumberField UpperHalfPlane
@@ -142,8 +145,7 @@ theorem ArchimedeanPeriodData.variableChangeToLatticeCurve_differentialCoefficie
 
 /-- The chosen admissible variable change induces an additive equivalence from
 points on the explicit lattice equation to points on the embedded input
-equation. This is a purely algebraic point equivalence; no topology or complex
-analytic structure is asserted on the target point type. -/
+equation. -/
 noncomputable def ArchimedeanPeriodData.latticeCurvePointAddEquiv
     {K : Type*} [Field K] [NumberField K]
     (W : WeierstrassCurve K) [W.IsElliptic]
@@ -156,9 +158,7 @@ noncomputable def ArchimedeanPeriodData.latticeCurvePointAddEquiv
 
 /-- Algebraic uniformization at the level of additive groups: the explicit
 lattice quotient maps additively and bijectively to the affine point type of
-the embedded input curve. The source carries the topology constructed in this
-repository, but this equivalence does not transport or install a topology on
-the target and is not claimed to be analytic. -/
+the embedded input curve. -/
 noncomputable def ArchimedeanPeriodData.latticeQuotientToEmbeddedPointAddEquiv
     {K : Type*} [Field K] [NumberField K]
     (W : WeierstrassCurve K) [W.IsElliptic]

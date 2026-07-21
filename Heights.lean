@@ -13,6 +13,7 @@ import Heights.LatticeAffinePoint
 import Heights.LatticeQuotientPoint
 import Heights.LatticeQuotientTopology
 import Heights.LatticeQuotientCompact
+import Heights.WeierstrassCurveTopology
 import Heights.LatticeCurveTopology
 import Heights.LatticeAffinePointTopology
 import Heights.LatticePointMapTopology
@@ -40,7 +41,9 @@ fundamental-domain parameter. Same-`j` classification over `ℂ` then supplies a
 actual algebraic variable change between the embedded input curve and the
 explicit lattice curve, eliminating the complex twisting objection. Its
 coordinate map transports the lattice quotient uniformization to the embedded
-input curve as an additive equivalence. The project still does not formalize
-periods by integration, topologize that arbitrary target or prove the
-equivalence analytic, or construct an Arakelov Faltings height.
+input curve as an additive equivalence. Every nonsingular complex target now
+has an independently equation-defined compact Hausdorff topology, invariant
+under admissible variable changes. The project still does not construct a
+complex atlas, prove the uniformization analytic, formalize periods by
+integration, or construct an Arakelov Faltings height.
 -/

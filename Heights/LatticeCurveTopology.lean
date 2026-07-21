@@ -1,24 +1,21 @@
 import Heights.LatticeQuotientTopology
-import Mathlib.Topology.Compactification.OnePoint.Basic
+import Heights.WeierstrassCurveTopology
 
 set_option linter.style.header false
 
 /-!
 # Topology on the explicit lattice curve point type
 
-For the Weierstrass curve attached to `τ`, mathlib identifies its algebraic
-point type with the affine equation locus plus one distinguished point.  This
-file introduces a named wrapper around that point type and transports the
-one-point-compactification topology through the identification.  The affine
-locus is closed and locally compact, so the resulting space is compact and
-`T4` (in particular Hausdorff and regular), and its affine chart is an open
-embedding.
+This file specializes the equation-defined topology from
+`Heights.WeierstrassCurveTopology` to the explicit lattice curve attached to
+`τ`.  The legacy lattice-specific names are retained for the analytic
+uniformization files: the point space is compact and `T4`, and its affine
+chart is an open embedding.
 
-This is deliberately restricted to the explicit lattice curve; no orphan
-topology is installed on arbitrary elliptic-curve point types.  Nothing here
-proves continuity or analyticity of `latticePointMap` at its poles, continuity
-of the group law, a homeomorphism from `ℂ/L`, or arbitrary-curve
-uniformization.
+The construction is no longer restricted in substance to the lattice equation;
+it is the specialization of an intrinsic construction available for every
+nonsingular complex Weierstrass equation.  Nothing here supplies a complex
+atlas or proves analyticity.
 -/
 
 open scoped UpperHalfPlane OnePoint
@@ -31,102 +28,90 @@ open Topology
 
 /-- The affine equation locus of the explicit lattice Weierstrass curve. -/
 abbrev LatticeCurveAffine (τ : ℍ) :=
-  {xy : ℂ × ℂ //
-    (latticeWeierstrassCurve τ).toAffine.Equation xy.1 xy.2}
+  ComplexWeierstrassAffine (latticeWeierstrassCurve τ)
 
-/-- A conservative wrapper around the point type of the explicit lattice
-curve.  Its separate name keeps the topology below local to this construction. -/
+/-- The wrapped point type of the explicit lattice curve. -/
 def LatticeCurvePoint (τ : ℍ) :=
-  (latticeWeierstrassCurve τ).toAffine.Point
+  ComplexWeierstrassPoint (latticeWeierstrassCurve τ)
 
-/-- The algebraic point equivalence, viewed as an equivalence with the
-one-point extension of the affine equation locus. -/
+/-- The algebraic point equivalence with the one-point extension of the affine
+locus. -/
 noncomputable def latticeCurvePointEquiv (τ : ℍ) :
     LatticeCurvePoint τ ≃ OnePoint (LatticeCurveAffine τ) :=
-  (latticeWeierstrassCurve τ).toAffine.pointEquiv
+  complexWeierstrassPointEquiv (latticeWeierstrassCurve τ)
 
-/-- The one-point-compactification topology transported to the wrapped
-explicit lattice-curve point type. -/
+/-- The equation-defined one-point-compactification topology. -/
 instance latticeCurvePointTopologicalSpace (τ : ℍ) :
     TopologicalSpace (LatticeCurvePoint τ) :=
-  TopologicalSpace.induced (latticeCurvePointEquiv τ) inferInstance
+  complexWeierstrassPointTopologicalSpace (latticeWeierstrassCurve τ)
 
 /-- The wrapper is homeomorphic to the one-point compactification of its
 affine equation locus. -/
 noncomputable def latticeCurvePointHomeomorph (τ : ℍ) :
     LatticeCurvePoint τ ≃ₜ OnePoint (LatticeCurveAffine τ) :=
-  (latticeCurvePointEquiv τ).toHomeomorphOfIsInducing
-    (Topology.IsInducing.induced _)
+  complexWeierstrassPointHomeomorph (latticeWeierstrassCurve τ)
 
 /-- The distinguished point at infinity in the wrapped curve-point type. -/
 def latticeCurvePointInfinity (τ : ℍ) : LatticeCurvePoint τ :=
-  .zero
+  complexWeierstrassPointInfinity (latticeWeierstrassCurve τ)
 
 /-- The affine chart map into the wrapped curve-point type. -/
 noncomputable def latticeCurvePointOfAffine (τ : ℍ) :
     LatticeCurveAffine τ → LatticeCurvePoint τ :=
-  (latticeCurvePointHomeomorph τ).symm ∘
-    ((↑) : LatticeCurveAffine τ → OnePoint (LatticeCurveAffine τ))
+  complexWeierstrassPointOfAffine (latticeWeierstrassCurve τ)
 
 @[simp] theorem latticeCurvePointHomeomorph_infinity (τ : ℍ) :
     latticeCurvePointHomeomorph τ (latticeCurvePointInfinity τ) =
       (∞ : OnePoint (LatticeCurveAffine τ)) :=
-  rfl
+  complexWeierstrassPointHomeomorph_infinity (latticeWeierstrassCurve τ)
 
 @[simp] theorem latticeCurvePointHomeomorph_affine (τ : ℍ)
     (xy : LatticeCurveAffine τ) :
     latticeCurvePointHomeomorph τ (latticeCurvePointOfAffine τ xy) =
-      (xy : OnePoint (LatticeCurveAffine τ)) := by
-  simp [latticeCurvePointOfAffine]
+      (xy : OnePoint (LatticeCurveAffine τ)) :=
+  complexWeierstrassPointHomeomorph_affine (latticeWeierstrassCurve τ) xy
 
 @[simp] theorem latticeCurvePointOfAffine_eq_mk (τ : ℍ)
     (xy : LatticeCurveAffine τ) :
     latticeCurvePointOfAffine τ xy =
-      WeierstrassCurve.Affine.Point.mk xy.2 := by
-  rfl
+      WeierstrassCurve.Affine.Point.mk xy.2 :=
+  complexWeierstrassPointOfAffine_eq_mk (latticeWeierstrassCurve τ) xy
 
 @[simp] theorem latticeCurvePointHomeomorph_symm_infinity (τ : ℍ) :
     (latticeCurvePointHomeomorph τ).symm
         (∞ : OnePoint (LatticeCurveAffine τ)) = latticeCurvePointInfinity τ :=
-  rfl
+  complexWeierstrassPointHomeomorph_symm_infinity (latticeWeierstrassCurve τ)
 
 /-- The affine chart is an open embedding. -/
 theorem isOpenEmbedding_latticeCurvePointOfAffine (τ : ℍ) :
     IsOpenEmbedding (latticeCurvePointOfAffine τ) :=
-  (latticeCurvePointHomeomorph τ).symm.isOpenEmbedding.comp
-    OnePoint.isOpenEmbedding_coe
+  isOpenEmbedding_complexWeierstrassPointOfAffine (latticeWeierstrassCurve τ)
 
 /-- The affine equation locus is closed in `ℂ × ℂ`. -/
 theorem isClosed_latticeCurveAffine (τ : ℍ) :
     IsClosed {xy : ℂ × ℂ |
-      (latticeWeierstrassCurve τ).toAffine.Equation xy.1 xy.2} := by
-  simp_rw [(latticeWeierstrassCurve τ).toAffine.equation_iff]
-  exact isClosed_eq (by fun_prop) (by fun_prop)
+      (latticeWeierstrassCurve τ).toAffine.Equation xy.1 xy.2} :=
+  isClosed_complexWeierstrassAffine (latticeWeierstrassCurve τ)
 
 /-- As a closed subspace of `ℂ × ℂ`, the affine equation locus is locally
 compact. -/
 noncomputable instance latticeCurveAffineLocallyCompactSpace (τ : ℍ) :
     LocallyCompactSpace (LatticeCurveAffine τ) :=
-  (isClosed_latticeCurveAffine τ).locallyCompactSpace
+  complexWeierstrassAffineLocallyCompactSpace (latticeWeierstrassCurve τ)
 
-/-- The one-point-compactification topology on the wrapped point type is
-compact. -/
+/-- The wrapped point type is compact. -/
 noncomputable instance latticeCurvePointCompactSpace (τ : ℍ) :
     CompactSpace (LatticeCurvePoint τ) :=
-  (latticeCurvePointHomeomorph τ).symm.compactSpace
+  complexWeierstrassPointCompactSpace (latticeWeierstrassCurve τ)
 
-/-- The wrapped point type is `T1`; this uses only that its affine equation
-locus is a subtype of the Hausdorff space `ℂ × ℂ`. -/
+/-- The wrapped point type is `T1`. -/
 noncomputable instance latticeCurvePointT1Space (τ : ℍ) :
     T1Space (LatticeCurvePoint τ) :=
-  (latticeCurvePointHomeomorph τ).symm.t1Space
+  complexWeierstrassPointT1Space (latticeWeierstrassCurve τ)
 
-/-- The wrapped point type is `T4`, hence in particular Hausdorff and regular.
-This is the standard separation theorem for the one-point compactification of
-a locally compact Hausdorff space, transported across the point
-homeomorphism. -/
+/-- The wrapped point type is `T4`, hence Hausdorff and regular. -/
 noncomputable instance latticeCurvePointT4Space (τ : ℍ) :
     T4Space (LatticeCurvePoint τ) :=
-  (latticeCurvePointHomeomorph τ).symm.t4Space
+  complexWeierstrassPointT4Space (latticeWeierstrassCurve τ)
 
 end Heights

@@ -637,3 +637,26 @@ proof placeholder, while their solution exports compile and pass the public
 axiom audit. Full `LAKE_JOBS=6 ./scripts/ci-checks.sh` passes; 618 public
 declarations use only `propext`, `Quot.sound`, and `Classical.choice`. No
 analytic-period or Arakelov claim was added.
+
+## Autonomous run 29 — 2026-07-21
+
+Closed the topology-only slice of analytic gate 2. The new
+`Heights/WeierstrassCurveTopology.lean` gives every nonsingular complex
+Weierstrass equation an independently equation-defined point topology: its
+affine equation locus is closed and locally compact, the point wrapper is the
+one-point compactification, hence compact and `T4`, and its affine chart is an
+open embedding. Explicit forward and inverse polynomial coordinate maps prove
+that every admissible variable change is a homeomorphism for the separately
+constructed source and target topologies; the resulting homeomorphism computes
+as the existing algebraic `pointMap` and `inversePointMap`.
+
+Refactored `Heights/LatticeCurveTopology.lean` into a compatibility
+specialization of this general construction, so all existing lattice point-map
+continuity and uniformization proofs remain intact. Updated the specification,
+analytic feasibility assessment, public umbrella documentation, and Blueprint
+to record that arbitrary embedded targets now have intrinsic compact Hausdorff
+topology while a complex-manifold atlas and analyticity remain open. This
+resolves taxis #176 without claiming any complex atlas, holomorphic form,
+integration theorem, or Arakelov/Faltings identification. Full
+`LAKE_JOBS=6 ./scripts/ci-checks.sh` passes; 653 covered declarations use only
+`propext`, `Quot.sound`, and `Classical.choice`.

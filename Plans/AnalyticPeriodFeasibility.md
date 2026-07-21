@@ -111,20 +111,21 @@ complex manifold. The pinned elliptic-curve API supplies no topology,
 `ChartedSpace`, `IsManifold`, holomorphic atlas, cotangent line, or invariant
 holomorphic differential for `WeierstrassCurve.toAffine.Point`.
 
-The repository's `LatticeCurvePoint` topology is deliberately only a
-one-point-compactification topology. It is enough for continuity and a
-homeomorphism, but it is not a complex atlas. The natural target construction
-must therefore add independent charts:
+The repository now closes the topology-only precursor: every nonsingular
+complex Weierstrass equation has a named point wrapper with the
+one-point-compactification topology of its affine equation locus, and every
+admissible variable change is a homeomorphism for the independently
+constructed source and target topologies. This compact Hausdorff topology is
+enough for continuity, but it is not a complex atlas. The natural target
+construction must therefore add independent charts:
 
 * at a finite nonsingular point, use whichever partial derivative of the
   Weierstrass equation is nonzero and a complex implicit-function theorem;
 * at infinity, use a projective/local parameter such as `-x/y` and prove the
   coordinate formulas extend holomorphically.
 
-This is the largest foundational layer. Generalizing the existing compact
-Hausdorff wrapper from the explicit lattice equation to arbitrary complex
-Weierstrass equations is a useful preliminary step, but topology alone does
-not discharge it.
+This is the largest foundational layer. The general compact Hausdorff wrapper
+is now complete, but topology alone does not discharge it.
 
 ### 3.3 Integration exists in ambient normed spaces, not yet on manifolds here
 
@@ -156,9 +157,11 @@ The remaining work should be split into the following gates.
 1. **Source complex manifold.** Construct the complex charted/manifold
    structure on `ℂ/L`, prove the quotient projection locally biholomorphic, and
    descend the constant form `dz`.
-2. **Intrinsic target topology and atlas.** Give every nonsingular complex
-   Weierstrass point type a topology and one-dimensional complex-manifold
-   structure from its equation, independently of any selected `τ`.
+2. **Intrinsic target topology and atlas.** The equation-defined compact
+   Hausdorff topology and variable-change homeomorphisms are complete. Give
+   every nonsingular complex Weierstrass point type a one-dimensional
+   complex-manifold structure from its equation, independently of any selected
+   `τ`.
 3. **Invariant differential.** Define the global regular form represented by
    `dx/(2y+a₁x+a₃)`, including the alternate local expressions needed where
    that denominator vanishes and at infinity. Prove it is holomorphic and
@@ -177,8 +180,9 @@ The remaining work should be split into the following gates.
    the project address the Hodge bundle, its metric and Arakelov degree. This is
    a further project, not a consequence of period realization alone.
 
-Gates 1 and a topology-only slice of gate 2 are plausible standalone tasks.
-Gates 2--6 together remain mathlib-scale. Gate 7 is larger still.
+The topology-only slice of gate 2 is complete. Gate 1 remains a plausible
+standalone task; the complex-atlas part of gate 2 through gate 6 together
+remain mathlib-scale. Gate 7 is larger still.
 
 ## 5. Judgment for the heights mission
 

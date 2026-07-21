@@ -214,7 +214,8 @@ The repository does **not** claim:
   variable change and the induced point map is an additive equivalence);
 * a packaged point-level **analytic** isomorphism for an arbitrary curve
   `E(ℂ) ≃ ℂ/(ℤ+ℤτ)`. The underlying bijective additive-group isomorphism is
-  proved; an intrinsic complex-manifold structure on the target is not;
+  proved, as is an intrinsic compact Hausdorff topology on every nonsingular
+  complex Weierstrass point type; a complex-manifold atlas is not;
 * an unconditional all-curves comparison with an independently constructed
   Arakelov Faltings height. The all-curves theorem now proved concerns only
   `silvermanHeightOfCurve`, the explicitly formula-defined height.
@@ -380,9 +381,11 @@ discharged; an analytic/integration gap remains.
    change from each embedded input curve to its selected lattice curve, and the
    invariant-differential denominator scaling is explicit. The variable change
    is now packaged as an additive point equivalence and composed with the
-   lattice quotient equivalence. It still does not install an intrinsic complex
-   manifold structure on the arbitrary target, define periods by integration,
-   or give an Arakelov identification. See
+   lattice quotient equivalence. Every nonsingular complex Weierstrass point
+   type now also has an independently equation-defined compact Hausdorff
+   topology, and admissible variable changes are homeomorphisms for these
+   topologies. This still does not install an intrinsic complex-manifold
+   structure, define periods by integration, or give an Arakelov identification. See
    `Plans/ArchimedeanUniformizationFeasibility.md`,
    `Plans/AnalyticPeriodFeasibility.md`, and taxis #57/#128/#174.
 
@@ -494,14 +497,18 @@ The following was checked against `.lake/packages/mathlib/Mathlib/`.
   it set-theoretically through `ℂ/L`. The quotient and target topologies are
   packaged in `Heights/LatticeQuotientTopology.lean` and
   `Heights/LatticeCurveTopology.lean`, with source compactness proved in
-  `Heights/LatticeQuotientCompact.lean`; `Heights/LatticeAffinePointTopology.lean`
+  `Heights/LatticeQuotientCompact.lean`. The general equation-defined target
+  topology and variable-change homeomorphisms are in
+  `Heights/WeierstrassCurveTopology.lean`, with the former lattice API recovered
+  by specialization. `Heights/LatticeAffinePointTopology.lean`
   proves continuity on the pole-free affine chart, and
   `Heights/LatticePointMapTopology.lean` uses the pole order to prove continuity
   of the total and descended maps at infinity. The repository subsequently
   proves bijectivity, additivity, same-`j` algebraic realization, and an
   additive equivalence to every embedded input curve. It now also packages
-  `ℂ → ℂ/L` as a covering map. Search still found no verified complex-manifold
-  structure on that quotient or on a Weierstrass point type, no global
+  `ℂ → ℂ/L` as a covering map and an intrinsic compact Hausdorff topology on
+  every nonsingular complex Weierstrass point type. Search still found no
+  verified complex-manifold structure on that quotient or point type, no global
   invariant holomorphic differential there, and no integration-based period
   theorem.
 * `UpperHalfPlane`, its `SL₂` action, `qParam`, and the analytic ingredients are

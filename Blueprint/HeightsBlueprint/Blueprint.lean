@@ -278,33 +278,42 @@ maps applies to the canonical projection; because that projection is
 surjective, its compact range is the whole quotient $`\mathbb C/L`.
 
 This compactness concerns only the source topology. Later results combine it
-with continuity and bijectivity to obtain a homeomorphism, prove compatibility
-with addition, and transport the additive equivalence to every embedded curve.
-Analyticity and an intrinsic topology on the arbitrary target remain separate.
+with continuity and bijectivity to obtain a homeomorphism and prove
+compatibility with addition. The target topology is now constructed directly
+from every nonsingular complex Weierstrass equation in the next node.
+Analyticity remains separate.
 
 *Status: the explicit complex lattice quotient is proved compact
 unconditionally.*
 :::
 
-:::proposition "prop:lattice-curve-topology" (uses := "prop:lattice-weierstrass-curve, prop:lattice-quotient-topology") (lean := "Heights.LatticeCurveAffine, Heights.LatticeCurvePoint, Heights.latticeCurvePointEquiv, Heights.latticeCurvePointHomeomorph, Heights.latticeCurvePointInfinity, Heights.latticeCurvePointOfAffine, Heights.latticeCurvePointHomeomorph_infinity, Heights.latticeCurvePointHomeomorph_affine, Heights.isOpenEmbedding_latticeCurvePointOfAffine, Heights.isClosed_latticeCurveAffine, Heights.latticeCurveAffineLocallyCompactSpace, Heights.latticeCurvePointCompactSpace, Heights.latticeCurvePointT1Space, Heights.latticeCurvePointT4Space")
-For the explicit lattice curve only, a named wrapper around the algebraic point
-type is given the topology transported from the one-point compactification of
-its affine equation locus. The algebraic point equivalence becomes a
-homeomorphism, carrying the distinguished point to infinity and affine points
-to the open affine chart. The affine Weierstrass equation cuts out a closed,
-hence locally compact, subspace of $`\mathbb C^2`. Consequently the wrapped
-point space is compact and $`T_4` (in particular Hausdorff and regular), and
-its affine chart is an open embedding.
+:::proposition "prop:complex-weierstrass-topology" (lean := "Heights.ComplexWeierstrassAffine, Heights.ComplexWeierstrassPoint, Heights.complexWeierstrassPointEquiv, Heights.complexWeierstrassPointHomeomorph, Heights.complexWeierstrassPointInfinity, Heights.complexWeierstrassPointOfAffine, Heights.complexWeierstrassPointHomeomorph_infinity, Heights.complexWeierstrassPointHomeomorph_affine, Heights.isOpenEmbedding_complexWeierstrassPointOfAffine, Heights.isClosed_complexWeierstrassAffine, Heights.complexWeierstrassAffineLocallyCompactSpace, Heights.complexWeierstrassPointCompactSpace, Heights.complexWeierstrassPointT1Space, Heights.complexWeierstrassPointT4Space, Heights.variableChangeAffineLocusHomeomorph, Heights.onePointHomeomorph, Heights.variableChangePointHomeomorph, Heights.variableChangePointHomeomorph_apply, Heights.variableChangePointHomeomorph_symm_apply")
+For every nonsingular complex Weierstrass equation, a named wrapper around its
+algebraic point type is topologized directly from the one-point
+compactification of its affine equation locus. The equation locus is closed
+and locally compact in $`\mathbb C^2`, so the point space is compact and
+$`T_4`, with an open affine chart.
 
-No topology is installed on arbitrary elliptic-curve point types. In
-particular, this construction alone does not prove continuity or analyticity
-of the descended Weierstrass point map at the pole, continuity of the group
-law, or arbitrary-curve uniformization. The later point-map theorem combines
-this topology with bijectivity to obtain the stated homeomorphism.
+An admissible variable change gives mutually inverse polynomial homeomorphisms
+of the two affine loci. Extending them by fixing infinity proves that its
+existing algebraic point map is a homeomorphism between the two point
+topologies. These topologies are independently equation-defined; they are not
+transported from a selected lattice uniformization.
 
-*Status: the conservative compact Hausdorff target topology is packaged
-unconditionally for the explicit lattice curve; analytic uniformization
-remains open.*
+*Status: intrinsic compact Hausdorff topology and variable-change invariance
+are proved for every nonsingular complex Weierstrass equation. No complex
+atlas or analyticity is claimed.*
+:::
+
+:::proposition "prop:lattice-curve-topology" (uses := "prop:lattice-weierstrass-curve, prop:lattice-quotient-topology, prop:complex-weierstrass-topology") (lean := "Heights.LatticeCurveAffine, Heights.LatticeCurvePoint, Heights.latticeCurvePointEquiv, Heights.latticeCurvePointHomeomorph, Heights.latticeCurvePointInfinity, Heights.latticeCurvePointOfAffine, Heights.latticeCurvePointHomeomorph_infinity, Heights.latticeCurvePointHomeomorph_affine, Heights.isOpenEmbedding_latticeCurvePointOfAffine, Heights.isClosed_latticeCurveAffine, Heights.latticeCurveAffineLocallyCompactSpace, Heights.latticeCurvePointCompactSpace, Heights.latticeCurvePointT1Space, Heights.latticeCurvePointT4Space")
+The earlier lattice-specific topology API is retained as the specialization of
+the arbitrary-equation construction to the explicit lattice curve. Its point
+space is compact and $`T_4`, and the affine chart is an open embedding. The
+later point-map theorem combines this topology with bijectivity to obtain the
+explicit topological uniformization.
+
+*Status: the legacy lattice topology is recovered from the general intrinsic
+topology. Analytic uniformization remains open.*
 :::
 
 :::proposition "prop:lattice-affine-point-continuity" (uses := "prop:lattice-affine-point-map, prop:lattice-curve-topology") (lean := "Heights.latticeAffineCoordinateMap, Heights.latticeAffineCurvePointMap, Heights.latticeAffineCoordinateMap_val, Heights.latticeAffineCurvePointMap_eq, Heights.latticeAffineCurvePointMap_homeomorph, Heights.continuous_latticeAffineCoordinateMap, Heights.continuous_latticeAffineCurvePointMap")
@@ -341,8 +350,9 @@ $`\mathbb C/L\simeq E_\tau(\mathbb C)` for the explicitly attached curve.
 This is a topological result for the explicit lattice curve. It does not prove
 analyticity across infinity or compatibility with addition. Later algebraic
 results prove addition compatibility and transport the resulting additive
-equivalence to arbitrary embedded complex elliptic curves, without transporting
-this topology or proving analyticity there.
+equivalence to arbitrary embedded complex elliptic curves. Those target curves
+now carry independently equation-defined topologies, and admissible variable
+changes are homeomorphisms for them, but no complex analyticity is proved.
 
 *Status: continuity, bijectivity, closed-embedding status, and the resulting
 topological equivalence are proved unconditionally for the descended explicit
@@ -434,9 +444,11 @@ $`\mathbb C/L\simeq E(\mathbb C)` as additive groups for every embedded input
 curve represented by the period data.
 
 *Status: proved. This is an actual algebraic variable change and point-level
-additive equivalence, not merely an abstract equality of invariants. No topology
-is installed on the arbitrary target point type; analyticity, invariant
-differential integration, and an Arakelov metric are not yet formalized.*
+additive equivalence, not merely an abstract equality of invariants. The
+arbitrary target now has its independently equation-defined compact Hausdorff
+topology and variable changes are homeomorphisms; a complex atlas, analyticity,
+invariant-differential integration, and an Arakelov metric are not yet
+formalized.*
 :::
 
 :::definition "def:reduced-principal-ideal-data" (lean := "Heights.ReducedPrincipalIdealData, Heights.exists_reducedPrincipalIdealData, Heights.reducedPrincipalIdealData")
