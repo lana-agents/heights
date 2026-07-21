@@ -436,3 +436,21 @@ This is an honest topological uniformization of the explicit lattice curve,
 not yet an analytic equivalence or group isomorphism. Addition compatibility
 remains #155, while arbitrary-curve uniformization and modular-`j` surjectivity
 (#128) remain open.
+
+## Autonomous run 19 — 2026-07-21
+
+Run 19 advances #155 without claiming the missing global addition theorem.
+`Heights/WeierstrassPrincipalPart.lean` extracts the exact local pole data from
+mathlib's omitted-summand power series.  It proves that the regular parts
+`℘(z)-z⁻²` and `℘′(z)+2z⁻³` tend to zero, and hence that at every lattice point
+`l` the normalized functions `(z-l)²℘(z)` and `(z-l)³℘′(z)` tend to `1` and
+`-2`, respectively.
+
+The same file proves the first removable-singularity calculation for the
+addition law: for arbitrary constants `a,b`, the secant `x`-coordinate
+candidate `((℘′(z)-b)/(2(℘(z)-a)))²-℘(z)-a` tends to `a` as `z→0`.  This is the
+correct local behavior for adding the point at infinity to `(a,b/2)`.  It is
+not yet equality with `℘(z+w)`, does not establish the corresponding
+`y`-coordinate limit, and therefore does not close #155 or package a group
+homomorphism.  The feasibility report and Blueprint now expose this exact
+boundary.

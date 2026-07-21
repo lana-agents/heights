@@ -119,9 +119,17 @@ extended by zero at the lattice, would be entire, doubly periodic, bounded, and
 constant. Hence `℘` attains every finite value away from the lattice; the curve
 equation and the two signs of `℘′` make the total and descended point maps
 surjective. The closed embedding is therefore packaged as a homeomorphism
-`ℂ/L ≃ₜ Eτ(ℂ)`. The Weierstrass addition formula itself, analytic extension
-across infinity, compatibility with addition, and arbitrary-curve
-uniformization have not been proved.
+`ℂ/L ≃ₜ Eτ(ℂ)`. `Heights/WeierstrassPrincipalPart.lean` now isolates the local
+pole input for
+that frontier: after subtracting `z⁻²` and `-2z⁻³`, the regular parts of `℘`
+and `℘′` tend to zero; at every period `l`, `(z-l)²℘(z) → 1` and
+`(z-l)³℘′(z) → -2`.  It also proves that the secant-law candidate
+`((℘′(z)-b)/(2(℘(z)-a)))²-℘(z)-a` extends across zero with value `a`.
+This is a genuine local `x`-coordinate cancellation at infinity, but it does
+not identify that candidate with `℘(z+w)` or handle the corresponding
+`y`-coordinate. The Weierstrass addition formula itself, its full analytic
+extension, compatibility with addition, and arbitrary-curve uniformization
+have not been proved.
 
 ### Modular forms and the fundamental domain
 
@@ -212,6 +220,10 @@ result.
    and descended maps, and compatibility with zero and negation is proved.
    `Heights/WeierstrassDifferential.lean` also proves the second-order ODE
    `℘′′ = 6℘² - g₂/2` on the lattice complement.
+   `Heights/WeierstrassPrincipalPart.lean` proves the exact normalized pole
+   limits for `℘` and `℘′` at every lattice point and the removable
+   `x`-coordinate secant-law limit at infinity.  The global addition identity
+   and its `y`-coordinate extension are still missing.
    `Heights/WeierstrassFibers.lean` uses ODE uniqueness, analytic continuation,
    and the pole order to prove the exact fibers of `℘` and `(℘,℘′)`; hence
    `Heights/LatticePointMapInjectivity.lean` proves injectivity after quotient
@@ -253,12 +265,14 @@ and if the formula-defined height is eventually to be related to a genuine
 Faltings height. The compact source quotient topology, a conservative compact
 Hausdorff one-point-compactification topology on the explicit target,
 continuity of the total and descended point maps, their zero/negation
-compatibility, the second-order Weierstrass ODE, exact Weierstrass fibers,
-surjectivity, and a homeomorphism from the quotient to the explicit lattice
-curve are now available. They do not resolve the addition formula, analytic
-extension, compatibility with addition, arbitrary-curve uniformization, or
-modular-`j` surjectivity. Until one certificate-level route lands, the
-comparison over every number field correctly
+compatibility, the second-order Weierstrass ODE, exact normalized pole limits
+(including the local secant `x`-coordinate cancellation at infinity), exact
+Weierstrass fibers, surjectivity, and a homeomorphism from the quotient to the
+explicit lattice curve are now available. They do not resolve the global
+addition formula, the corresponding `y`-coordinate extension, compatibility
+with addition, arbitrary-curve uniformization, or modular-`j` surjectivity.
+Until one certificate-level route lands, the comparison over every number
+field correctly
 retains `ArchimedeanPeriodData K W` as its sole remaining realization
 certificate; global minimal-discriminant data is now constructed
 unconditionally.

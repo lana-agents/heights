@@ -1,6 +1,7 @@
 import Heights.WeilHeight
 import Heights.ModularJ
 import Heights.LatticeEisenstein
+import Heights.WeierstrassPrincipalPart
 import Heights.WeierstrassDifferential
 import Heights.WeierstrassFibers
 import Heights.LatticeWeierstrass

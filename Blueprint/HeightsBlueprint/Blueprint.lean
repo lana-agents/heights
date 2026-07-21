@@ -135,7 +135,31 @@ torus, descend $`\wp`, or uniformize an algebraic elliptic curve.
 *Status: proved unconditionally.*
 :::
 
-:::proposition "prop:lattice-weierstrass-curve" (uses := "prop:lattice-eisenstein-normalization, def:modular-j") (lean := "Heights.deriv_derivWeierstrassP, Heights.latticeWeierstrassCurve, Heights.weierstrassP_on_latticeWeierstrassCurve, Heights.latticeWeierstrassCurve_c4, Heights.latticeWeierstrassCurve_discriminant, Heights.latticeWeierstrassCurve_discriminant_eq_modularDiscriminant, Heights.latticeWeierstrassCurve_j")
+:::proposition "prop:weierstrass-principal-parts" (lean := "Heights.tendsto_weierstrassP_sub_inv_sq_zero, Heights.tendsto_derivWeierstrassP_add_two_div_cube_zero, Heights.tendsto_sq_mul_weierstrassP_zero, Heights.tendsto_cube_mul_derivWeierstrassP_zero, Heights.tendsto_sq_mul_weierstrassP_at_lattice, Heights.tendsto_cube_mul_derivWeierstrassP_at_lattice, Heights.tendsto_weierstrass_secant_addX_zero")
+For every complex period pair and every period $`l`, the singular summands in
+mathlib's definitions give the normalized principal-part limits
+$`
+  (z-l)^2\wp(z)\longrightarrow 1,
+  \qquad
+  (z-l)^3\wp'(z)\longrightarrow -2.
+`
+At the origin, the regular remainders
+$`\wp(z)-z^{-2}` and $`\wp'(z)+2z^{-3}` tend to zero.
+
+These cancellations also show that for arbitrary $`a,b\in\mathbb C` the
+secant-formula candidate
+$`
+ \left(\frac{\wp'(z)-b}{2(\wp(z)-a)}\right)^2-\wp(z)-a
+`
+extends across $`z=0` with value $`a`. This is the local $`x`-coordinate
+cancellation required at the point at infinity. It is not the global
+Weierstrass addition theorem: equality with a translate of $`\wp` and the
+corresponding $`y`-coordinate remain open.
+
+*Status: proved unconditionally.*
+:::
+
+:::proposition "prop:lattice-weierstrass-curve" (uses := "prop:lattice-eisenstein-normalization, prop:weierstrass-principal-parts, def:modular-j") (lean := "Heights.deriv_derivWeierstrassP, Heights.latticeWeierstrassCurve, Heights.weierstrassP_on_latticeWeierstrassCurve, Heights.latticeWeierstrassCurve_c4, Heights.latticeWeierstrassCurve_discriminant, Heights.latticeWeierstrassCurve_discriminant_eq_modularDiscriminant, Heights.latticeWeierstrassCurve_j")
 Differentiating the cubic Weierstrass relation and using analytic
 no-zero-divisors on the connected lattice complement gives the second-order
 identity $`\wp''=6\wp^2-g_2/2`; the order-two pole excludes the spurious case
