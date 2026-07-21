@@ -521,4 +521,5 @@ input curve. `silvermanHeightOfCurve`, `proposition_2_1`, and
 while explicitly retaining the honesty boundary: no independently constructed
 Arakelov Faltings height or arbitrary-curve analytic uniformization is claimed.
 Full CI, trust, axiom, comparator, and Blueprint checks pass with 441 audited
-declarations.
+declarations. Filed ready-to-clanck #173 for the now-separable canonicality
+question: prove the formula is independent of the weak period-data choice.
