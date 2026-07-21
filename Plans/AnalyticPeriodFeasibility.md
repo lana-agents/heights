@@ -118,9 +118,13 @@ The repository now closes the topology-only precursor: every nonsingular
 complex Weierstrass equation has a named point wrapper with the
 one-point-compactification topology of its affine equation locus, and every
 admissible variable change is a homeomorphism for the independently
-constructed source and target topologies. This compact Hausdorff topology is
-enough for continuity, but it is not a complex atlas. The natural target
-construction must therefore add independent charts:
+constructed source and target topologies. It also packages the forward and
+inverse polynomial coordinate changes as a genuine ambient biholomorphism of
+`ℂ × ℂ`, and proves that the affine-locus homeomorphism is its restriction.
+Thus the affine analytic calculation for variable changes is complete, but
+restriction to curve manifolds still requires their missing atlases. This
+compact Hausdorff topology is enough for continuity, but it is not a complex
+atlas. The natural target construction must therefore add independent charts:
 
 * at a finite nonsingular point, use whichever partial derivative of the
   Weierstrass equation is nonzero and a complex implicit-function theorem;
@@ -170,9 +174,12 @@ The remaining work should be split into the following gates.
    `dx/(2y+a₁x+a₃)`, including the alternate local expressions needed where
    that denominator vanishes and at infinity. Prove it is holomorphic and
    nowhere zero.
-4. **Analyticity of the existing maps.** Prove the explicit Weierstrass map and
-   every admissible variable-change point map are biholomorphic for the
-   independently constructed structures.
+4. **Analyticity of the existing maps.** The ambient affine variable-change
+   map and its inverse are now packaged as biholomorphic polynomial maps, and
+   the affine-locus homeomorphism is proved to be their restriction. After the
+   target atlas exists, restrict this result to the curve manifolds, extend it
+   through infinity, and prove the explicit Weierstrass map biholomorphic for
+   the independently constructed structures.
 5. **Pullback identity.** Upgrade the existing rational coefficient identities
    to an equality of global one-forms. Prove the lattice parametrization pulls
    the lattice-curve form back to `dz`, including ramification points and
@@ -185,8 +192,11 @@ The remaining work should be split into the following gates.
    a further project, not a consequence of period realization alone.
 
 The atlas/projection portion of gate 1 and the topology-only slice of gate 2
-are complete. Descending `dz` finishes gate 1; the complex-atlas part of gate 2
-through gate 6 together remain mathlib-scale. Gate 7 is larger still.
+are complete. The ambient affine variable-change slice of gate 4 is also
+complete, but no curve-level biholomorphism follows until gate 2 supplies its
+atlas and the map is controlled at infinity. Descending `dz` finishes gate 1;
+the complex-atlas part of gate 2, gate 3, the remaining parts of gates 4--6,
+and then gate 7 remain substantial.
 
 ## 5. Judgment for the heights mission
 

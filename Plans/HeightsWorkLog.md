@@ -660,3 +660,26 @@ resolves taxis #176 without claiming any complex atlas, holomorphic form,
 integration theorem, or Arakelov/Faltings identification. Full
 `LAKE_JOBS=6 ./scripts/ci-checks.sh` passes; 653 covered declarations use only
 `propext`, `Quot.sound`, and `Classical.choice`.
+
+## Autonomous run 30 — 2026-07-21
+
+Constructed the intrinsic complex-manifold structure on `ℂ/L` in
+`Heights/LatticeQuotientManifold.lean`. Covering-local-inverse charts have
+transition maps locally equal to translations by lattice elements; all such
+local inverses belong to the maximal atlas. The quotient projection is a local
+complex-analytic diffeomorphism and hence holomorphic. This closes the atlas
+and projection slice of analytic gate 1 / taxis #175 without claiming a
+descended `dz`, curve analyticity, or period integration. Full CI passed; 660
+covered declarations used only the permitted axioms.
+
+## Autonomous run 31 — 2026-07-21
+
+Isolated the tractable affine part of analytic gate 4. The new
+`Heights/VariableChangeAnalytic.lean` packages every admissible complex
+Weierstrass coordinate change and its explicit inverse as a global ambient
+biholomorphism of `ℂ × ℂ`, and proves the existing homeomorphism of affine
+equation loci is exactly its restriction in both directions. This does not
+smuggle in a curve atlas or an argument at infinity: curve-level
+biholomorphicity still waits on analytic gate 2. Filed taxis #177 for finite
+implicit-function charts and #178 for the independent infinity chart. Full CI
+passes; 670 covered declarations use only the permitted axiom subset.

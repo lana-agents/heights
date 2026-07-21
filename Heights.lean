@@ -15,6 +15,7 @@ import Heights.LatticeQuotientTopology
 import Heights.LatticeQuotientManifold
 import Heights.LatticeQuotientCompact
 import Heights.WeierstrassCurveTopology
+import Heights.VariableChangeAnalytic
 import Heights.LatticeCurveTopology
 import Heights.LatticeAffinePointTopology
 import Heights.LatticePointMapTopology
@@ -46,7 +47,9 @@ input curve as an additive equivalence. The source quotient now has an
 independently constructed complex-manifold structure for which its projection
 from `ℂ` is locally biholomorphic. Every nonsingular complex target has an
 equation-defined compact Hausdorff topology, invariant under admissible
-variable changes. The project still does not construct a complex atlas on the
-curve, prove the uniformization analytic, formalize periods by integration, or
-construct an Arakelov Faltings height.
+variable changes. The affine coordinate change and its inverse are moreover
+packaged as an ambient biholomorphism of `ℂ × ℂ`. The project still does not
+construct a complex atlas on the curve, extend that affine analyticity through
+infinity, prove the uniformization analytic, formalize periods by integration,
+or construct an Arakelov Faltings height.
 -/

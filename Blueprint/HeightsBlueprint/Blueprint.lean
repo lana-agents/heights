@@ -319,7 +319,24 @@ transported from a selected lattice uniformization.
 
 *Status: intrinsic compact Hausdorff topology and variable-change invariance
 are proved for every nonsingular complex Weierstrass equation. No complex
-atlas or analyticity is claimed.*
+atlas or curve-level analyticity is claimed.*
+:::
+
+:::proposition "prop:variable-change-ambient-biholomorph" (uses := "prop:complex-weierstrass-topology") (lean := "Heights.variableChangeAffineAmbientEquiv, Heights.variableChangeAffineAmbientBiholomorph, Heights.variableChangeAffineAmbientBiholomorph_apply, Heights.variableChangeAffineAmbientBiholomorph_symm_apply, Heights.variableChangeAffineLocusHomeomorph_coe, Heights.variableChangeAffineLocusHomeomorph_symm_coe")
+For every admissible complex change of Weierstrass variables, the forward
+coordinate polynomial
+$`(x,y)\mapsto(u^2x+r,u^3y+u^2sx+t)` and its explicit inverse form a global
+biholomorphism of $`\mathbb C^2`. The affine-locus homeomorphism between the
+changed equations is exactly the restriction of this ambient biholomorphism,
+in both directions.
+
+This closes the ambient affine analytic calculation needed for variable-change
+invariance. It does not equip either equation locus with a complex atlas, show
+that restriction is a map of curve manifolds, or extend the resulting
+curve-level statement through the point at infinity.
+
+*Status: the ambient affine variable change is proved biholomorphic; the
+intrinsic curve atlas and infinity argument remain open.*
 :::
 
 :::proposition "prop:lattice-curve-topology" (uses := "prop:lattice-weierstrass-curve, prop:lattice-quotient-topology, prop:complex-weierstrass-topology") (lean := "Heights.LatticeCurveAffine, Heights.LatticeCurvePoint, Heights.latticeCurvePointEquiv, Heights.latticeCurvePointHomeomorph, Heights.latticeCurvePointInfinity, Heights.latticeCurvePointOfAffine, Heights.latticeCurvePointHomeomorph_infinity, Heights.latticeCurvePointHomeomorph_affine, Heights.isOpenEmbedding_latticeCurvePointOfAffine, Heights.isClosed_latticeCurveAffine, Heights.latticeCurveAffineLocallyCompactSpace, Heights.latticeCurvePointCompactSpace, Heights.latticeCurvePointT1Space, Heights.latticeCurvePointT4Space")
@@ -446,7 +463,7 @@ construction, but the next node proves it algebraically realizes the embedded
 curve.*
 :::
 
-:::proposition "prop:archimedean-algebraic-realization" (uses := "def:archimedean-period-data, prop:lattice-weierstrass-curve, prop:lattice-quotient-point-map") (lean := "Heights.variableChange_invariantDifferentialDenominator, Heights.variableChange_invariantDifferentialCoefficient, Heights.ArchimedeanPeriodData.exists_variableChange_to_latticeCurve, Heights.ArchimedeanPeriodData.variableChangeToLatticeCurve, Heights.ArchimedeanPeriodData.variableChangeToLatticeCurve_smul, Heights.ArchimedeanPeriodData.variableChangeToLatticeCurve_differentialDenominator, Heights.ArchimedeanPeriodData.variableChangeToLatticeCurve_differentialCoefficient, Heights.ArchimedeanPeriodData.latticeCurvePointAddEquiv, Heights.ArchimedeanPeriodData.latticeQuotientToEmbeddedPointAddEquiv")
+:::proposition "prop:archimedean-algebraic-realization" (uses := "def:archimedean-period-data, prop:lattice-weierstrass-curve, prop:lattice-quotient-point-map, prop:variable-change-ambient-biholomorph") (lean := "Heights.variableChange_invariantDifferentialDenominator, Heights.variableChange_invariantDifferentialCoefficient, Heights.ArchimedeanPeriodData.exists_variableChange_to_latticeCurve, Heights.ArchimedeanPeriodData.variableChangeToLatticeCurve, Heights.ArchimedeanPeriodData.variableChangeToLatticeCurve_smul, Heights.ArchimedeanPeriodData.variableChangeToLatticeCurve_differentialDenominator, Heights.ArchimedeanPeriodData.variableChangeToLatticeCurve_differentialCoefficient, Heights.ArchimedeanPeriodData.latticeCurvePointAddEquiv, Heights.ArchimedeanPeriodData.latticeQuotientToEmbeddedPointAddEquiv")
 Over the separably closed field $`\mathbb C`, elliptic Weierstrass curves with
 the same $`j`-invariant differ by an admissible change of variables. Therefore
 each selected lattice curve is algebraically isomorphic to the base change of
@@ -463,9 +480,10 @@ curve represented by the period data.
 *Status: proved. This is an actual algebraic variable change and point-level
 additive equivalence, not merely an abstract equality of invariants. The
 arbitrary target now has its independently equation-defined compact Hausdorff
-topology and variable changes are homeomorphisms; a complex atlas, analyticity,
-invariant-differential integration, and an Arakelov metric are not yet
-formalized.*
+topology, variable changes are homeomorphisms, and their ambient affine
+coordinate maps are biholomorphic. A complex curve atlas, analyticity through
+infinity, invariant-differential integration, and an Arakelov metric are not
+yet formalized.*
 :::
 
 :::definition "def:reduced-principal-ideal-data" (lean := "Heights.ReducedPrincipalIdealData, Heights.exists_reducedPrincipalIdealData, Heights.reducedPrincipalIdealData")

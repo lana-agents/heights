@@ -500,17 +500,21 @@ The following was checked against `.lake/packages/mathlib/Mathlib/`.
   `Heights/LatticeQuotientCompact.lean`. The general equation-defined target
   topology and variable-change homeomorphisms are in
   `Heights/WeierstrassCurveTopology.lean`, with the former lattice API recovered
-  by specialization. `Heights/LatticeAffinePointTopology.lean`
+  by specialization. `Heights/VariableChangeAnalytic.lean` packages the
+  forward and inverse affine coordinate polynomials as an ambient
+  biholomorphism of `ℂ × ℂ` and identifies the locus homeomorphism with its
+  restriction. `Heights/LatticeAffinePointTopology.lean`
   proves continuity on the pole-free affine chart, and
   `Heights/LatticePointMapTopology.lean` uses the pole order to prove continuity
   of the total and descended maps at infinity. The repository subsequently
   proves bijectivity, additivity, same-`j` algebraic realization, and an
   additive equivalence to every embedded input curve. It now also packages
-  `ℂ → ℂ/L` as a covering map and an intrinsic compact Hausdorff topology on
-  every nonsingular complex Weierstrass point type. Search still found no
-  verified complex-manifold structure on that quotient or point type, no global
-  invariant holomorphic differential there, and no integration-based period
-  theorem.
+  `ℂ → ℂ/L` as a covering map and constructs the quotient's intrinsic complex
+  manifold in `Heights/LatticeQuotientManifold.lean`, with the projection
+  locally biholomorphic. Every nonsingular complex Weierstrass point type has
+  an intrinsic compact Hausdorff topology, but search still found no verified
+  complex-manifold structure on that point type, no global invariant
+  holomorphic differential there, and no integration-based period theorem.
 * `UpperHalfPlane`, its `SL₂` action, `qParam`, and the analytic ingredients are
   therefore present. The remaining bridge is specifically from the proved
   algebraic/additive uniformization to intrinsic complex-analytic and
@@ -565,7 +569,8 @@ Heights/
   WeilHeight.lean, IdealFactorization.lean, Certificates.lean
   ModularJ.lean, ModularJFibers.lean, SilvermanHeight.lean
   Lattice*.lean, Weierstrass*.lean, PeriodPairScaling.lean
-  VariableChangePoint.lean, ArchimedeanAlgebraicRealization.lean
+  VariableChangePoint.lean, VariableChangeAnalytic.lean
+  ArchimedeanAlgebraicRealization.lean
 Comparator/
 Blueprint/                 # Verso blueprint, based on blueprint-verso
 scripts/
