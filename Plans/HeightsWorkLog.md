@@ -349,3 +349,30 @@ projection `ℂ → ℂ/L` is periodic under the full `ℤ`-lattice, so
 `IsZLattice.isCompact_range_of_periodic` makes its range compact; quotient
 surjectivity identifies that range with the whole space. This adds no
 injectivity, group-law, analyticity, or uniformization claim.
+
+## Autonomous run 16 — 2026-07-20
+
+Closed the general finite-place realization project #56. Commit `f35c342`
+generalizes the rational denominator-clearing argument: localization supplies a
+denominator for each Weierstrass coefficient, their product gives one nonzero
+algebraic integer, and a scaling change clears the weighted denominators
+simultaneously over `𝓞 K`. The resulting global integral model bounds every
+chosen local minimal discriminant exponent. Dedekind ideal factorization then
+assembles those bounded exponents into `GlobalMinimalDiscriminantData K W` for
+every number field, via `nonempty_globalMinimalDiscriminantData` and the chosen
+`globalMinimalDiscriminantData`.
+
+Commit `bda6210` consumes the construction in the headline chain.
+`silvermanHeightOfPeriods`, `unstableMinimalDiscriminantOfCurve`, and
+`proposition_2_1_of_periods` instantiate the previous certificate-level theorem
+with the constructed finite data; the semistable specialization is instantiated
+as well. Thus `ArchimedeanPeriodData K W` is now the sole remaining realization
+input over every number field, not only over `ℚ`. This is still a formula-defined
+Silverman height and does not claim an Arakelov/Hodge-bundle Faltings-height
+identification or unconditional period existence.
+
+The Blueprint, specification, feasibility report, and root documentation now
+record the completed arithmetic branch. Full `LAKE_JOBS=6
+./scripts/ci-checks.sh` passes with 344 public declarations audited, all within
+`{propext, Quot.sound, Classical.choice}`. Taxis #56 was closed; #128/#57 remain
+the hard archimedean front.
