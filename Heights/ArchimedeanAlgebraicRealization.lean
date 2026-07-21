@@ -18,9 +18,10 @@ to the explicit lattice curve.
 This removes the possible twisting obstruction after base change to `ℂ`.
 The induced point map is packaged below as an additive equivalence. Separately,
 `WeierstrassCurveTopology` proves every admissible change is a homeomorphism
-for the topology independently constructed from each equation. The repository
-still has no complex-manifold atlas or invariant
-holomorphic differential on an arbitrary Weierstrass curve, nor integration of
+for the topology independently constructed from each equation. The affine
+locus now has an intrinsic complex atlas, but the repository still has no
+complex-manifold atlas on the compact point type or invariant holomorphic
+differential on an arbitrary Weierstrass curve, nor integration of
 such a differential. Consequently this file does not identify the
 formula-defined height with an independently constructed Arakelov/Faltings
 height.

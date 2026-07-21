@@ -319,10 +319,29 @@ transported from a selected lattice uniformization.
 
 *Status: intrinsic compact Hausdorff topology and variable-change invariance
 are proved for every nonsingular complex Weierstrass equation. No complex
-atlas or curve-level analyticity is claimed.*
+atlas on the compact point type or curve-level analyticity is claimed.*
 :::
 
-:::proposition "prop:variable-change-ambient-biholomorph" (uses := "prop:complex-weierstrass-topology") (lean := "Heights.variableChangeAffineAmbientEquiv, Heights.variableChangeAffineAmbientBiholomorph, Heights.variableChangeAffineAmbientBiholomorph_apply, Heights.variableChangeAffineAmbientBiholomorph_symm_apply, Heights.variableChangeAffineLocusHomeomorph_coe, Heights.variableChangeAffineLocusHomeomorph_symm_coe")
+:::proposition "prop:complex-weierstrass-finite-manifold" (uses := "prop:complex-weierstrass-topology") (lean := "Heights.complexWeierstrassEquation, Heights.complexWeierstrassAffine_derivative_ne_zero, Heights.complexWeierstrassImplicitYChart, Heights.complexWeierstrassImplicitXChart, Heights.contDiffAt_complexWeierstrassImplicitYChart_symm_coe_of_mem, Heights.contDiffAt_complexWeierstrassImplicitXChart_symm_coe_of_mem, Heights.contDiffOn_complexWeierstrassImplicitYChart_transition, Heights.contDiffOn_complexWeierstrassImplicitYChart_ImplicitXChart_transition, Heights.contDiffOn_complexWeierstrassImplicitXChart_ImplicitYChart_transition, Heights.contDiffOn_complexWeierstrassImplicitXChart_transition, Heights.complexWeierstrassAffineChartAt, Heights.complexWeierstrassAffineChartedSpace, Heights.complexWeierstrassAffineIsManifold")
+At every point of a nonsingular affine complex Weierstrass equation, at least
+one equation partial derivative is nonzero. Restricting the corresponding
+ambient implicit-function neighborhood to that noncritical locus gives a chart
+whose coordinate is $`x` or $`y`. Its inverse is holomorphic at every point of
+the chart target.
+
+Transitions between charts using the same coordinate are identities. The two
+mixed transitions are the appropriate component of an analytic chart inverse.
+Thus all transitions are holomorphic on their whole overlaps, and these charts
+equip the affine equation locus with a one-dimensional complex-manifold
+structure on its existing subtype topology. No lattice parameter or transported
+atlas enters the construction.
+
+*Status: the finite affine complex atlas and manifold are proved
+unconditionally. The chart at infinity and a manifold structure on the compact
+point type remain open.*
+:::
+
+:::proposition "prop:variable-change-ambient-biholomorph" (uses := "prop:complex-weierstrass-topology, prop:complex-weierstrass-finite-manifold") (lean := "Heights.variableChangeAffineAmbientEquiv, Heights.variableChangeAffineAmbientBiholomorph, Heights.variableChangeAffineAmbientBiholomorph_apply, Heights.variableChangeAffineAmbientBiholomorph_symm_apply, Heights.variableChangeAffineLocusHomeomorph_coe, Heights.variableChangeAffineLocusHomeomorph_symm_coe")
 For every admissible complex change of Weierstrass variables, the forward
 coordinate polynomial
 $`(x,y)\mapsto(u^2x+r,u^3y+u^2sx+t)` and its explicit inverse form a global
@@ -331,12 +350,12 @@ changed equations is exactly the restriction of this ambient biholomorphism,
 in both directions.
 
 This closes the ambient affine analytic calculation needed for variable-change
-invariance. It does not equip either equation locus with a complex atlas, show
-that restriction is a map of curve manifolds, or extend the resulting
-curve-level statement through the point at infinity.
+invariance. The affine equation loci now have independent intrinsic atlases,
+but this node does not yet package the restriction as a map of those manifolds
+or extend the resulting curve-level statement through the point at infinity.
 
-*Status: the ambient affine variable change is proved biholomorphic; the
-intrinsic curve atlas and infinity argument remain open.*
+*Status: the ambient affine variable change is proved biholomorphic; its
+restriction and the infinity argument remain open.*
 :::
 
 :::proposition "prop:lattice-curve-topology" (uses := "prop:lattice-weierstrass-curve, prop:lattice-quotient-topology, prop:complex-weierstrass-topology") (lean := "Heights.LatticeCurveAffine, Heights.LatticeCurvePoint, Heights.latticeCurvePointEquiv, Heights.latticeCurvePointHomeomorph, Heights.latticeCurvePointInfinity, Heights.latticeCurvePointOfAffine, Heights.latticeCurvePointHomeomorph_infinity, Heights.latticeCurvePointHomeomorph_affine, Heights.isOpenEmbedding_latticeCurvePointOfAffine, Heights.isClosed_latticeCurveAffine, Heights.latticeCurveAffineLocallyCompactSpace, Heights.latticeCurvePointCompactSpace, Heights.latticeCurvePointT1Space, Heights.latticeCurvePointT4Space")

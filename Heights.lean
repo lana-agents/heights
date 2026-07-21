@@ -17,6 +17,7 @@ import Heights.LatticeQuotientCompact
 import Heights.WeierstrassCurveTopology
 import Heights.VariableChangeAnalytic
 import Heights.WeierstrassFiniteAnalytic
+import Heights.WeierstrassFiniteManifold
 import Heights.LatticeCurveTopology
 import Heights.LatticeAffinePointTopology
 import Heights.LatticePointMapTopology
@@ -52,8 +53,10 @@ variable changes. The affine coordinate change and its inverse are moreover
 packaged as an ambient biholomorphism of `ℂ × ℂ`. At every finite curve point,
 the two equation derivatives are computed, the complex implicit-function
 theorem supplies an analytic graph germ in one coordinate direction, and its
-zero-fiber neighborhood gives an open topological chart. The project still
-does not assemble the finite charts into a complex atlas on the curve,
-construct the chart at infinity, prove the uniformization analytic, formalize
-periods by integration, or construct an Arakelov Faltings height.
+zero-fiber neighborhood gives an open topological chart. Their transition
+maps are holomorphic on whole overlaps, giving the affine equation locus an
+intrinsic one-dimensional complex-manifold structure. The project still does
+not construct the chart at infinity or a complex atlas on the compact curve,
+prove the uniformization analytic, formalize periods by integration, or
+construct an Arakelov Faltings height.
 -/

@@ -683,3 +683,32 @@ smuggle in a curve atlas or an argument at infinity: curve-level
 biholomorphicity still waits on analytic gate 2. Filed taxis #177 for finite
 implicit-function charts and #178 for the independent infinity chart. Full CI
 passes; 670 covered declarations use only the permitted axiom subset.
+
+## Autonomous run 32 — 2026-07-21
+
+Began the finite slice of analytic gate 2 in
+`Heights/WeierstrassFiniteAnalytic.lean`. Computed the exact complex Fréchet
+derivative of the affine equation and proved the nonsingular partial-derivative
+alternative. Mathlib's implicit-function theorem gives analytic graph germs in
+both coordinate directions. Restricting the ambient inverse-function
+neighborhoods along the zero fiber gives explicit `OpenPartialHomeomorph`
+charts from the affine equation locus to `ℂ`; every finite point lies in one
+source, and each inverse agrees near its center with the corresponding analytic
+graph. This did not yet claim whole-overlap transitions or a `ChartedSpace`.
+Full CI passed; the final axiom audit covered 740 declarations.
+
+## Autonomous run 33 — 2026-07-21
+
+Completed the intrinsic finite affine atlas in
+`Heights/WeierstrassFiniteManifold.lean`. The ambient implicit neighborhoods
+are now restricted to their noncritical loci. At every point of their targets,
+the inverse-function theorem can therefore be reapplied with an invertible
+partial derivative, proving the chart inverses analytic on the whole target.
+The four combinations of `x`- and `y`-coordinate charts have holomorphic
+transitions on their whole overlaps. A preferred derivative-dependent chart at
+each point gives the existing affine subtype topology a `ChartedSpace ℂ` and a
+one-dimensional complex-analytic `IsManifold` instance.
+
+This resolves the finite-affine deliverable of taxis #177 without claiming a
+chart at infinity or a complex atlas on the compact point wrapper. Those remain
+the separate taxis #178 / compact-assembly gate.
