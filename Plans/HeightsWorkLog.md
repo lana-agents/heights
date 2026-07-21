@@ -590,3 +590,32 @@ uniformization at the point-type level. The target has not been given a
 topology, the equivalence is not claimed continuous or analytic, and no
 invariant differential has been defined or integrated. Those remain the exact
 boundary before an Arakelov/Faltings interpretation.
+
+## Autonomous run 27 — 2026-07-21 (`4177aff`)
+
+Performed a focused feasibility review of the one genuinely analytic statement
+left after #174. `Plans/AnalyticPeriodFeasibility.md` separates the already
+proved algebraic/additive uniformization from the missing intrinsic
+complex-manifold atlas, global invariant holomorphic differential, analyticity
+of the existing maps, and integration/covering-space computation of all
+periods. It records the expected normalization precisely: the chosen variable
+change should pull the embedded invariant differential back to `u⁻¹ dz`, so
+the periods should be `u⁻¹` and `u⁻¹τ` and their ratio should be the selected
+`τ`. Transporting the analytic structure and form tautologically along the
+existing equivalence is explicitly not accepted as an intrinsic realization.
+
+Landed one concrete first step:
+`isAddQuotientCoveringMap_latticeQuotientMk` and
+`isCoveringMap_latticeQuotientMk` package `ℂ → ℂ/L` as the quotient covering
+map for translation by the discrete period lattice. Updated the feasibility
+report, specification, and Blueprint to remove stale pre-#174 claims and link
+the new declarations. Full `LAKE_JOBS=6 ./scripts/ci-checks.sh` passes; 616
+public declarations use only the permitted axiom subset.
+
+Filed and labeled `ready-to-clanck` two deduplicated standalone slices: #175
+(complex-manifold structure on the source lattice quotient) and #176 (intrinsic
+one-point-compactification topology for arbitrary complex Weierstrass point
+types and variable-change homeomorphisms). Posted the narrowed feasibility
+judgment to umbrella issue #57. The analytic-period frontier is GO only as this
+decomposed infrastructure project; an Arakelov/Faltings identification remains
+a further, larger layer.
