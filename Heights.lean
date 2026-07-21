@@ -23,7 +23,8 @@ Silverman's formula-defined elliptic-curve height (cf. [Silv], Proposition
 The public API contains the unconditional Weil-height and modular estimates,
 explicit interfaces for missing realization data, Silverman's formula-defined
 certificate-level height, and certified forms of Proposition 2.1. Global
-minimal-discriminant data is constructed unconditionally over `ℚ`; compatible
-archimedean period data remains an input even there. The project does not claim
-an Arakelov Faltings height or an unconditional all-curves comparison theorem.
+minimal-discriminant data is constructed unconditionally over every number
+field; compatible archimedean period data remains an input. The project does
+not claim an Arakelov Faltings height or an unconditional all-curves comparison
+theorem.
 -/

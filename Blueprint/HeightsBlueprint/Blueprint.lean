@@ -308,18 +308,18 @@ height inequality.
 assert global existence.*
 :::
 
-:::definition "def:global-minimal-discriminant-data" (uses := "def:local-minimal-discriminant-exponent") (lean := "Heights.GlobalMinimalDiscriminantData, Heights.globalMinimalDiscriminantDataRat")
+:::definition "def:global-minimal-discriminant-data" (uses := "def:local-minimal-discriminant-exponent") (lean := "Heights.GlobalMinimalDiscriminantData, Heights.exists_integralModel_change, Heights.nonempty_globalMinimalDiscriminantData, Heights.globalMinimalDiscriminantData")
 The minimal-discriminant ideal packages the finite contribution to the height
 formula by requiring each prime multiplicity to equal its local minimal
-exponent; it need not arise from one globally minimal equation. Over
-$`\mathbb Q`, a single integral model bounds every local exponent, so mathlib's
-DVR minimal-model theorem and ideal factorization assemble the required ideal.
-Neither denominator divisibility nor a comparison estimate is stored in the
-interface.
+exponent; it need not arise from one globally minimal equation. A product of
+localization denominators makes the original equation globally integral over
+the ring of integers. Its discriminant bounds every local minimum, so mathlib's
+DVR minimal-model theorem and Dedekind ideal factorization assemble the required
+ideal. Neither denominator divisibility nor a comparison estimate is stored in
+the interface.
 
-*Status: `Heights.GlobalMinimalDiscriminantData` is formalized and
-`Heights.globalMinimalDiscriminantDataRat` proves existence over $`\mathbb Q`;
-general number-field existence remains open.*
+*Status: formalized and constructed for every elliptic Weierstrass curve over
+every number field.*
 :::
 
 :::definition "def:archimedean-period-data" (uses := "def:modular-j") (lean := "Heights.ArchimedeanPeriodData, Heights.nonempty_archimedeanPeriodData_of_modularJ_surjective")
@@ -349,7 +349,7 @@ existence and `Heights.reducedPrincipalIdealData` fixes a canonical choice.*
 
 # Certificate-level height and comparisons
 
-:::definition "def:silverman-height" (uses := "def:silverman-modular-discriminant, def:global-minimal-discriminant-data, def:archimedean-period-data") (lean := "Heights.silvermanHeight, Heights.silvermanHeight_archimedean_log_arg_pos, Heights.silvermanHeight_denominator_pos")
+:::definition "def:silverman-height" (uses := "def:silverman-modular-discriminant, def:global-minimal-discriminant-data, def:archimedean-period-data") (lean := "Heights.silvermanHeight, Heights.silvermanHeightOfPeriods, Heights.silvermanHeight_archimedean_log_arg_pos, Heights.silvermanHeight_denominator_pos")
 Silverman's formula balances the finite bad-reduction contribution
 $`\log N(\Delta_{\min})` against the archimedean norm of the discriminant
 differential, $`\log(|\Delta_{\mathrm{Silv}}(\tau)|\operatorname{Im}(\tau)^6)`.
@@ -358,16 +358,17 @@ invariant-differential line. Here this expression is defined only from genuine
 minimal-ideal and period certificates, not renamed as an independently
 constructed Arakelov height.
 
-*Status: `Heights.silvermanHeight` is formalized at certificate level, with
-positivity of every logarithm argument and denominator proved; no Arakelov
-identification is claimed.*
+*Status: `Heights.silvermanHeight` is formalized at certificate level and
+`Heights.silvermanHeightOfPeriods` supplies its now-constructed finite data;
+positivity of every logarithm argument and denominator is proved, but no
+Arakelov identification is claimed.*
 :::
 
 :::proposition "prop:proposition-1-1-certified" (uses := "def:silverman-height")
 With genuine minimal-discriminant and period certificates, the preceding
 formula is the elliptic-curve height formula corresponding to Proposition
-1.1. This node does not assert unconditional existence of those data or an
-Arakelov/Hodge-bundle construction.
+1.1. The finite data is now constructed; this node does not assert
+unconditional period existence or an Arakelov/Hodge-bundle construction.
 
 *Status: not started (conditional/certificate-level target).*
 :::
@@ -379,11 +380,11 @@ $`j`-denominator is proved to divide the minimal-discriminant ideal, defining
 its canonical complement without a reduced-ideal hypothesis, and semistability
 is proved to make that complement the unit ideal.
 
-*Status: formalized and proved conditionally only on global minimal-
-discriminant realization data.*
+*Status: formalized and proved; global minimal-discriminant realization data
+is now constructed over every number field.*
 :::
 
-:::theorem "thm:proposition-2-1-certified" (uses := "prop:rational-height-arithmetic, prop:reduced-principal-ideals, prop:modular-estimates, prop:weighted-log-log, def:silverman-height") (lean := "Heights.comparisonExpression_eq_archimedeanAverage, Heights.correctedComparison_bounds_of_modular_estimates, Heights.proposition_2_1_certified")
+:::theorem "thm:proposition-2-1-certified" (uses := "prop:rational-height-arithmetic, prop:reduced-principal-ideals, prop:modular-estimates, prop:weighted-log-log, def:silverman-height") (lean := "Heights.comparisonExpression_eq_archimedeanAverage, Heights.correctedComparison_bounds_of_modular_estimates, Heights.proposition_2_1_certified, Heights.proposition_2_1_of_periods")
 One pair of absolute modular-estimate constants, quantified before the number
 field, curve, and remaining realization data, gives Silverman's two-sided
 Proposition 2.1 estimate for normalized $`j`-height, the canonical unstable
@@ -391,25 +392,26 @@ ideal, and `silvermanHeight`. The theorem no longer assumes reduced
 principal-ideal data or analytic estimates: the unconditional fundamental-
 domain theorems supply the two absolute constants directly.
 
-*Status: proved conditional only on minimal-discriminant and period realization
-data; this is not an all-curves Arakelov Faltings-height theorem.*
+*Status: proved. `Heights.proposition_2_1_of_periods` instantiates the
+constructed minimal-discriminant data over every number field, leaving only
+compatible periods; this is not an all-curves Arakelov Faltings-height theorem.*
 :::
 
-:::theorem "thm:proposition-2-1-semistable-certified" (uses := "thm:proposition-2-1-certified, def:certified-semistability") (lean := "Heights.semistable_abs_comparison_of_corrected_bounds, Heights.proposition_2_1_semistable_certified")
+:::theorem "thm:proposition-2-1-semistable-certified" (uses := "thm:proposition-2-1-certified, def:certified-semistability") (lean := "Heights.semistable_abs_comparison_of_corrected_bounds, Heights.proposition_2_1_semistable_certified, Heights.proposition_2_1_semistable_of_periods")
 After proving certified semistability makes the unstable ideal trivial, derive
 the absolute-value specialization comparing normalized $`j`-height with
 $`12\,\mathrm{silvermanHeight}`.
 
-*Status: proved conditional only on minimal-discriminant and period realization
-data and certified semistability; no analytic estimate remains as a hypothesis.*
+*Status: proved with the constructed minimal-discriminant data, compatible
+periods, and certified semistability; no analytic estimate remains as a
+hypothesis.*
 :::
 
-The repository does not presently claim period construction, global minimal-
-discriminant construction over every number field, complex uniformization, an
-Arakelov Faltings height, or unconditional all-curves Proposition 2.1. Over
-$`\mathbb Q` the global minimal-discriminant certificate is unconditional, so
-`ArchimedeanPeriodData` is the sole remaining realization input. The precise
-archimedean feasibility findings are recorded in
+The repository does not presently claim period construction, complex
+uniformization, an Arakelov Faltings height, or unconditional all-curves
+Proposition 2.1. Global minimal-discriminant data is unconditional over every
+number field, so `ArchimedeanPeriodData` is the sole remaining realization
+input. The precise archimedean feasibility findings are recorded in
 `Plans/ArchimedeanUniformizationFeasibility.md`.
 
 {blueprint_graph}

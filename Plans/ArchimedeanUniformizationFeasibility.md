@@ -219,6 +219,7 @@ Faltings height. The compact source quotient topology, a conservative compact
 Hausdorff one-point-compactification topology on the explicit target, and
 continuity of the total and descended point maps are now available, but they do
 not resolve analytic extension, group-law compatibility, bijectivity, or the
-uniformization gap. Until one route lands, the unconditional
-`K = ℚ` result correctly retains `ArchimedeanPeriodData ℚ W` as its sole
-remaining certificate.
+uniformization gap. Until one route lands, the comparison over every number field correctly
+retains `ArchimedeanPeriodData K W` as its sole remaining realization
+certificate; global minimal-discriminant data is now constructed
+unconditionally.

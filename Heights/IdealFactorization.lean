@@ -373,6 +373,13 @@ noncomputable def unstableMinimalDiscriminant
     (m : GlobalMinimalDiscriminantData K W) : Ideal (𝓞 K) :=
   Classical.choose (denominator_dvd_minimalDiscriminant m)
 
+/-- The unstable ideal attached to the chosen global minimal-discriminant
+data for a curve over a number field. -/
+noncomputable def unstableMinimalDiscriminantOfCurve
+    {K : Type*} [Field K] [NumberField K]
+    (W : WeierstrassCurve K) [W.IsElliptic] : Ideal (𝓞 K) :=
+  unstableMinimalDiscriminant (globalMinimalDiscriminantData W)
+
 /-- The canonical denominator times its complement is the certified
 minimal-discriminant ideal. -/
 theorem denominator_mul_unstableMinimalDiscriminant
@@ -435,6 +442,12 @@ def IsSemistable
   ∀ v : HeightOneSpectrum (𝓞 K),
     (m.realizes v).IsGoodReduction ∨
       (m.realizes v).IsMultiplicativeReduction
+
+/-- Semistability relative to the chosen global minimal-discriminant data. -/
+def IsSemistableOfCurve
+    (K : Type*) [Field K] [NumberField K]
+    (W : WeierstrassCurve K) [W.IsElliptic] : Prop :=
+  IsSemistable K W (globalMinimalDiscriminantData W)
 
 /-- At every finite place of a semistable certified curve, the canonical
 reduced `j`-denominator multiplicity equals the minimal-discriminant
@@ -969,5 +982,42 @@ theorem proposition_2_1_semistable_certified :
           6 * Real.log (1 + normalizedLogHeight K W.j) + C :=
   proposition_2_1_semistable_certified_of_standard_modular_estimates
     modularDeltaJ_fd_comparison modularIm_logLogJ_fd_comparison
+
+/-- Silverman's corrected two-sided comparison over every number field, using
+the constructed global minimal-discriminant data. Compatible archimedean
+periods are the only remaining realization input. -/
+theorem proposition_2_1_of_periods :
+    ∃ C : ℝ, 0 ≤ C ∧
+      ∀ (K : Type*) [Field K] [NumberField K]
+        (W : WeierstrassCurve K) [W.IsElliptic]
+        (p : ArchimedeanPeriodData K W),
+        -C ≤ normalizedLogHeight K W.j +
+              logIdealNorm (unstableMinimalDiscriminantOfCurve W) /
+                (Module.finrank ℚ K : ℝ) -
+            12 * silvermanHeightOfPeriods W p ∧
+          normalizedLogHeight K W.j +
+              logIdealNorm (unstableMinimalDiscriminantOfCurve W) /
+                (Module.finrank ℚ K : ℝ) -
+            12 * silvermanHeightOfPeriods W p ≤
+          6 * Real.log (1 + normalizedLogHeight K W.j) + C := by
+  rcases proposition_2_1_certified with ⟨C, hC, hall⟩
+  refine ⟨C, hC, ?_⟩
+  intro K _ _ W _ p
+  exact hall K W (globalMinimalDiscriminantData W) p
+
+/-- The semistable specialization over every number field, using the
+constructed global minimal-discriminant data. -/
+theorem proposition_2_1_semistable_of_periods :
+    ∃ C : ℝ, 0 ≤ C ∧
+      ∀ (K : Type*) [Field K] [NumberField K]
+        (W : WeierstrassCurve K) [W.IsElliptic]
+        (p : ArchimedeanPeriodData K W),
+        IsSemistableOfCurve K W →
+        |normalizedLogHeight K W.j - 12 * silvermanHeightOfPeriods W p| ≤
+          6 * Real.log (1 + normalizedLogHeight K W.j) + C := by
+  rcases proposition_2_1_semistable_certified with ⟨C, hC, hall⟩
+  refine ⟨C, hC, ?_⟩
+  intro K _ _ W _ p hs
+  exact hall K W (globalMinimalDiscriminantData W) p hs
 
 end Heights

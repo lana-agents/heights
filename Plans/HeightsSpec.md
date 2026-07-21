@@ -178,7 +178,10 @@ theorem proposition_2_1_certified :
 
 The reduced principal-ideal representation is now constructed unconditionally,
 so the displayed signature uses its canonical choice and does not quantify an
-external witness. The theorem must not quantify an arbitrary `hF : ℝ`.
+external witness. Global minimal-discriminant data is also constructed over
+every number field; `proposition_2_1_of_periods` instantiates `m` with that
+choice, leaving only `ArchimedeanPeriodData`. The theorem must not quantify an
+arbitrary `hF : ℝ`.
 
 Define certified semistability place-by-place as “good or multiplicative” for a
 minimal local model. Prove that semistability implies `γ = ⊤`, then derive
@@ -205,13 +208,11 @@ The repository does **not** claim:
 
 * an unconditional construction of the Faltings height as the Arakelov degree of
   the Hodge bundle;
-* existence of global minimal-discriminant data for every `W/K` (it is now
-  constructed for every elliptic `W/ℚ`, but not for general number fields);
 * existence of compatible periods for every complex embedding of every `W/K`;
 * an algebraic/analytic isomorphism `E(ℂ) ≃ ℂ/(ℤ+ℤτ)`;
 * the unconditional all-curves form of Proposition 2.1. The certified theorem
-  is proved, and over `ℚ` its sole remaining realization input is
-  `ArchimedeanPeriodData ℚ W`.
+  is proved, and over every number field its sole remaining realization input
+  is `ArchimedeanPeriodData K W`.
 
 Those become targets only after the feasibility gate in P8. Merely restricting to
 `K = ℚ` or to a totally real field does not remove the archimedean term: even a
@@ -342,14 +343,15 @@ with an explicit convention for `x = 0` rather than silently assuming `j ≠ 0`.
 
 ### 2.3 Explicit library gaps and forbidden shortcuts
 
-There are two genuinely large realization gaps, one now partially discharged.
+The finite realization gap is now discharged; the archimedean gap remains
+large.
 
-1. **Global arithmetic assembly.** `Reduction.lean` proves local minimal-model
-   existence over a DVR. This repository now bridges it to the number-field
-   valuation framework and constructs `GlobalMinimalDiscriminantData ℚ W` for
-   every elliptic curve over `ℚ`. General number fields still lack the global
-   ideal assembly (taxis #56); the argument over `ℚ` uses simultaneous
-   integrality unavailable over an arbitrary ring of integers.
+1. **Global arithmetic assembly (completed).** `Reduction.lean` proves local
+   minimal-model existence over a DVR. This repository bridges it to the
+   number-field valuation framework, clears all five coefficient denominators
+   by one scaling over `𝓞 K`, bounds the local minimal exponents by the resulting
+   integral discriminant, and uses Dedekind ideal factorization to construct
+   `GlobalMinimalDiscriminantData K W` for every number field (taxis #56).
 2. **Complex uniformization bridge.** Mathlib has upper-half-plane geometry,
    modular forms, the modular discriminant, period lattices, and Weierstrass
    `℘`, but no theorem producing periods from an algebraic elliptic curve over
@@ -615,8 +617,8 @@ mathematical content, not that the abandoned review ceremony was performed.
 | P5 | Complete: denominator divisibility, canonical unstable ideal, exact finite/archimedean decomposition, semistability. |
 | P6 | Complete: both certified Proposition 2.1 theorems and the expanded comparator target. |
 | P7 | Partially complete: rational arithmetic, equation (11), and ε-absorption are proved; no uncertified Faltings-height corollary is claimed. |
-| P8 | Arithmetic `ℚ` branch GO and complete; general arithmetic branch remains #56. Archimedean branch STOP as phase-sized work, although the explicit lattice curve, total point map, descent through `ℂ/L`, compact source quotient topology, conservative explicit-target topology, and continuity of the total/descended map (including at the poles) are complete Route B slices; see `Plans/ArchimedeanUniformizationFeasibility.md` and #57. Analytic extension, the remaining uniformization properties, and Arakelov identification remain unavailable. |
-| P9 | Not scheduled. Over `ℚ`, only `ArchimedeanPeriodData ℚ W` remains; general `K` also needs #56. |
+| P8 | Arithmetic branch GO and complete over every number field (#56). Archimedean branch STOP as phase-sized work, although the explicit lattice curve, total point map, descent through `ℂ/L`, compact source quotient topology, conservative explicit-target topology, and continuity of the total/descended map (including at the poles) are complete Route B slices; see `Plans/ArchimedeanUniformizationFeasibility.md` and #57. Analytic extension, the remaining uniformization properties, and Arakelov identification remain unavailable. |
+| P9 | Partially instantiated: `proposition_2_1_of_periods` removes the finite realization certificate over every number field. `ArchimedeanPeriodData K W` remains, so no unconditional all-curves or Arakelov Faltings-height theorem is claimed. |
 
 ### P0 — Bootstrap (already committed)
 
@@ -740,7 +742,7 @@ Proposition 2.1.
 existence: rational numerator/denominator/discriminant identities, the
 `c₄,c₆,Δ,j` algebra, and the elementary absorption
 `6 log(1+log t) ≤ ε log t + Oε(1)`. State and prove the full inequalities only
-with `ArchimedeanPeriodData ℚ W` and global minimal data as hypotheses.
+with `ArchimedeanPeriodData ℚ W` as the remaining realization hypothesis.
 
 **Checks.** Full bounded build/audits; theorem names distinguish unconditional
 algebra from certified height comparisons; no claim says the `ℚ` case removes

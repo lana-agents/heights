@@ -5,12 +5,13 @@ set_option linter.style.header false
 /-!
 # Arithmetic and archimedean realization certificates
 
-Mathlib does not currently assemble local minimal models over a number field
-into a global minimal-discriminant ideal, nor does it uniformize an algebraic
-elliptic curve over `ℂ` and identify its algebraic `j` with `Heights.modularJ`.
-This file gives explicit interfaces for exactly that missing realization data.
-None of these structures contains a height, a height formula, a comparison
-bound, or an existence claim.
+This file gives explicit interfaces for finite and archimedean realization
+data. It constructs the finite global minimal-discriminant data over every
+number field from local minimal models and ideal factorization. Compatible
+archimedean periods remain unavailable: mathlib does not uniformize an
+algebraic elliptic curve over `ℂ` or identify its algebraic `j` with
+`Heights.modularJ`. None of the structures contains a height, a height formula,
+or a comparison bound.
 -/
 
 open scoped NumberField UpperHalfPlane nonZeroDivisors
@@ -54,8 +55,8 @@ structure IsLocalMinimalDiscriminantExponent
       v.valuation K (C • W).Δ ≤ WithZero.exp (-(n : ℤ))
 
 /-- A nonzero integral ideal whose prime multiplicities realize all local
-minimal discriminant exponents. This packages global assembly data but does
-not assert that such data exists for every curve. -/
+minimal discriminant exponents. Existence for every elliptic curve over a
+number field is proved below, rather than stored as a structure field. -/
 structure GlobalMinimalDiscriminantData
     (K : Type*) [Field K] [NumberField K]
     (W : WeierstrassCurve K) [W.IsElliptic] where
