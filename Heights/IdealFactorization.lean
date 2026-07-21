@@ -984,8 +984,9 @@ theorem proposition_2_1_semistable_certified :
     modularDeltaJ_fd_comparison modularIm_logLogJ_fd_comparison
 
 /-- Silverman's corrected two-sided comparison over every number field, using
-the constructed global minimal-discriminant data. Compatible archimedean
-periods are the only remaining realization input. -/
+the constructed global minimal-discriminant data. Compatible archimedean data
+is the only remaining explicit input; it exists for every curve and is proved
+to algebraically realize the embedded curve. -/
 theorem proposition_2_1_of_periods :
     ∃ C : ℝ, 0 ≤ C ∧
       ∀ (K : Type*) [Field K] [NumberField K]
@@ -1022,8 +1023,10 @@ theorem proposition_2_1_semistable_of_periods :
 
 /-- Silverman's corrected two-sided comparison over every number field and
 elliptic Weierstrass curve, for the formula-defined height obtained from the
-constructed finite data and a classical choice of weak `j`-compatible
-archimedean data. This theorem makes no Arakelov Faltings-height claim. -/
+constructed finite data and a classical choice of `j`-compatible
+archimedean data. Same-`j` classification proves that this data algebraically
+realizes each complex base change, but this theorem makes no period-integration
+or Arakelov Faltings-height claim. -/
 theorem proposition_2_1 :
     ∃ C : ℝ, 0 ≤ C ∧
       ∀ (K : Type*) [Field K] [NumberField K]

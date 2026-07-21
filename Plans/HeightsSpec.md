@@ -199,8 +199,9 @@ theorem proposition_2_1_semistable_certified :
 ```
 
 This was the largest initially justified headline result. The finite data and
-the deliberately weak `j`-compatible archimedean interface are now constructed;
-the distinction from an Arakelov Faltings height remains essential.
+the minimal `j`-compatible archimedean interface are now constructed, and the
+latter is proved to algebraically realize every embedded input curve; the
+distinction from an Arakelov Faltings height remains essential.
 
 #### What is not claimed
 
@@ -208,10 +209,11 @@ The repository does **not** claim:
 
 * an unconditional construction of the Faltings height as the Arakelov degree of
   the Hodge bundle;
-* genuine periods obtained by integrating a differential on every embedded
-  `W/K` (the constructed weak data records only matching `j`);
-* an algebraic/analytic isomorphism for an arbitrary curve
-  `E(ℂ) ≃ ℂ/(ℤ+ℤτ)`;
+* periods defined by integrating a differential on every embedded `W/K`
+  (although the selected lattice curve is now related to it by an actual
+  algebraic variable change);
+* a packaged point-level analytic isomorphism for an arbitrary curve
+  `E(ℂ) ≃ ℂ/(ℤ+ℤτ)` (the equation-level algebraic change is proved);
 * an unconditional all-curves comparison with an independently constructed
   Arakelov Faltings height. The all-curves theorem now proved concerns only
   `silvermanHeightOfCurve`, the explicitly formula-defined height.
@@ -311,16 +313,21 @@ complex elliptic curves by `j`; choosing the fundamental domain makes the
 global modular bounds directly applicable. The repository now separately
 proves that equal `modularJ` values lie in one `SL₂(ℤ)` orbit and that
 `‖silvermanModularDiscriminant τ‖ * τ.im ^ 6` is invariant on that orbit.
-Thus `silvermanHeight` is independent of the qualifying weak period-data
-choice. Its formula still uses the actual `silvermanModularDiscriminant`
-(including `(2π)^12`) and the actual `τ.im`, so both archimedean factors of
-Proposition 1.1 remain visible.
+Thus `silvermanHeight` is independent of the qualifying period-data choice.
+Moreover, `ArchimedeanPeriodData.exists_variableChange_to_latticeCurve` proves
+that `j_eq` supplies an actual admissible algebraic variable change from the
+complex base change of `W` to the explicit lattice curve; the complex twisting
+obstruction therefore disappears. The exact `u³` scaling of
+`2y + a₁x + a₃` is also proved, isolating the usual invariant-differential
+scaling calculation. The formula still uses the actual
+`silvermanModularDiscriminant` (including `(2π)^12`) and the actual `τ.im`, so
+both archimedean factors of Proposition 1.1 remain visible.
 
-A stronger future interface may replace `j_eq` by an explicit analytic group
-isomorphism from the complex base change of `W` to the lattice quotient and then
-derive `j_eq`. That stronger object is preferable if the quotient/uniformization
-infrastructure is developed, but it is not required to prove the analytic
-comparison from Proposition 1.1's formula.
+A stronger future interface may package the variable change as an additive and
+analytic point equivalence, define invariant differentials and their integrals,
+and derive the period lattice in that language. That stronger object is
+preferable for an Arakelov interpretation, but it is not required to prove the
+analytic comparison from Proposition 1.1's formula.
 
 #### Reduced principal fractional ideals
 
@@ -349,8 +356,8 @@ with an explicit convention for `x = 0` rather than silently assuming `j ≠ 0`.
 
 ### 2.3 Explicit library gaps and forbidden shortcuts
 
-The finite realization gap is now discharged; the archimedean gap remains
-large.
+The finite realization gap and the algebraic archimedean realization are now
+discharged; an analytic/integration gap remains.
 
 1. **Global arithmetic assembly (completed).** `Reduction.lean` proves local
    minimal-model existence over a DVR. This repository bridges it to the
@@ -366,11 +373,13 @@ large.
    homeomorphism and an additive equivalence `ℂ/L ≃+ Eτ(ℂ)`. It also proves
    `Function.Surjective modularJ` by showing the holomorphic image is open and,
    using cusp growth plus compact truncated fundamental domains, closed. This
-   constructs the deliberately weak `ArchimedeanPeriodData` interface for every
-   curve. It still does not prove that these chosen parameters arise as periods
-   of the given curve, an analytic Lie-group equivalence, arbitrary-curve
-   analytic uniformization, or an Arakelov identification.
-   See `Plans/ArchimedeanUniformizationFeasibility.md` and taxis #57/#128.
+   constructs the minimal `ArchimedeanPeriodData` interface for every curve.
+   Same-`j` classification over `ℂ` now gives an actual algebraic variable
+   change from each embedded input curve to its selected lattice curve, and the
+   invariant-differential denominator scaling is explicit. It still does not
+   package that change as an additive/analytic point equivalence, define periods
+   by integration, or give an Arakelov identification.
+   See `Plans/ArchimedeanUniformizationFeasibility.md` and taxis #57/#128/#174.
 
 Forbidden in every phase:
 
@@ -618,7 +627,7 @@ mathematical content, not that the abandoned review ceremony was performed.
 | P5 | Complete: denominator divisibility, canonical unstable ideal, exact finite/archimedean decomposition, semistability. |
 | P6 | Complete: both certified Proposition 2.1 theorems and the expanded comparator target. |
 | P7 | Partially complete: rational arithmetic, equation (11), and ε-absorption are proved; no uncertified Faltings-height corollary is claimed. |
-| P8 | Arithmetic branch GO and complete over every number field (#56). Weak archimedean Route A GO and complete: `modularJ_surjective` constructs `ArchimedeanPeriodData` (#57/#128). Route B also gives a topological and additive uniformization of the explicit lattice curve. Arbitrary-curve analytic uniformization and Arakelov identification remain unavailable. |
+| P8 | Arithmetic branch GO and complete over every number field (#56). Archimedean Route A and its algebraic strengthening are complete: `modularJ_surjective` constructs `ArchimedeanPeriodData`, and same-`j` classification gives an actual variable change to every embedded input curve (#57/#128). Route B also gives a topological and additive uniformization of the explicit lattice curve. Point-level arbitrary-curve analytic uniformization, integration, and Arakelov identification remain unavailable (#174). |
 | P9 | Complete for the formula-defined object: `silvermanHeightOfCurve`, `proposition_2_1`, and its semistable specialization have no realization-certificate arguments. No comparison with an independently constructed Arakelov Faltings height is claimed. |
 
 ### P0 — Bootstrap (already committed)
@@ -765,11 +774,11 @@ report for:
 * relating the formula-defined height to a future Arakelov/Hodge-bundle
   Faltings height.
 
-**Decision.** The finite branch and the weak archimedean branch are GO and
-complete. The latter uses modular-`j` surjectivity rather than claiming genuine
-periods of the arbitrary input curve. Full arbitrary-curve analytic
-uniformization and Arakelov identification remain STOP as separate
-mathlib-scale projects.
+**Decision.** The finite branch, the formula-level archimedean branch, and its
+algebraic realization are GO and complete. The latter combines modular-`j`
+surjectivity with same-`j` classification over `ℂ`. Point-level arbitrary-curve
+analytic uniformization, integration of invariant differentials, and Arakelov
+identification remain STOP as separate mathlib-scale projects.
 
 **Checks.** Gap report cites exact failed/successful APIs and contains no
 noncompiling tracked Lean experiments.

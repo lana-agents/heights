@@ -1,4 +1,4 @@
-import Heights.Certificates
+import Heights.ArchimedeanAlgebraicRealization
 import Heights.ModularJFibers
 import Heights.WeilHeight
 
@@ -56,8 +56,10 @@ The finite term is the norm of the certified minimal-discriminant ideal. The
 archimedean term uses actual period ratios and the actual modular discriminant,
 including `(2π) ^ 12`, and the whole expression is divided by `12 [K : ℚ]`.
 Both inputs can now be constructed over every number field. The archimedean
-input is only the weak, `j`-compatible data of `ArchimedeanPeriodData`; no
-Arakelov or analytic-uniformization interpretation is asserted. -/
+input is the minimal `j`-compatible data of `ArchimedeanPeriodData`; it is
+proved separately to determine an algebraic variable change from the explicit
+lattice curve to the embedded input curve. No Arakelov or integration-based
+analytic interpretation is asserted. -/
 noncomputable def silvermanHeight
     {K : Type*} [Field K] [NumberField K]
     (W : WeierstrassCurve K) [W.IsElliptic]
@@ -69,9 +71,10 @@ noncomputable def silvermanHeight
           (‖silvermanModularDiscriminant (p.τ v)‖ * (p.τ v).im ^ 6)) /
     (12 * (Module.finrank ℚ K : ℝ))
 
-/-- The formula-defined height is independent of the qualifying weak period
-data.  This is canonicity of the displayed modular expression only; it does
-not identify the chosen parameters with analytic periods of `W`. -/
+/-- The formula-defined height is independent of the qualifying period data.
+This is canonicity of the displayed modular expression. The parameters do
+algebraically realize the embedded curve, but no period-integration or
+Arakelov interpretation is used here. -/
 theorem silvermanHeight_periodData_independent
     {K : Type*} [Field K] [NumberField K]
     (W : WeierstrassCurve K) [W.IsElliptic]
@@ -94,7 +97,7 @@ theorem silvermanHeight_periodData_independent
   rw [silvermanHeight, silvermanHeight, hsum]
 
 /-- Silverman's formula-defined height using the chosen global
-minimal-discriminant data and supplied weak archimedean data.  The value is
+minimal-discriminant data and supplied archimedean data. The value is
 independent of this supplied data by `silvermanHeight_periodData_independent`. -/
 noncomputable def silvermanHeightOfPeriods
     {K : Type*} [Field K] [NumberField K]
@@ -103,16 +106,17 @@ noncomputable def silvermanHeightOfPeriods
   silvermanHeight W (globalMinimalDiscriminantData W) p
 
 /-- Silverman's formula-defined height using classical choices of both the
-global minimal-discriminant data and the weak `j`-compatible archimedean data.
-The formula is independent of the weak period choice, but this is not claimed
-to be an independently constructed Arakelov Faltings height or the genuine
-analytic height of the specific curve `W`. -/
+global minimal-discriminant data and the `j`-compatible archimedean data. The
+formula is choice-independent, and the archimedean parameter algebraically
+realizes the embedded curve. This is still not claimed to be an independently
+constructed Arakelov Faltings height: period integration and the Hodge metric
+have not been formalized. -/
 noncomputable def silvermanHeightOfCurve
     {K : Type*} [Field K] [NumberField K]
     (W : WeierstrassCurve K) [W.IsElliptic] : ℝ :=
   silvermanHeightOfPeriods W (archimedeanPeriodData W)
 
-/-- Every qualifying weak period datum computes the canonical formula-defined
+/-- Every qualifying period datum computes the canonical formula-defined
 curve height. -/
 theorem silvermanHeightOfPeriods_eq_silvermanHeightOfCurve
     {K : Type*} [Field K] [NumberField K]

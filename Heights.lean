@@ -21,6 +21,7 @@ import Heights.LatticePointMapInjectivity
 import Heights.LatticePointMapAddition
 import Heights.WeierstrassSurjectivity
 import Heights.Certificates
+import Heights.ArchimedeanAlgebraicRealization
 import Heights.SilvermanHeight
 import Heights.IdealFactorization
 
@@ -34,8 +35,11 @@ Silverman's formula-defined elliptic-curve height (cf. [Silv], Proposition
 The public API contains the unconditional Weil-height and modular estimates,
 constructed formula-level realization data, Silverman's formula-defined
 height, and certified and all-curves forms of Proposition 2.1. The
-archimedean construction uses only surjectivity of modular `j` to choose a
-matching fundamental-domain parameter; it does not claim periods obtained from
-the given curve. The project does not claim an Arakelov Faltings height or an
-analytic uniformization theorem for arbitrary curves.
+archimedean construction uses surjectivity of modular `j` to choose a matching
+fundamental-domain parameter. Same-`j` classification over `ℂ` then supplies an
+actual algebraic variable change between the embedded input curve and the
+explicit lattice curve, eliminating the complex twisting objection. The
+project still does not formalize periods by integration, an analytic
+uniformization theorem for arbitrary curve-point types, or an Arakelov
+Faltings height.
 -/

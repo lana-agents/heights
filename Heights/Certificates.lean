@@ -7,12 +7,14 @@ set_option linter.style.header false
 
 This file gives explicit interfaces for finite and archimedean realization
 data. It constructs the finite global minimal-discriminant data over every
-number field from local minimal models and ideal factorization. The weak
-archimedean data required by the present formula is now constructed from
-surjectivity of `Heights.modularJ`. This does not uniformize an algebraic
-elliptic curve over `ℂ`: it chooses only a fundamental-domain parameter with
-the prescribed algebraic `j`-invariant. None of the structures contains a
-height, a height formula, or a comparison bound.
+number field from local minimal models and ideal factorization. The minimal
+archimedean data required by the present formula is constructed from
+surjectivity of `Heights.modularJ`. The fields record only a fundamental-domain
+parameter with the prescribed algebraic `j`-invariant; the downstream theorem
+`ArchimedeanPeriodData.exists_variableChange_to_latticeCurve` proves that over
+`ℂ` this already yields an actual algebraic variable change to the explicit
+lattice curve. No structure contains a height, a height formula, a comparison
+bound, or unproved analytic integration data.
 -/
 
 open scoped NumberField UpperHalfPlane nonZeroDivisors
@@ -71,9 +73,10 @@ structure GlobalMinimalDiscriminantData
       (multiplicity v.asIdeal ideal)
 
 /-- Fundamental-domain parameters compatible with the embedded algebraic
-`j`-invariant. Despite the historical name, this weak interface does not
-assert that the parameters arise by integrating a differential on the given
-curve, and no analytic estimate is included as a field. -/
+`j`-invariant. Despite the historical name, this minimal interface does not
+store an integration construction or an analytic estimate. Over `ℂ`, its
+`j_eq` field is later proved to imply an actual algebraic variable change to
+the explicit lattice curve, so no complex twist remains. -/
 structure ArchimedeanPeriodData
     (K : Type*) [Field K] [NumberField K]
     (W : WeierstrassCurve K) [W.IsElliptic] where
@@ -86,8 +89,9 @@ structure ArchimedeanPeriodData
 
 /-- Surjectivity of the modular `j`-function is sufficient to construct the
 archimedean certificate at every infinite place. The fundamental-domain
-condition follows from modular invariance; no curve uniformization is hidden
-in this reduction. -/
+condition follows from modular invariance. The later algebraic-realization
+theorem uses same-`j` classification; no integration theorem is hidden in this
+reduction. -/
 theorem nonempty_archimedeanPeriodData_of_modularJ_surjective
     {K : Type*} [Field K] [NumberField K]
     (W : WeierstrassCurve K) [W.IsElliptic]
@@ -97,16 +101,17 @@ theorem nonempty_archimedeanPeriodData_of_modularJ_surjective
     exists_mem_fd_modularJ_eq_of_surjective hsurj (v.embedding W.j)
   exact ⟨⟨τ, hτfd, fun v ↦ (hτj v).symm⟩⟩
 
-/-- The weak archimedean certificate exists for every elliptic Weierstrass
-curve over a number field. This uses modular-`j` surjectivity and does not claim
-an analytic uniformization of the given curve. -/
+/-- The minimal archimedean certificate exists for every elliptic Weierstrass
+curve over a number field. This uses modular-`j` surjectivity; algebraic
+realization over `ℂ` is proved separately, while analytic integration is not
+claimed. -/
 theorem nonempty_archimedeanPeriodData
     {K : Type*} [Field K] [NumberField K]
     (W : WeierstrassCurve K) [W.IsElliptic] :
     Nonempty (ArchimedeanPeriodData K W) :=
   nonempty_archimedeanPeriodData_of_modularJ_surjective W modularJ_surjective
 
-/-- A classical choice of weak archimedean data for a curve. -/
+/-- A classical choice of minimal archimedean data for a curve. -/
 noncomputable def archimedeanPeriodData
     {K : Type*} [Field K] [NumberField K]
     (W : WeierstrassCurve K) [W.IsElliptic] :

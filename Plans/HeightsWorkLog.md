@@ -537,7 +537,33 @@ proving `Heights.exists_smul_eq_of_modularJ_eq`.
 The weight-twelve discriminant law and imaginary-part transformation then show
 that `‖silvermanModularDiscriminant τ‖ * τ.im ^ 6` depends only on `modularJ τ`.
 Consequently `silvermanHeight_periodData_independent` proves equality for any
-two qualifying weak `ArchimedeanPeriodData` values, and every such value agrees
-with `silvermanHeightOfCurve`. This makes the formula canonical while preserving
-the existing honesty boundary: no chosen `τ` is proved to be a genuine period
-of the input curve, and no Arakelov Faltings-height identification is claimed.
+two qualifying `ArchimedeanPeriodData` values, and every such value agrees with
+`silvermanHeightOfCurve`. This makes the formula canonical. At the end of run
+24 the remaining caveat was stated as absence of genuine periods; run 25
+sharpens that boundary below.
+
+## Autonomous run 25 — 2026-07-21
+
+Run 25 confirms that the recurring complex-twist caveat was too strong.
+For every `p : ArchimedeanPeriodData K W` and infinite place `v`, the equality
+`p.j_eq v`, `latticeWeierstrassCurve_j`, and mathlib's
+`WeierstrassCurve.exists_variableChange_of_j_eq` over the separably closed
+field `ℂ` produce an actual admissible variable change
+
+`C • W.map v.embedding = latticeWeierstrassCurve (p.τ v)`.
+
+`Heights/ArchimedeanAlgebraicRealization.lean` proves this existence theorem,
+fixes a chosen change, and records its equation equality. It also proves the
+exact `u³` scaling of `2y + a₁x + a₃`; together with the evident `u²` derivative
+of the transformed x-coordinate, this is the controlled algebraic calculation
+behind the standard `u⁻¹` scaling of the invariant differential. Thus the
+selected lattice genuinely algebraically realizes the specified complex base
+change, and twists do not remain over `ℂ`.
+
+The sharpened honesty boundary is now point-level analytic rather than
+algebraic: mathlib has no variable-change equivalence/additive equivalence on
+`Affine.Point`, no invariant holomorphic differential and integration package
+for an arbitrary Weierstrass curve, and no Arakelov/Hodge metric. The result
+therefore still does not identify `silvermanHeightOfCurve` with an independently
+constructed Faltings height. Filed ready-to-clanck #174 for the separable
+point-level variable-change equivalence and additive compatibility.

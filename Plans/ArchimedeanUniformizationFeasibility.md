@@ -3,9 +3,10 @@
 **Date:** 2026-07-20  
 **Scope:** taxis #57; `ArchimedeanPeriodData` in
 `Heights/Certificates.lean`; mathlib `v4.32.0`  
-**Decision (updated 2026-07-21, run 23):** **GO for the weak certificate route;
-Route A is complete.** Full arbitrary-curve analytic uniformization remains a
-separate mathlib-scale project.
+**Decision (updated 2026-07-21, run 25):** **GO for the formula certificate
+and its algebraic realization; both are complete.** Full integration-based
+arbitrary-curve analytic uniformization remains a separate mathlib-scale
+project.
 
 ## 1. The exact blocker is smaller than full uniformization
 
@@ -32,13 +33,20 @@ torus. Run 23 completed this route:
 * `Heights.exists_mem_fd_modularJ_eq_of_surjective` moves any preimage into
   `ModularGroup.fd`.
 * `Heights.modularJ_surjective` proves the required surjectivity.
-* `Heights.nonempty_archimedeanPeriodData` chooses compatible weak data at
+* `Heights.nonempty_archimedeanPeriodData` chooses compatible minimal data at
   every infinite place.
+* `ArchimedeanPeriodData.exists_variableChange_to_latticeCurve` then applies
+  same-`j` classification over the separably closed field `ℂ`: an actual
+  admissible `VariableChange ℂ` changes `W.map v.embedding` into
+  `latticeWeierstrassCurve (τ v)`.
 
-This is an interface-level reduction only. It does **not** prove that the
-chosen `τ` is a period ratio obtained by integrating a differential on `W`,
-does not construct `W(ℂ) ≃ ℂ/L`, and does not identify the formula-defined
-`silvermanHeight` with an Arakelov/Hodge-bundle Faltings height.
+Thus the earlier twisting caveat was too pessimistic: twists disappear after
+the specified complex base change, and the chosen `τ` algebraically realizes
+that base change. What remains absent is narrower but still substantial. The
+repository does **not** define periods by integrating an invariant differential
+on `W`, package the variable change as a point-level analytic/additive
+isomorphism, or identify the formula-defined `silvermanHeight` with an
+Arakelov/Hodge-bundle Faltings height.
 
 ## 2. What mathlib already supplies
 
@@ -187,11 +195,14 @@ The algebraic side is comparatively strong:
   a variable change.
 
 The required nonsingular lattice curve with the correct modular `j` is now
-constructed in `Heights/LatticeWeierstrass.lean`. Consequently these
-classification results are available for a later converse argument. They do
-not themselves produce a lattice from an arbitrary algebraic curve;
-modular-`j` surjectivity is now proved independently by the open-and-closed
-image argument.
+constructed in `Heights/LatticeWeierstrass.lean`, and modular-`j` surjectivity
+produces a suitable `τ`. `Heights/ArchimedeanAlgebraicRealization.lean` combines
+these facts with same-`j` classification: for every infinite place it produces
+an admissible variable change from the embedded input curve to the explicit
+lattice curve. It also proves the exact `u³` transformation of
+`2y + a₁x + a₃`, isolating the algebraic calculation behind the usual `u⁻¹`
+scaling of the invariant differential. The missing step is no longer an
+algebraic converse; it is point-level analytic/differential infrastructure.
 
 ## 3. Concrete missing theorem stack
 
@@ -264,25 +275,33 @@ principle, and Rouché theorem.
    an auxiliary point outside a countable exceptional set, proves unconditional
    additivity, and packages the descended bijection as an additive
    equivalence. Still missing: analyticity of the descended equivalence.
-4. In the converse direction, obtain a lattice from an arbitrary algebraic
-   complex elliptic curve (normally via periods of a holomorphic differential
-   or an inverse elliptic integral), then identify the resulting curve using
-   the same-`j` theorem.
+4. **Completed algebraically in
+   `Heights/ArchimedeanAlgebraicRealization.lean`:** modular-`j` surjectivity
+   supplies a lattice curve with the same invariant as the embedded arbitrary
+   curve, and same-`j` classification over `ℂ` supplies an admissible variable
+   change between their equations. The invariant-differential denominator is
+   proved to scale by `u³` (with the x-coordinate derivative scaling by `u²`).
+   Still missing: package the variable change on point types, prove its
+   additive/analytic compatibility, define the invariant differential and its
+   integrals, and connect those integrals to the lattice.
 
 Mathlib has generic quotient-group infrastructure, but the pinned elliptic
 files contain no complex-torus object carrying the required analytic structure.
 This repository now supplies both a descended topological equivalence and a
-descended additive equivalence for the explicit lattice curve. It does not
-combine them into an analytic Lie-group equivalence. That remaining analytic
-part of step 3, and especially the arbitrary-curve converse in step 4, still
-require substantial new infrastructure rather than glue code.
+descended additive equivalence for the explicit lattice curve, plus an actual
+algebraic variable change to every embedded input curve. It does not yet
+package the latter as a point equivalence, combine the structures into an
+analytic Lie-group equivalence, or formalize integration of the invariant
+differential. Those remaining analytic steps require new infrastructure rather
+than merely the same-`j` classification.
 
 ## 4. Judgment
 
-**GO, completed** for the present weak certificate. The open-and-closed image
-argument proves modular-`j` surjectivity from APIs already in the pinned
-library, without manufacturing a preimage assumption or adding an unproved
-structure field.
+**GO, completed** for the present formula certificate and its algebraic
+realization. The open-and-closed image argument proves modular-`j` surjectivity,
+and same-`j` classification over `ℂ` proves that every selected lattice curve is
+related to the embedded input curve by an actual admissible variable change.
+No preimage assumption or unproved structure field is manufactured.
 
 **GO** only if #57 is treated as a decomposed mathlib-scale project. Route A is
 the shortest path to the repository's present headline theorem; Route B is the
@@ -297,14 +316,17 @@ infinity), the secant candidates' pole-free first-order ODE, exact Weierstrass
 fibers, surjectivity, the global addition formula, unconditional compatibility
 with the affine elliptic-curve group law, a homeomorphism, and an additive
 equivalence from the quotient to the explicit lattice curve are now available.
-They do not resolve analyticity of that equivalence or arbitrary-curve
-uniformization. The weak `ArchimedeanPeriodData K W` interface is now
-constructed unconditionally from modular-`j` surjectivity, as is global
-minimal-discriminant data. The remaining choice ambiguity is also discharged:
+They do not resolve analyticity of that equivalence or integration-based
+arbitrary-curve uniformization. The minimal `ArchimedeanPeriodData K W`
+interface is constructed unconditionally from modular-`j` surjectivity, as is
+global minimal-discriminant data; its parameters are now also proved to
+algebraically realize every embedded input curve. The remaining choice
+ambiguity is discharged:
 `exists_smul_eq_of_modularJ_eq` proves that equal `modularJ` values differ by
 `SL(2, ℤ)`, using homothety and rigidity of the associated period lattices, and
 the weight-twelve transformation law proves the formula independent of the
-chosen weak data. This closes the realization inputs needed by the
-formula-defined comparison, but still does not identify the weak parameters
-with periods of the input curve or the formula with an independently
-constructed Arakelov Faltings height.
+chosen data. This closes the realization inputs needed by the formula-defined
+comparison and eliminates the complex-twist objection. It still does not
+define the parameters by integrating a differential on the input curve or
+identify the formula with an independently constructed Arakelov Faltings
+height.

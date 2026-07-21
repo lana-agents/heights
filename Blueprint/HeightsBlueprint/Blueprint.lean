@@ -25,11 +25,11 @@ are two deliberately separate kinds of result:
 
 * *Unconditional targets* are to be proved from mathlib without elliptic
   uniformization certificates.
-* *Certificate-level targets* assume explicit local-minimal-model and
-  archimedean-period realization data. Reduced principal-ideal data is now
-  constructed unconditionally and is no longer one of these hypotheses. The
-  remaining interfaces are not known to exist for every elliptic curve, and
-  they do not give an unconditional construction of the Faltings height.
+* *Certificate-level targets* expose explicit local-minimal-model and
+  archimedean-period realization data. Reduced principal-ideal, global minimal,
+  and archimedean data are now all constructed unconditionally. The
+  archimedean data algebraically realizes every embedded curve, but these
+  interfaces still do not construct an Arakelov Faltings height.
 
 Status is derived from the attached Lean declarations where proofs now exist.
 Unlinked items remain targets rather than claims.
@@ -243,13 +243,13 @@ make it constant, contradicting its nonzero value away from the lattice. Thus
 two possible signs of `℘′` then prove that both the total and descended point
 maps are surjective.
 
-The descent is not yet a group homomorphism: compatibility with addition has
-not been proved. Analytic equivalence and uniformization of arbitrary curves
-also remain open.
+The later global addition theorem proves that this descent is also a group
+homomorphism. Analytic equivalence and point-level uniformization of arbitrary
+curves remain open.
 
-*Status: total extension, set-theoretic quotient descent, zero/negation
-compatibility, and bijectivity are proved unconditionally for the explicit
-lattice curve.*
+*Status: total extension, quotient descent, zero/negation compatibility,
+bijectivity, and (in the later addition node) additivity are proved
+unconditionally for the explicit lattice curve.*
 :::
 
 :::proposition "prop:lattice-quotient-topology" (uses := "prop:lattice-quotient-point-map") (lean := "Heights.latticeQuotientMk, Heights.continuous_latticeQuotientMk, Heights.isOpenMap_latticeQuotientMk, Heights.isQuotientMap_latticeQuotientMk, Heights.latticeQuotientT1Space, Heights.latticeQuotient_nhds_mk")
@@ -403,14 +403,30 @@ every number field.*
 A period ratio is chosen in the standard fundamental domain so that the
 $`\mathrm{SL}_2(\mathbb Z)` ambiguity is removed and the uniform modular bounds
 apply directly. Equality of modular and embedded algebraic $`j` is exactly the
-compatibility needed by the present height formula, but is deliberately weaker
-than constructing an analytic torus isomorphism. Modular invariance reduces
-existence of this data to surjectivity of `modularJ`.
+compatibility needed by the present height formula. Modular invariance reduces
+existence of this minimal data to surjectivity of `modularJ`.
 
 *Status: formalized and constructed for every elliptic curve over a number
 field. `Heights.modularJ_surjective` proves the analytic input by an
-open-and-closed image argument. This remains weak $`j`-compatible data, not a
-claim that the chosen parameters were obtained by integrating on the curve.*
+open-and-closed image argument. The data does not store an integration
+construction, but the next node proves it algebraically realizes the embedded
+curve.*
+:::
+
+:::proposition "prop:archimedean-algebraic-realization" (uses := "def:archimedean-period-data, prop:lattice-weierstrass-curve") (lean := "Heights.variableChange_invariantDifferentialDenominator, Heights.ArchimedeanPeriodData.exists_variableChange_to_latticeCurve, Heights.ArchimedeanPeriodData.variableChangeToLatticeCurve, Heights.ArchimedeanPeriodData.variableChangeToLatticeCurve_smul, Heights.ArchimedeanPeriodData.variableChangeToLatticeCurve_differentialDenominator")
+Over the separably closed field $`\mathbb C`, elliptic Weierstrass curves with
+the same $`j`-invariant differ by an admissible change of variables. Therefore
+each selected lattice curve is algebraically isomorphic to the base change of
+the input curve along the corresponding infinite-place embedding: twists do
+not survive this base change. The coordinate calculation also shows that
+$`2y+a_1x+a_3` scales by $`u^3`; together with the $`u^2` scaling of the
+x-coordinate derivative, this is the usual $`u^{-1}` invariant-differential
+factor.
+
+*Status: proved. This is an actual algebraic variable change, not merely an
+abstract equality of invariants. A point-level additive/analytic equivalence,
+invariant differential integration, and an Arakelov metric are not yet
+formalized.*
 :::
 
 :::definition "def:reduced-principal-ideal-data" (lean := "Heights.ReducedPrincipalIdealData, Heights.exists_reducedPrincipalIdealData, Heights.reducedPrincipalIdealData")
@@ -427,7 +443,7 @@ existence and `Heights.reducedPrincipalIdealData` fixes a canonical choice.*
 
 # Certificate-level height and comparisons
 
-:::definition "def:silverman-height" (uses := "def:silverman-modular-discriminant, def:global-minimal-discriminant-data, def:archimedean-period-data") (lean := "Heights.silvermanHeight, Heights.silvermanHeight_periodData_independent, Heights.silvermanHeightOfPeriods, Heights.silvermanHeightOfCurve, Heights.silvermanHeightOfPeriods_eq_silvermanHeightOfCurve, Heights.silvermanHeight_archimedean_log_arg_pos, Heights.silvermanHeight_denominator_pos")
+:::definition "def:silverman-height" (uses := "def:silverman-modular-discriminant, def:global-minimal-discriminant-data, prop:archimedean-algebraic-realization") (lean := "Heights.silvermanHeight, Heights.silvermanHeight_periodData_independent, Heights.silvermanHeightOfPeriods, Heights.silvermanHeightOfCurve, Heights.silvermanHeightOfPeriods_eq_silvermanHeightOfCurve, Heights.silvermanHeight_archimedean_log_arg_pos, Heights.silvermanHeight_denominator_pos")
 Silverman's formula balances the finite bad-reduction contribution
 $`\log N(\Delta_{\min})` against the archimedean norm of the discriminant
 differential, $`\log(|\Delta_{\mathrm{Silv}}(\tau)|\operatorname{Im}(\tau)^6)`.
@@ -437,12 +453,11 @@ minimal-ideal and period certificates, not renamed as an independently
 constructed Arakelov height.
 
 *Status: formalized. `Heights.silvermanHeightOfCurve` supplies the constructed
-finite data and a classical choice of the now-constructed weak archimedean
-data. Equal modular $`j`-values are proved to lie in one
+finite and archimedean data. Equal modular $`j`-values are proved to lie in one
 $`\mathrm{SL}_2(\mathbb Z)` orbit, so the Petersson-normalized discriminant and
-hence the formula are independent of that weak choice. Positivity of every
-logarithm argument and denominator is proved, but no analytic-period or
-Arakelov identification is claimed.*
+hence the formula are independent of that choice. The parameter algebraically
+realizes the embedded curve, and every logarithm argument and denominator is
+positive. Period integration and an Arakelov identification remain unproved.*
 :::
 
 :::proposition "prop:proposition-1-1-certified" (uses := "def:silverman-height")
@@ -488,13 +503,15 @@ certified semistability; no analytic estimate or realization certificate
 remains as a theorem argument.*
 :::
 
-The repository proves modular-$`j` surjectivity, constructs its deliberately
-weak `ArchimedeanPeriodData`, and obtains an all-curves comparison for the
+The repository proves modular-$`j` surjectivity, constructs
+`ArchimedeanPeriodData`, and obtains an all-curves comparison for the
 formula-defined `silvermanHeightOfCurve`. It also gives topological and
-additive uniformization of each explicit lattice curve. It does not claim that
-the weak parameters are periods obtained from the arbitrary input curve, an
-analytic arbitrary-curve uniformization, or an Arakelov Faltings height. The
-precise archimedean findings are recorded in
+additive uniformization of each explicit lattice curve. Same-$`j`
+classification now supplies an actual algebraic variable change from that
+lattice curve to every embedded input curve, eliminating the twisting caveat.
+It does not yet package this as an analytic point equivalence, define periods
+by integrating an invariant differential, or construct an Arakelov Faltings
+height. The precise archimedean findings are recorded in
 `Plans/ArchimedeanUniformizationFeasibility.md`.
 
 {blueprint_graph}
