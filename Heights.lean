@@ -13,6 +13,7 @@ import Heights.LatticeAffinePointTopology
 import Heights.LatticePointMapTopology
 import Heights.LatticePointMapNegation
 import Heights.LatticePointMapInjectivity
+import Heights.WeierstrassSurjectivity
 import Heights.Certificates
 import Heights.SilvermanHeight
 import Heights.IdealFactorization
