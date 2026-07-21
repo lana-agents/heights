@@ -1,4 +1,5 @@
 import Mathlib.Analysis.SpecialFunctions.Elliptic.Weierstrass
+import Mathlib.Analysis.Calculus.Deriv.Slope
 
 set_option linter.style.header false
 
@@ -12,8 +13,10 @@ near a period `l`,
 
 `(z - l)² ℘(z) → 1` and `(z - l)³ ℘′(z) → -2`.
 
-These are local analytic inputs only.  In particular, no addition formula or
-group-law compatibility is claimed here.
+These are local analytic inputs only.  They also show that both coordinates
+of the secant-law candidate extend correctly when one input approaches
+infinity.  In particular, no addition formula or group-law compatibility is
+claimed here.
 -/
 
 open Set Filter Topology
@@ -136,6 +139,22 @@ theorem tendsto_cube_mul_derivWeierstrassP_at_lattice
   simp only [Function.comp_apply]
   rw [L.derivWeierstrassP_sub_coe]
 
+/-- The regular part of `℘` is little-oh of `z` at the origin.  This is the
+extra order of cancellation needed for the secant-law `y`-coordinate. -/
+theorem tendsto_weierstrassP_sub_inv_sq_div_zero (L : PeriodPair) :
+    Tendsto (fun z : ℂ ↦ (L.weierstrassP z - 1 / z ^ 2) / z)
+      (𝓝[≠] 0) (𝓝 0) := by
+  have hderiv : HasDerivAt (L.weierstrassPExcept 0) 0 0 := by
+    have h := (L.analyticAt_weierstrassPExcept 0).differentiableAt.hasDerivAt
+    rw [L.deriv_weierstrassPExcept_same,
+      L.derivWeierstrassPExcept_zero_zero] at h
+    exact h
+  have h := hderiv.tendsto_slope_zero
+  convert h using 1
+  funext z
+  rw [← L.weierstrassPExcept_add (0 : L.lattice)]
+  simp [div_eq_inv_mul]
+
 /-- The secant-formula candidate for the `x`-coordinate of adding a finite
 point `(a,b/2)` extends across the point at infinity with value `a`.
 
@@ -218,6 +237,106 @@ theorem tendsto_weierstrass_secant_addX_zero (L : PeriodPair) (a b : ℂ) :
     rw [hAeq, hp, mul_zero]
   rw [hAeq]
   dsimp [C, D, e, d]
+  field_simp [hz0, hpne]
+  ring
+
+/-- The secant-formula candidate for the `y`-coordinate of adding a finite
+point `(a,b/2)` extends across the point at infinity with value `b/2`.
+
+Together with `tendsto_weierstrass_secant_addX_zero`, this verifies both local
+coordinate cancellations needed when the first input approaches infinity.  It
+still does not identify either candidate with the coordinates at `z + w`. -/
+theorem tendsto_weierstrass_secant_addY_zero (L : PeriodPair) (a b : ℂ) :
+    Tendsto (fun z : ℂ ↦
+      let s := (L.derivWeierstrassP z - b) /
+        (2 * (L.weierstrassP z - a))
+      let x := s ^ 2 - L.weierstrassP z - a
+      s * (L.weierstrassP z - x) - L.derivWeierstrassP z / 2)
+      (𝓝[≠] 0) (𝓝 (b / 2)) := by
+  let e : ℂ → ℂ := fun z ↦ L.weierstrassP z - 1 / z ^ 2
+  let d : ℂ → ℂ := fun z ↦ L.derivWeierstrassP z + 2 / z ^ 3
+  let E : ℂ → ℂ := fun z ↦ e z / z
+  let A : ℂ → ℂ := fun z ↦ 1 + (e z - a) * z ^ 2
+  let S : ℂ → ℂ := fun z ↦
+    (24 * a ^ 2 - 24 * e z ^ 2) +
+      z * (24 * a * b - 36 * e z * b + 12 * e z * d z) +
+      z ^ 2 * (6 * b ^ 2 - 16 * a ^ 3 - 12 * d z * b + 6 * d z ^ 2 +
+        24 * e z * a ^ 2 - 8 * e z ^ 3) +
+      z ^ 3 * (-12 * a ^ 2 * b - 12 * d z * a ^ 2 +
+        48 * e z * a * b - 36 * e z ^ 2 * b + 12 * e z ^ 2 * d z) +
+      z ^ 5 * (b ^ 3 - 3 * d z * b ^ 2 + 8 * d z * a ^ 3 +
+        3 * d z ^ 2 * b - d z ^ 3 - 12 * e z * a ^ 2 * b -
+        12 * e z * d z * a ^ 2 + 24 * e z ^ 2 * a * b -
+        12 * e z ^ 3 * b + 4 * e z ^ 3 * d z)
+  let N : ℂ → ℂ := fun z ↦ -24 * E z - 8 * d z + z * S z
+  have hz : Tendsto (fun z : ℂ ↦ z) (𝓝[≠] 0) (𝓝 0) :=
+    tendsto_id.mono_left nhdsWithin_le_nhds
+  have he : Tendsto e (𝓝[≠] 0) (𝓝 0) :=
+    (tendsto_weierstrassP_sub_inv_sq_zero L).mono_left nhdsWithin_le_nhds
+  have hd : Tendsto d (𝓝[≠] 0) (𝓝 0) :=
+    (tendsto_derivWeierstrassP_add_two_div_cube_zero L).mono_left
+      nhdsWithin_le_nhds
+  have hE : Tendsto E (𝓝[≠] 0) (𝓝 0) := by
+    simpa [E, e] using tendsto_weierstrassP_sub_inv_sq_div_zero L
+  have hzed : Tendsto (fun z : ℂ ↦ (z, (e z, d z))) (𝓝[≠] 0)
+      (𝓝 ((0, (0, 0)) : ℂ × ℂ × ℂ)) := by
+    rw [nhds_prod_eq, nhds_prod_eq]
+    exact hz.prodMk (he.prodMk hd)
+  have hS : Tendsto S (𝓝[≠] 0) (𝓝 (24 * a ^ 2)) := by
+    have hc : ContinuousAt (fun q : ℂ × ℂ × ℂ ↦
+        (24 * a ^ 2 - 24 * q.2.1 ^ 2) +
+          q.1 * (24 * a * b - 36 * q.2.1 * b + 12 * q.2.1 * q.2.2) +
+          q.1 ^ 2 * (6 * b ^ 2 - 16 * a ^ 3 - 12 * q.2.2 * b +
+            6 * q.2.2 ^ 2 + 24 * q.2.1 * a ^ 2 - 8 * q.2.1 ^ 3) +
+          q.1 ^ 3 * (-12 * a ^ 2 * b - 12 * q.2.2 * a ^ 2 +
+            48 * q.2.1 * a * b - 36 * q.2.1 ^ 2 * b +
+            12 * q.2.1 ^ 2 * q.2.2) +
+          q.1 ^ 5 * (b ^ 3 - 3 * q.2.2 * b ^ 2 + 8 * q.2.2 * a ^ 3 +
+            3 * q.2.2 ^ 2 * b - q.2.2 ^ 3 - 12 * q.2.1 * a ^ 2 * b -
+            12 * q.2.1 * q.2.2 * a ^ 2 + 24 * q.2.1 ^ 2 * a * b -
+            12 * q.2.1 ^ 3 * b + 4 * q.2.1 ^ 3 * q.2.2))
+        ((0, 0, 0) : ℂ × ℂ × ℂ) := by
+      fun_prop
+    have h := hc.tendsto.comp hzed
+    convert h using 1
+    · rfl
+    · ring
+  have hN : Tendsto N (𝓝[≠] 0) (𝓝 0) := by
+    dsimp [N]
+    convert ((hE.const_mul (-24)).sub (hd.const_mul 8)).add (hz.mul hS) using 1
+    all_goals ring
+  have hA : Tendsto A (𝓝[≠] 0) (𝓝 1) := by
+    dsimp [A]
+    simpa using tendsto_const_nhds.add
+      ((he.sub tendsto_const_nhds).mul (hz.pow 2))
+  have hden : Tendsto (fun z ↦ 8 * A z ^ 3) (𝓝[≠] 0) (𝓝 8) := by
+    simpa using (tendsto_const_nhds.mul (hA.pow 3))
+  have hquot : Tendsto (fun z ↦ N z / (8 * A z ^ 3))
+      (𝓝[≠] 0) (𝓝 0) := by
+    have h := hN.div hden (by norm_num)
+    convert h using 1
+    · funext z
+      simp only [Pi.div_apply]
+    · norm_num
+  have hfinal : Tendsto (fun z ↦ b / 2 + N z / (8 * A z ^ 3))
+      (𝓝[≠] 0) (𝓝 (b / 2)) := by
+    simpa using tendsto_const_nhds.add hquot
+  apply hfinal.congr'
+  have hAne : ∀ᶠ z in 𝓝[≠] (0 : ℂ), A z ≠ 0 :=
+    hA (eventually_ne_nhds one_ne_zero)
+  filter_upwards [self_mem_nhdsWithin, hAne] with z hz0 hAz
+  simp only [mem_compl_iff, mem_singleton_iff] at hz0
+  have hAeq : A z = z ^ 2 * (L.weierstrassP z - a) := by
+    dsimp [A, e]
+    field_simp [hz0]
+    ring
+  have hpne : L.weierstrassP z - a ≠ 0 := by
+    intro hp
+    apply hAz
+    rw [hAeq, hp, mul_zero]
+  dsimp only
+  rw [hAeq]
+  dsimp [N, S, E, A, e, d]
   field_simp [hz0, hpne]
   ring
 
