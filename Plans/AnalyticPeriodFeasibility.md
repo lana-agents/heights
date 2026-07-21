@@ -136,7 +136,12 @@ centers. `Heights/WeierstrassFiniteManifold.lean` proves all four kinds of
 transition map holomorphic on their whole overlaps and installs the resulting
 one-dimensional complex `ChartedSpace` and `IsManifold` on the affine equation
 locus. Its topology is the pre-existing subtype topology, not a transported
-one.
+one. The ambient coordinate inclusion is analytic for this intrinsic
+structure. Consequently a map into the affine locus is analytic whenever its
+two ambient coordinate functions are analytic; applying this criterion to the
+explicit variable-change polynomials proves that every admissible variable
+change is a biholomorphism between the independently constructed finite
+manifolds.
 
 The other essential chart is still wholly open: at infinity, use a
 projective/local parameter such as `-x/y` and prove the coordinate formulas
@@ -187,11 +192,11 @@ The remaining work should be split into the following gates.
    that denominator vanishes and at infinity. Prove it is holomorphic and
    nowhere zero.
 4. **Analyticity of the existing maps.** The ambient affine variable-change
-   map and its inverse are now packaged as biholomorphic polynomial maps, and
-   the affine-locus homeomorphism is proved to be their restriction. After the
-   target atlas exists, restrict this result to the curve manifolds, extend it
-   through infinity, and prove the explicit Weierstrass map biholomorphic for
-   the independently constructed structures.
+   map and its inverse are packaged as biholomorphic polynomial maps, and their
+   restrictions are now proved to be a biholomorphism between the intrinsic
+   finite affine manifolds. After the compact target atlas exists, extend this
+   result through infinity and prove the explicit Weierstrass map
+   biholomorphic for the independently constructed structures.
 5. **Pullback identity.** Upgrade the existing rational coefficient identities
    to an equality of global one-forms. Prove the lattice parametrization pulls
    the lattice-curve form back to `dz`, including ramification points and
@@ -204,9 +209,10 @@ The remaining work should be split into the following gates.
    a further project, not a consequence of period realization alone.
 
 The atlas/projection portion of gate 1 and the topology plus entire finite
-atlas slice of gate 2 are complete. The ambient affine variable-change slice
-of gate 4 is also complete, but no compact-curve biholomorphism follows until
-the map and atlas are controlled at infinity. Descending `dz` finishes gate 1;
+atlas slice of gate 2 are complete. The affine variable-change slice of gate 4
+is also complete at the intrinsic manifold level, but no compact-curve
+biholomorphism follows until the map and atlas are controlled at infinity.
+Descending `dz` finishes gate 1;
 the infinity chart and compact-atlas assembly finish gate 2; gate 3, the
 remaining parts of gates 4--6, and then gate 7 remain substantial.
 

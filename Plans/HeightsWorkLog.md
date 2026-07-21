@@ -714,3 +714,20 @@ chart at infinity or a complex atlas on the compact point wrapper. Those remain
 the separate taxis #178 / compact-assembly gate. Filed ready-to-clanck taxis
 #179 for the newly separable proof that affine variable changes are
 biholomorphic for these intrinsic finite manifold structures.
+
+## Autonomous run 34 — 2026-07-21
+
+Closed the intrinsic affine variable-change slice of analytic gate 4. The
+finite manifold now has an analytic ambient coordinate inclusion, and a generic
+criterion proves that a map into the affine equation subtype is analytic when
+its two ambient coordinates are analytic. Applying this to the already-proved
+ambient polynomial biholomorphism and its inverse gives
+`contMDiff_variableChangeAffineLocusHomeomorph` and its symmetric counterpart,
+bundled as `variableChangeAffineLocusBiholomorph` between the independently
+constructed finite implicit-function manifolds.
+
+This resolves taxis #179 without transporting either atlas and without making
+any claim at infinity. Taxis #178 remains the honest blocker for a compact
+curve manifold and for extending this affine biholomorphism globally. Full
+`LAKE_JOBS=6 ./scripts/ci-checks.sh` passes; the axiom audit covers 766
+public declarations, all within the permitted subset.

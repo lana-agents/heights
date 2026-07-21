@@ -1,4 +1,4 @@
-import Heights.WeierstrassCurveTopology
+import Heights.WeierstrassFiniteManifold
 import Mathlib.Geometry.Manifold.Diffeomorph
 
 set_option linter.style.header false
@@ -12,10 +12,10 @@ This file packages the resulting ambient biholomorphism of `ℂ × ℂ` and prov
 that the affine-locus homeomorphism constructed from the two equations is its
 restriction.
 
-This is the affine analytic core of the point-level variable change. It does
-not put a complex-manifold structure on the equation locus or its one-point
-compactification, and therefore does not claim that the global elliptic-curve
-point map is biholomorphic at infinity.
+The ambient maps restrict to a biholomorphism for the intrinsic finite
+implicit-function manifolds.  This remains an affine result: it does not put a
+complex-manifold structure on the one-point compactification and does not
+claim that the global elliptic-curve point map is biholomorphic at infinity.
 -/
 
 open scoped ContDiff Manifold
@@ -86,6 +86,55 @@ ambient biholomorphism. -/
     (((variableChangeAffineLocusHomeomorph W C).symm xy :
         ComplexWeierstrassAffine (C • W)) : ℂ × ℂ) =
       (variableChangeAffineAmbientBiholomorph C).symm (xy : ℂ × ℂ) :=
+  rfl
+
+/-- An admissible variable change is analytic between the independently
+constructed intrinsic finite manifolds. -/
+theorem contMDiff_variableChangeAffineLocusHomeomorph
+    (W : WeierstrassCurve ℂ) [W.IsElliptic]
+    (C : WeierstrassCurve.VariableChange ℂ) :
+    ContMDiff 𝓘(ℂ) 𝓘(ℂ) ω (variableChangeAffineLocusHomeomorph W C) := by
+  apply contMDiff_complexWeierstrassAffine_of_contMDiff_coe W
+  have h := (variableChangeAffineAmbientBiholomorph C).contMDiff.comp
+    (contMDiff_complexWeierstrassAffine_coe (C • W))
+  simpa [Function.comp_def] using h
+
+/-- The explicit inverse variable change is analytic between the intrinsic
+finite manifolds. -/
+theorem contMDiff_variableChangeAffineLocusHomeomorph_symm
+    (W : WeierstrassCurve ℂ) [W.IsElliptic]
+    (C : WeierstrassCurve.VariableChange ℂ) :
+    ContMDiff 𝓘(ℂ) 𝓘(ℂ) ω (variableChangeAffineLocusHomeomorph W C).symm := by
+  apply contMDiff_complexWeierstrassAffine_of_contMDiff_coe (C • W)
+  have h := (variableChangeAffineAmbientBiholomorph C).symm.contMDiff.comp
+    (contMDiff_complexWeierstrassAffine_coe W)
+  simpa [Function.comp_def] using h
+
+/-- The finite affine-locus homeomorphism, bundled as a biholomorphism for the
+intrinsic implicit-function manifold structures. -/
+noncomputable def variableChangeAffineLocusBiholomorph
+    (W : WeierstrassCurve ℂ) [W.IsElliptic]
+    (C : WeierstrassCurve.VariableChange ℂ) :
+    Diffeomorph 𝓘(ℂ) 𝓘(ℂ)
+      (ComplexWeierstrassAffine (C • W)) (ComplexWeierstrassAffine W) ω where
+  toEquiv := (variableChangeAffineLocusHomeomorph W C).toEquiv
+  contMDiff_toFun := contMDiff_variableChangeAffineLocusHomeomorph W C
+  contMDiff_invFun := contMDiff_variableChangeAffineLocusHomeomorph_symm W C
+
+@[simp] theorem variableChangeAffineLocusBiholomorph_apply
+    (W : WeierstrassCurve ℂ) [W.IsElliptic]
+    (C : WeierstrassCurve.VariableChange ℂ)
+    (P : ComplexWeierstrassAffine (C • W)) :
+    variableChangeAffineLocusBiholomorph W C P =
+      variableChangeAffineLocusHomeomorph W C P :=
+  rfl
+
+@[simp] theorem variableChangeAffineLocusBiholomorph_symm_apply
+    (W : WeierstrassCurve ℂ) [W.IsElliptic]
+    (C : WeierstrassCurve.VariableChange ℂ)
+    (P : ComplexWeierstrassAffine W) :
+    (variableChangeAffineLocusBiholomorph W C).symm P =
+      (variableChangeAffineLocusHomeomorph W C).symm P :=
   rfl
 
 end Heights

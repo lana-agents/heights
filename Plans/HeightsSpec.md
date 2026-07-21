@@ -502,15 +502,19 @@ The following was checked against `.lake/packages/mathlib/Mathlib/`.
   `Heights/WeierstrassCurveTopology.lean`, with the former lattice API recovered
   by specialization. `Heights/VariableChangeAnalytic.lean` packages the
   forward and inverse affine coordinate polynomials as an ambient
-  biholomorphism of `ℂ × ℂ` and identifies the locus homeomorphism with its
-  restriction. `Heights/WeierstrassFiniteAnalytic.lean` computes the affine
-  equation derivative, constructs analytic implicit graph germs in one of the
+  biholomorphism of `ℂ × ℂ`, identifies the locus homeomorphism with its
+  restriction, and proves that restriction is a biholomorphism for the
+  intrinsic finite manifold structures.
+  `Heights/WeierstrassFiniteAnalytic.lean` computes the affine equation
+  derivative, constructs analytic implicit graph germs in one of the
   two coordinate directions at every finite curve point, and restricts the
   ambient inverse-function neighborhoods to noncritical open topological
   charts on the affine locus. `Heights/WeierstrassFiniteManifold.lean` proves
   their four kinds of transition map holomorphic on whole overlaps and equips
   the affine equation locus with its intrinsic one-dimensional complex
-  `ChartedSpace` and `IsManifold`. `Heights/LatticeAffinePointTopology.lean`
+  `ChartedSpace` and `IsManifold`; it also proves that the ambient coordinate
+  inclusion is analytic and supplies an ambient-coordinate criterion for maps
+  into the equation subtype. `Heights/LatticeAffinePointTopology.lean`
   proves continuity on the pole-free affine chart, and
   `Heights/LatticePointMapTopology.lean` uses the pole order to prove continuity
   of the total and descended maps at infinity. The repository subsequently
@@ -579,7 +583,7 @@ Heights/
   ModularJ.lean, ModularJFibers.lean, SilvermanHeight.lean
   Lattice*.lean, Weierstrass*.lean, PeriodPairScaling.lean
   VariableChangePoint.lean, VariableChangeAnalytic.lean
-  WeierstrassFiniteAnalytic.lean
+  WeierstrassFiniteAnalytic.lean, WeierstrassFiniteManifold.lean
   ArchimedeanAlgebraicRealization.lean
 Comparator/
 Blueprint/                 # Verso blueprint, based on blueprint-verso

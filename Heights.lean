@@ -55,8 +55,10 @@ the two equation derivatives are computed, the complex implicit-function
 theorem supplies an analytic graph germ in one coordinate direction, and its
 zero-fiber neighborhood gives an open topological chart. Their transition
 maps are holomorphic on whole overlaps, giving the affine equation locus an
-intrinsic one-dimensional complex-manifold structure. The project still does
-not construct the chart at infinity or a complex atlas on the compact curve,
-prove the uniformization analytic, formalize periods by integration, or
+intrinsic one-dimensional complex-manifold structure. Its ambient coordinate
+inclusion is analytic, and every admissible affine variable change is a
+biholomorphism for these independently constructed structures. The project
+still does not construct the chart at infinity or a complex atlas on the
+compact curve, prove the uniformization analytic, formalize periods by integration, or
 construct an Arakelov Faltings height.
 -/

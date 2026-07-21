@@ -322,7 +322,7 @@ are proved for every nonsingular complex Weierstrass equation. No complex
 atlas on the compact point type or curve-level analyticity is claimed.*
 :::
 
-:::proposition "prop:complex-weierstrass-finite-manifold" (uses := "prop:complex-weierstrass-topology") (lean := "Heights.complexWeierstrassEquation, Heights.complexWeierstrassAffine_derivative_ne_zero, Heights.complexWeierstrassImplicitYChart, Heights.complexWeierstrassImplicitXChart, Heights.contDiffAt_complexWeierstrassImplicitYChart_symm_coe_of_mem, Heights.contDiffAt_complexWeierstrassImplicitXChart_symm_coe_of_mem, Heights.contDiffOn_complexWeierstrassImplicitYChart_transition, Heights.contDiffOn_complexWeierstrassImplicitYChart_ImplicitXChart_transition, Heights.contDiffOn_complexWeierstrassImplicitXChart_ImplicitYChart_transition, Heights.contDiffOn_complexWeierstrassImplicitXChart_transition, Heights.complexWeierstrassAffineChartAt, Heights.complexWeierstrassAffineChartedSpace, Heights.complexWeierstrassAffineIsManifold")
+:::proposition "prop:complex-weierstrass-finite-manifold" (uses := "prop:complex-weierstrass-topology") (lean := "Heights.complexWeierstrassEquation, Heights.complexWeierstrassAffine_derivative_ne_zero, Heights.complexWeierstrassImplicitYChart, Heights.complexWeierstrassImplicitXChart, Heights.contDiffAt_complexWeierstrassImplicitYChart_symm_coe_of_mem, Heights.contDiffAt_complexWeierstrassImplicitXChart_symm_coe_of_mem, Heights.contDiffOn_complexWeierstrassImplicitYChart_transition, Heights.contDiffOn_complexWeierstrassImplicitYChart_ImplicitXChart_transition, Heights.contDiffOn_complexWeierstrassImplicitXChart_ImplicitYChart_transition, Heights.contDiffOn_complexWeierstrassImplicitXChart_transition, Heights.complexWeierstrassAffineChartAt, Heights.complexWeierstrassAffineChartedSpace, Heights.complexWeierstrassAffineIsManifold, Heights.contMDiff_complexWeierstrassAffine_coe, Heights.contMDiff_complexWeierstrassAffine_of_contMDiff_coe")
 At every point of a nonsingular affine complex Weierstrass equation, at least
 one equation partial derivative is nonzero. Restricting the corresponding
 ambient implicit-function neighborhood to that noncritical locus gives a chart
@@ -341,7 +341,7 @@ unconditionally. The chart at infinity and a manifold structure on the compact
 point type remain open.*
 :::
 
-:::proposition "prop:variable-change-ambient-biholomorph" (uses := "prop:complex-weierstrass-topology, prop:complex-weierstrass-finite-manifold") (lean := "Heights.variableChangeAffineAmbientEquiv, Heights.variableChangeAffineAmbientBiholomorph, Heights.variableChangeAffineAmbientBiholomorph_apply, Heights.variableChangeAffineAmbientBiholomorph_symm_apply, Heights.variableChangeAffineLocusHomeomorph_coe, Heights.variableChangeAffineLocusHomeomorph_symm_coe")
+:::proposition "prop:variable-change-ambient-biholomorph" (uses := "prop:complex-weierstrass-topology, prop:complex-weierstrass-finite-manifold") (lean := "Heights.variableChangeAffineAmbientEquiv, Heights.variableChangeAffineAmbientBiholomorph, Heights.variableChangeAffineAmbientBiholomorph_apply, Heights.variableChangeAffineAmbientBiholomorph_symm_apply, Heights.variableChangeAffineLocusHomeomorph_coe, Heights.variableChangeAffineLocusHomeomorph_symm_coe, Heights.contMDiff_variableChangeAffineLocusHomeomorph, Heights.contMDiff_variableChangeAffineLocusHomeomorph_symm, Heights.variableChangeAffineLocusBiholomorph")
 For every admissible complex change of Weierstrass variables, the forward
 coordinate polynomial
 $`(x,y)\mapsto(u^2x+r,u^3y+u^2sx+t)` and its explicit inverse form a global
@@ -349,13 +349,15 @@ biholomorphism of $`\mathbb C^2`. The affine-locus homeomorphism between the
 changed equations is exactly the restriction of this ambient biholomorphism,
 in both directions.
 
-This closes the ambient affine analytic calculation needed for variable-change
-invariance. The affine equation loci now have independent intrinsic atlases,
-but this node does not yet package the restriction as a map of those manifolds
-or extend the resulting curve-level statement through the point at infinity.
+The intrinsic finite manifold embeds analytically in its ambient coordinate
+plane, and maps into the equation subtype are analytic whenever both ambient
+coordinates are. Applying this criterion packages the affine-locus
+homeomorphism and its inverse as a biholomorphism for the independently
+constructed implicit-function atlases. This node does not extend that result
+through the point at infinity.
 
-*Status: the ambient affine variable change is proved biholomorphic; its
-restriction and the infinity argument remain open.*
+*Status: the affine variable change is proved biholomorphic both ambiently and
+between the intrinsic finite manifolds; the infinity argument remains open.*
 :::
 
 :::proposition "prop:lattice-curve-topology" (uses := "prop:lattice-weierstrass-curve, prop:lattice-quotient-topology, prop:complex-weierstrass-topology") (lean := "Heights.LatticeCurveAffine, Heights.LatticeCurvePoint, Heights.latticeCurvePointEquiv, Heights.latticeCurvePointHomeomorph, Heights.latticeCurvePointInfinity, Heights.latticeCurvePointOfAffine, Heights.latticeCurvePointHomeomorph_infinity, Heights.latticeCurvePointHomeomorph_affine, Heights.isOpenEmbedding_latticeCurvePointOfAffine, Heights.isClosed_latticeCurveAffine, Heights.latticeCurveAffineLocallyCompactSpace, Heights.latticeCurvePointCompactSpace, Heights.latticeCurvePointT1Space, Heights.latticeCurvePointT4Space")

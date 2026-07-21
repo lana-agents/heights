@@ -212,4 +212,64 @@ noncomputable instance complexWeierstrassAffineIsManifold
           ((complexWeierstrassAffine_derivative_ne_zero W P).resolve_right hP)
           ((complexWeierstrassAffine_derivative_ne_zero W Q).resolve_right hQ)
 
+/-- The intrinsic affine manifold embeds analytically in its ambient
+coordinate plane.  This is proved in the preferred implicit chart at each
+point, using the whole-target analyticity of both graph parametrizations. -/
+theorem contMDiff_complexWeierstrassAffine_coe
+    (W : WeierstrassCurve ℂ) [W.IsElliptic] :
+    ContMDiff 𝓘(ℂ) 𝓘(ℂ, ℂ × ℂ) ω
+      (fun P : ComplexWeierstrassAffine W => (P : ℂ × ℂ)) := by
+  intro P
+  rw [contMDiffAt_iff_source_of_mem_source
+    (complexWeierstrassAffineChartAt_mem_source W P)]
+  rw [contMDiffWithinAt_iff_contDiffWithinAt]
+  by_cases hP : complexWeierstrassEquationY W P.1 ≠ 0
+  · have hc : chartAt ℂ P = complexWeierstrassImplicitYChart W P hP :=
+      complexWeierstrassAffineChartAt_eq_implicitY W P hP
+    rw [extChartAt_coe_symm, extChartAt_coe, hc]
+    simpa [Function.comp_def] using
+      (contDiffAt_complexWeierstrassImplicitYChart_symm_coe W P hP).contDiffWithinAt
+  · let hX := (complexWeierstrassAffine_derivative_ne_zero W P).resolve_right hP
+    have hc : chartAt ℂ P = complexWeierstrassImplicitXChart W P hX :=
+      complexWeierstrassAffineChartAt_eq_implicitX W P hP
+    rw [extChartAt_coe_symm, extChartAt_coe, hc]
+    simpa [Function.comp_def] using
+      (contDiffAt_complexWeierstrassImplicitXChart_symm_coe W P hX).contDiffWithinAt
+
+/-- A map into the intrinsic affine curve is analytic when its two ambient
+coordinate functions are analytic.  The equation proof carried by the
+subtype contributes no extra analytic data. -/
+theorem contMDiff_complexWeierstrassAffine_of_contMDiff_coe
+    {M : Type*} [TopologicalSpace M] [ChartedSpace ℂ M]
+    (W : WeierstrassCurve ℂ) [W.IsElliptic]
+    (f : M → ComplexWeierstrassAffine W)
+    (hf : ContMDiff 𝓘(ℂ) 𝓘(ℂ, ℂ × ℂ) ω
+      (fun x => (f x : ℂ × ℂ))) :
+    ContMDiff 𝓘(ℂ) 𝓘(ℂ) ω f := by
+  intro x
+  rw [contMDiffAt_iff_target_of_mem_source
+    (complexWeierstrassAffineChartAt_mem_source W (f x))]
+  have hfcont : Continuous f := continuous_induced_rng.mpr hf.continuous
+  have hf1 : ContMDiff 𝓘(ℂ) 𝓘(ℂ) ω (fun x => (f x).1.1) :=
+    (contDiff_fst.contMDiff :
+      ContMDiff 𝓘(ℂ, ℂ × ℂ) 𝓘(ℂ) ω Prod.fst).comp hf
+  have hf2 : ContMDiff 𝓘(ℂ) 𝓘(ℂ) ω (fun x => (f x).1.2) :=
+    (contDiff_snd.contMDiff :
+      ContMDiff 𝓘(ℂ, ℂ × ℂ) 𝓘(ℂ) ω Prod.snd).comp hf
+  refine ⟨hfcont.continuousAt, ?_⟩
+  rw [extChartAt_coe]
+  by_cases hP : complexWeierstrassEquationY W (f x).1 ≠ 0
+  · have hc : chartAt ℂ (f x) =
+        complexWeierstrassImplicitYChart W (f x) hP :=
+      complexWeierstrassAffineChartAt_eq_implicitY W (f x) hP
+    rw [hc]
+    exact hf1.contMDiffAt
+  · let hX :=
+      (complexWeierstrassAffine_derivative_ne_zero W (f x)).resolve_right hP
+    have hc : chartAt ℂ (f x) =
+        complexWeierstrassImplicitXChart W (f x) hX :=
+      complexWeierstrassAffineChartAt_eq_implicitX W (f x) hP
+    rw [hc]
+    exact hf2.contMDiffAt
+
 end Heights
