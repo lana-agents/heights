@@ -135,7 +135,7 @@ torus, descend $`\wp`, or uniformize an algebraic elliptic curve.
 *Status: proved unconditionally.*
 :::
 
-:::proposition "prop:weierstrass-principal-parts" (lean := "Heights.tendsto_weierstrassP_sub_inv_sq_zero, Heights.tendsto_derivWeierstrassP_add_two_div_cube_zero, Heights.tendsto_sq_mul_weierstrassP_zero, Heights.tendsto_cube_mul_derivWeierstrassP_zero, Heights.tendsto_sq_mul_weierstrassP_at_lattice, Heights.tendsto_cube_mul_derivWeierstrassP_at_lattice, Heights.tendsto_weierstrass_secant_addX_zero")
+:::proposition "prop:weierstrass-principal-parts" (lean := "Heights.tendsto_weierstrassP_sub_inv_sq_zero, Heights.tendsto_derivWeierstrassP_add_two_div_cube_zero, Heights.tendsto_sq_mul_weierstrassP_zero, Heights.tendsto_cube_mul_derivWeierstrassP_zero, Heights.tendsto_sq_mul_weierstrassP_at_lattice, Heights.tendsto_cube_mul_derivWeierstrassP_at_lattice, Heights.tendsto_weierstrass_secant_addX_zero, Heights.tendsto_weierstrass_secant_addY_zero")
 For every complex period pair and every period $`l`, the singular summands in
 mathlib's definitions give the normalized principal-part limits
 $`
@@ -146,17 +146,28 @@ $`
 At the origin, the regular remainders
 $`\wp(z)-z^{-2}` and $`\wp'(z)+2z^{-3}` tend to zero.
 
-These cancellations also show that for arbitrary $`a,b\in\mathbb C` the
-secant-formula candidate
-$`
- \left(\frac{\wp'(z)-b}{2(\wp(z)-a)}\right)^2-\wp(z)-a
-`
-extends across $`z=0` with value $`a`. This is the local $`x`-coordinate
-cancellation required at the point at infinity. It is not the global
-Weierstrass addition theorem: equality with a translate of $`\wp` and the
-corresponding $`y`-coordinate remain open.
+These cancellations also show that for arbitrary $`a,b\in\mathbb C` both
+secant-formula coordinate candidates extend across $`z=0` with values $`a`
+and $`b/2`. These are the local coordinate cancellations required at the
+point at infinity. They are not the global Weierstrass addition theorem:
+equality with the coordinates at $`z+w` remains open.
 
 *Status: proved unconditionally.*
+:::
+
+:::proposition "prop:weierstrass-secant-differential" (uses := "prop:weierstrass-principal-parts, prop:lattice-weierstrass-curve") (lean := "Heights.weierstrassSecantSlope, Heights.weierstrassSecantAddX, Heights.weierstrassSecantAddY, Heights.hasDerivAt_weierstrassSecantSlope, Heights.hasDerivAt_weierstrassSecantAddX, Heights.hasDerivAt_weierstrassSecantAddY")
+Suppose $`b^2=4a^3-g_2a-g_3`, and let $`X,Y` be the two secant-law
+candidates for adding $`(\wp(z),\wp'(z)/2)` to $`(a,b/2)`. Away from the
+period lattice and vertical secants, direct differentiation gives
+$`
+  X'=2Y, \qquad Y'=3X^2-g_2/4.
+`
+Consequently $`(X,2Y)` satisfies the same polynomial first-order ODE as
+$`(\wp,\wp')`. Together with the preceding removable limits, this is a local
+ODE route toward the addition theorem, but ODE uniqueness and global analytic
+continuation have not yet identified $`X,Y` with the coordinates at $`z+w`.
+
+*Status: proved on the pole-free, nonvertical secant domain.*
 :::
 
 :::proposition "prop:lattice-weierstrass-curve" (uses := "prop:lattice-eisenstein-normalization, prop:weierstrass-principal-parts, def:modular-j") (lean := "Heights.deriv_derivWeierstrassP, Heights.latticeWeierstrassCurve, Heights.weierstrassP_on_latticeWeierstrassCurve, Heights.latticeWeierstrassCurve_c4, Heights.latticeWeierstrassCurve_discriminant, Heights.latticeWeierstrassCurve_discriminant_eq_modularDiscriminant, Heights.latticeWeierstrassCurve_j")

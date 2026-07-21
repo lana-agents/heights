@@ -129,9 +129,14 @@ both coordinates extend correctly across zero: the `x`-candidate
 `y`-candidate tends to `b/2`.  The latter uses the additional little-oh result
 `(℘(z)-z⁻²)/z → 0`.  These are genuine local coordinate cancellations at
 infinity, but they do not identify either candidate with the coordinates at
-`z+w`. The Weierstrass addition formula itself, its full analytic extension,
-compatibility with addition, and arbitrary-curve uniformization have not been
-proved.
+`z+w`. `Heights/WeierstrassAdditionDifferential.lean` now supplies the next
+local analytic step.  If `b² = 4a³ - g₂a - g₃`, then away from poles and
+vertical secants the two named secant candidates satisfy
+`X′ = 2Y` and `Y′ = 3X² - g₂/4`; hence `(X,2Y)` obeys the same polynomial ODE
+as `(℘,℘′)`.  The Weierstrass addition formula itself, removable analytic
+packaging of these candidates, the ODE-uniqueness identification, its global
+analytic extension, compatibility with addition, and arbitrary-curve
+uniformization have not been proved.
 
 ### Modular forms and the fundamental domain
 
@@ -225,7 +230,11 @@ result.
    `Heights/WeierstrassPrincipalPart.lean` proves the exact normalized pole
    limits for `℘` and `℘′` at every lattice point, the needed little-oh estimate
    for the regular part of `℘`, and the removable secant-law limits for both
-   coordinates at infinity.  The global addition identity is still missing.
+   coordinates at infinity. `Heights/WeierstrassAdditionDifferential.lean`
+   proves that the pole-free, nonvertical secant candidates satisfy the same
+   first-order polynomial ODE as `(℘,℘′)`.  The removable analytic packaging,
+   local ODE-uniqueness comparison, and global addition identity are still
+   missing.
    `Heights/WeierstrassFibers.lean` uses ODE uniqueness, analytic continuation,
    and the pole order to prove the exact fibers of `℘` and `(℘,℘′)`; hence
    `Heights/LatticePointMapInjectivity.lean` proves injectivity after quotient
@@ -269,9 +278,11 @@ Hausdorff one-point-compactification topology on the explicit target,
 continuity of the total and descended point maps, their zero/negation
 compatibility, the second-order Weierstrass ODE, exact normalized pole limits
 (including the local secant-law cancellations for both coordinates at
-infinity), exact Weierstrass fibers, surjectivity, and a homeomorphism from the
-quotient to the explicit lattice curve are now available. They do not resolve
-the global addition formula, compatibility with addition, arbitrary-curve
+infinity), the secant candidates' pole-free first-order ODE, exact Weierstrass
+fibers, surjectivity, and a homeomorphism from the quotient to the explicit
+lattice curve are now available. They do not resolve the removable analytic
+packaging and ODE comparison needed for the global addition formula,
+compatibility with addition, arbitrary-curve
 uniformization, or modular-`j` surjectivity.
 Until one certificate-level route lands, the comparison over every number
 field correctly

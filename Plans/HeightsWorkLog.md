@@ -454,3 +454,29 @@ not yet equality with `℘(z+w)`, does not establish the corresponding
 `y`-coordinate limit, and therefore does not close #155 or package a group
 homomorphism.  The feasibility report and Blueprint now expose this exact
 boundary.
+
+## Autonomous run 20 — 2026-07-21
+
+Run 20 completed the second removable coordinate calculation in
+`Heights/WeierstrassPrincipalPart.lean`. The stronger estimate
+`(℘(z)-z⁻²)/z → 0` controls the cancellation left after the leading poles are
+removed, and the secant-law `y`-candidate now tends to `b/2` at the origin.
+Together with run 19, both secant coordinates have the correct limit when one
+summand approaches infinity. No equality with the coordinates at `z+w` was
+claimed.
+
+## Autonomous run 21 — 2026-07-21
+
+`Heights/WeierstrassAdditionDifferential.lean` names the secant slope and its
+two coordinate candidates and proves the next local analytic step. Whenever
+`b² = 4a³ - g₂a - g₃`, direct differentiation away from the lattice and
+vertical secants gives `s′ = ℘ - X`, `X′ = 2Y`, and
+`Y′ = 3X² - g₂/4`. Thus `(X,2Y)` satisfies exactly the same polynomial
+first-order ODE as `(℘,℘′)`.
+
+This is genuine progress toward #155, but not the addition theorem. The
+candidates have not yet been packaged as analytic functions across zero, ODE
+uniqueness has not yet identified them locally with `(℘(z+w),℘′(z+w)/2)`, and
+no identity theorem has globalized that comparison. Consequently the point
+map is still not claimed to preserve addition or packaged as a group
+isomorphism.

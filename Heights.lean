@@ -3,6 +3,7 @@ import Heights.ModularJ
 import Heights.LatticeEisenstein
 import Heights.WeierstrassPrincipalPart
 import Heights.WeierstrassDifferential
+import Heights.WeierstrassAdditionDifferential
 import Heights.WeierstrassFibers
 import Heights.LatticeWeierstrass
 import Heights.LatticeAffinePoint
