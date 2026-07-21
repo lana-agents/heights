@@ -133,10 +133,10 @@ infinity, but they do not identify either candidate with the coordinates at
 local analytic step.  If `b² = 4a³ - g₂a - g₃`, then away from poles and
 vertical secants the two named secant candidates satisfy
 `X′ = 2Y` and `Y′ = 3X² - g₂/4`; hence `(X,2Y)` obeys the same polynomial ODE
-as `(℘,℘′)`.  The Weierstrass addition formula itself, removable analytic
-packaging of these candidates, the ODE-uniqueness identification, its global
-analytic extension, compatibility with addition, and arbitrary-curve
-uniformization have not been proved.
+as `(℘,℘′)`. Installing the already proved limiting values makes both
+candidates analytic at zero.  The Weierstrass addition formula itself, the
+ODE-uniqueness identification, its global analytic extension, compatibility
+with addition, and arbitrary-curve uniformization have not been proved.
 
 ### Modular forms and the fundamental domain
 
@@ -232,9 +232,9 @@ result.
    for the regular part of `℘`, and the removable secant-law limits for both
    coordinates at infinity. `Heights/WeierstrassAdditionDifferential.lean`
    proves that the pole-free, nonvertical secant candidates satisfy the same
-   first-order polynomial ODE as `(℘,℘′)`.  The removable analytic packaging,
-   local ODE-uniqueness comparison, and global addition identity are still
-   missing.
+   first-order polynomial ODE as `(℘,℘′)` and that installing their limiting
+   values makes both candidates analytic at zero.  The local ODE-uniqueness
+   comparison and global addition identity are still missing.
    `Heights/WeierstrassFibers.lean` uses ODE uniqueness, analytic continuation,
    and the pole order to prove the exact fibers of `℘` and `(℘,℘′)`; hence
    `Heights/LatticePointMapInjectivity.lean` proves injectivity after quotient
@@ -280,8 +280,8 @@ compatibility, the second-order Weierstrass ODE, exact normalized pole limits
 (including the local secant-law cancellations for both coordinates at
 infinity), the secant candidates' pole-free first-order ODE, exact Weierstrass
 fibers, surjectivity, and a homeomorphism from the quotient to the explicit
-lattice curve are now available. They do not resolve the removable analytic
-packaging and ODE comparison needed for the global addition formula,
+lattice curve are now available. They do not resolve the local ODE comparison
+and analytic continuation needed for the global addition formula,
 compatibility with addition, arbitrary-curve
 uniformization, or modular-`j` surjectivity.
 Until one certificate-level route lands, the comparison over every number

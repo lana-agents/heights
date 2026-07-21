@@ -155,7 +155,7 @@ equality with the coordinates at $`z+w` remains open.
 *Status: proved unconditionally.*
 :::
 
-:::proposition "prop:weierstrass-secant-differential" (uses := "prop:weierstrass-principal-parts, prop:lattice-weierstrass-curve") (lean := "Heights.weierstrassSecantSlope, Heights.weierstrassSecantAddX, Heights.weierstrassSecantAddY, Heights.hasDerivAt_weierstrassSecantSlope, Heights.hasDerivAt_weierstrassSecantAddX, Heights.hasDerivAt_weierstrassSecantAddY")
+:::proposition "prop:weierstrass-secant-differential" (uses := "prop:weierstrass-principal-parts, prop:lattice-weierstrass-curve") (lean := "Heights.weierstrassSecantSlope, Heights.weierstrassSecantAddX, Heights.weierstrassSecantAddY, Heights.hasDerivAt_weierstrassSecantSlope, Heights.hasDerivAt_weierstrassSecantAddX, Heights.hasDerivAt_weierstrassSecantAddY, Heights.weierstrassSecantAddXAtZero, Heights.weierstrassSecantAddYAtZero, Heights.analyticAt_weierstrassSecantAddXAtZero, Heights.analyticAt_weierstrassSecantAddYAtZero")
 Suppose $`b^2=4a^3-g_2a-g_3`, and let $`X,Y` be the two secant-law
 candidates for adding $`(\wp(z),\wp'(z)/2)` to $`(a,b/2)`. Away from the
 period lattice and vertical secants, direct differentiation gives
@@ -163,9 +163,10 @@ $`
   X'=2Y, \qquad Y'=3X^2-g_2/4.
 `
 Consequently $`(X,2Y)` satisfies the same polynomial first-order ODE as
-$`(\wp,\wp')`. Together with the preceding removable limits, this is a local
-ODE route toward the addition theorem, but ODE uniqueness and global analytic
-continuation have not yet identified $`X,Y` with the coordinates at $`z+w`.
+$`(\wp,\wp')`. Installing the preceding limiting values at zero makes both
+candidates analytic there. This gives a local ODE route toward the addition
+theorem, but ODE uniqueness and global analytic continuation have not yet
+identified $`X,Y` with the coordinates at $`z+w`.
 
 *Status: proved on the pole-free, nonvertical secant domain.*
 :::

@@ -474,9 +474,10 @@ vertical secants gives `s′ = ℘ - X`, `X′ = 2Y`, and
 `Y′ = 3X² - g₂/4`. Thus `(X,2Y)` satisfies exactly the same polynomial
 first-order ODE as `(℘,℘′)`.
 
-This is genuine progress toward #155, but not the addition theorem. The
-candidates have not yet been packaged as analytic functions across zero, ODE
-uniqueness has not yet identified them locally with `(℘(z+w),℘′(z+w)/2)`, and
-no identity theorem has globalized that comparison. Consequently the point
-map is still not claimed to preserve addition or packaged as a group
-isomorphism.
+The same module installs the limiting values `a` and `b/2` at zero and applies
+Riemann's removable-singularity theorem, proving that both extended candidates
+are analytic there. This is genuine progress toward #155, but not the addition
+theorem: ODE uniqueness has not yet identified the candidates locally with
+`(℘(z+w),℘′(z+w)/2)`, and no identity theorem has globalized that comparison.
+Consequently the point map is still not claimed to preserve addition or
+packaged as a group isomorphism.
