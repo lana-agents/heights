@@ -50,9 +50,10 @@ from `ℂ` is locally biholomorphic. Every nonsingular complex target has an
 equation-defined compact Hausdorff topology, invariant under admissible
 variable changes. The affine coordinate change and its inverse are moreover
 packaged as an ambient biholomorphism of `ℂ × ℂ`. At every finite curve point,
-the two equation derivatives are computed and the complex implicit-function
-theorem now supplies an analytic graph germ in one coordinate direction. The
-project still does not assemble those germs into a complex atlas on the curve,
+the two equation derivatives are computed, the complex implicit-function
+theorem supplies an analytic graph germ in one coordinate direction, and its
+zero-fiber neighborhood gives an open topological chart. The project still
+does not assemble the finite charts into a complex atlas on the curve,
 construct the chart at infinity, prove the uniformization analytic, formalize
 periods by integration, or construct an Arakelov Faltings height.
 -/

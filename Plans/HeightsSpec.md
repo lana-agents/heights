@@ -504,9 +504,11 @@ The following was checked against `.lake/packages/mathlib/Mathlib/`.
   forward and inverse affine coordinate polynomials as an ambient
   biholomorphism of `ℂ × ℂ` and identifies the locus homeomorphism with its
   restriction. `Heights/WeierstrassFiniteAnalytic.lean` computes the affine
-  equation derivative and constructs analytic implicit graph germs in one of
-  the two coordinate directions at every finite curve point; these germs are
-  not yet assembled into an atlas. `Heights/LatticeAffinePointTopology.lean`
+  equation derivative, constructs analytic implicit graph germs in one of the
+  two coordinate directions at every finite curve point, and restricts the
+  ambient inverse-function neighborhoods to open topological charts on the
+  affine locus. Their holomorphic transitions are not yet assembled into an
+  atlas. `Heights/LatticeAffinePointTopology.lean`
   proves continuity on the pole-free affine chart, and
   `Heights/LatticePointMapTopology.lean` uses the pole order to prove continuity
   of the total and descended maps at infinity. The repository subsequently
@@ -515,9 +517,9 @@ The following was checked against `.lake/packages/mathlib/Mathlib/`.
   `ℂ → ℂ/L` as a covering map and constructs the quotient's intrinsic complex
   manifold in `Heights/LatticeQuotientManifold.lean`, with the projection
   locally biholomorphic. Every nonsingular complex Weierstrass point type has
-  an intrinsic compact Hausdorff topology and verified finite analytic graph
-  germs, but there is still no assembled complex-manifold structure on that
-  point type, no chart at infinity, no global invariant
+  an intrinsic compact Hausdorff topology, verified finite analytic graph
+  germs, and finite open topological charts, but there is still no assembled
+  complex-manifold structure on that point type, no chart at infinity, no global invariant
   holomorphic differential there, and no integration-based period theorem.
 * `UpperHalfPlane`, its `SL₂` action, `qParam`, and the analytic ingredients are
   therefore present. The remaining bridge is specifically from the proved

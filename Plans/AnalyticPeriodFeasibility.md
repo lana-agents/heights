@@ -128,9 +128,12 @@ affine equation, proves that one partial derivative is nonzero at every finite
 curve point, and applies mathlib's complex implicit-function theorem in both
 coordinate directions. The resulting functions are analytic at the base
 coordinate, locally unique, and have graphs lying on the equation near the
-base point. They are honest analytic graph germs, not yet bundled charts:
-open chart domains, holomorphic transitions on those domains, and the
-`ChartedSpace` assembly remain to be constructed.
+base point. The corresponding ambient inverse-function neighborhoods are now
+restricted along the zero fiber to explicit open partial homeomorphisms from
+the affine locus to `ℂ`; every finite point lies in one of their sources, and
+their topology is definitionally the existing subtype topology. Holomorphic
+transitions on those open domains and the `ChartedSpace` assembly remain to be
+packaged.
 
 The other essential chart is still wholly open: at infinity, use a
 projective/local parameter such as `-x/y` and prove the coordinate formulas
@@ -171,10 +174,10 @@ The remaining work should be split into the following gates.
    form `dz`.
 2. **Intrinsic target topology and atlas.** The equation-defined compact
    Hausdorff topology and variable-change homeomorphisms are complete. At
-   finite points, the derivative alternative and analytic implicit graph germs
-   are now proved; bundling them as charts and proving transitions remains.
-   The infinity chart also remains open. Assemble these independent charts to
-   give every nonsingular complex Weierstrass point type a one-dimensional
+   finite points, the derivative alternative, analytic implicit graph germs,
+   and open topological charts are now proved; packaging their holomorphic
+   transitions remains. The infinity chart also remains open. Assemble these
+   independent charts to give every nonsingular complex Weierstrass point type a one-dimensional
    complex-manifold structure without using any selected `τ`.
 3. **Invariant differential.** Define the global regular form represented by
    `dx/(2y+a₁x+a₃)`, including the alternate local expressions needed where
@@ -200,8 +203,8 @@ The remaining work should be split into the following gates.
 The atlas/projection portion of gate 1 and the topology plus finite-analytic-
 germ slices of gate 2 are complete. The ambient affine variable-change slice
 of gate 4 is also complete, but no curve-level biholomorphism follows until
-those germs are bundled into the gate-2 atlas and the map is controlled at
-infinity. Descending `dz` finishes gate 1; finite chart assembly and the
+the finite charts are assembled into the gate-2 complex atlas and the map is
+controlled at infinity. Descending `dz` finishes gate 1; finite chart assembly and the
 infinity chart finish gate 2; gate 3, the remaining parts of gates 4--6, and
 then gate 7 remain substantial.
 

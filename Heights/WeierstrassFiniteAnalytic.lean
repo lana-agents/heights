@@ -14,9 +14,11 @@ function theorem in either coordinate.  The resulting implicit functions are
 complex analytic at the base point, parametrize the equation in a
 neighbourhood, and are locally unique.
 
-These declarations are the analytic core of finite curve charts.  They do not
-yet bundle the germs as `OpenPartialHomeomorph`s, choose compatible chart
-sources, or install a `ChartedSpace` on the affine locus or compact point type.
+The inverse-function neighborhoods are also restricted along the zero fiber to
+explicit `OpenPartialHomeomorph`s from the affine equation locus to `ℂ`, in
+both coordinate directions, and every finite point lies in one chart source.
+The file does not yet package holomorphic transitions, install a `ChartedSpace`
+on the affine locus or compact point type, or address the chart at infinity.
 In particular, no manifold structure is transported from a period lattice.
 -/
 
@@ -309,6 +311,280 @@ theorem contDiffAt_complexWeierstrassImplicitX
     (by simp) (isInvertible_fderiv_inr_complexWeierstrassEquationSwap W
       (p.2, p.1) hx)
 
+/-- The inverse-function-theorem neighborhood in ambient `ℂ × ℂ` whose
+forward map is `(x, y) ↦ (F(x,y), x)`.  Restricting its zero fiber produces
+the topological chart in the `x`-coordinate. -/
+def complexWeierstrassImplicitYAmbientHomeomorph
+    (W : WeierstrassCurve ℂ) (p : ℂ × ℂ)
+    (hy : complexWeierstrassEquationY W p ≠ 0) :
+    OpenPartialHomeomorph (ℂ × ℂ) (ℂ × ℂ) :=
+  (((contDiff_complexWeierstrassEquation W).contDiffAt.hasStrictFDerivAt
+      (by simp)).implicitFunctionDataOfProdDomain
+        (isInvertible_fderiv_inr_complexWeierstrassEquation W p hy)).toOpenPartialHomeomorph
+
+theorem complexWeierstrassImplicitYAmbientHomeomorph_mem_source
+    (W : WeierstrassCurve ℂ) (p : ℂ × ℂ)
+    (hy : complexWeierstrassEquationY W p ≠ 0) :
+    p ∈ (complexWeierstrassImplicitYAmbientHomeomorph W p hy).source :=
+  ImplicitFunctionData.pt_mem_toOpenPartialHomeomorph_source _
+
+@[simp] theorem complexWeierstrassImplicitYAmbientHomeomorph_apply
+    (W : WeierstrassCurve ℂ) (p q : ℂ × ℂ)
+    (hy : complexWeierstrassEquationY W p ≠ 0) :
+    complexWeierstrassImplicitYAmbientHomeomorph W p hy q =
+      (complexWeierstrassEquation W q, q.1) :=
+  rfl
+
+private def complexWeierstrassImplicitYChartInv
+    (W : WeierstrassCurve ℂ) (p : ℂ × ℂ)
+    (hp : W.toAffine.Equation p.1 p.2)
+    (hy : complexWeierstrassEquationY W p ≠ 0) (x : ℂ) :
+    ComplexWeierstrassAffine W := by
+  classical
+  exact if hx : (0, x) ∈
+      (complexWeierstrassImplicitYAmbientHomeomorph W p hy).target then
+    ⟨(complexWeierstrassImplicitYAmbientHomeomorph W p hy).symm (0, x),
+      (complexWeierstrassEquation_eq_zero_iff W _).1 (by
+        have hright :=
+          (complexWeierstrassImplicitYAmbientHomeomorph W p hy).right_inv hx
+        exact congrArg Prod.fst hright)⟩
+  else ⟨p, hp⟩
+
+private theorem complexWeierstrassImplicitYChartInv_coe_of_mem
+    (W : WeierstrassCurve ℂ) (p : ℂ × ℂ)
+    (hp : W.toAffine.Equation p.1 p.2)
+    (hy : complexWeierstrassEquationY W p ≠ 0) (x : ℂ)
+    (hx : (0, x) ∈
+      (complexWeierstrassImplicitYAmbientHomeomorph W p hy).target) :
+    (complexWeierstrassImplicitYChartInv W p hp hy x : ℂ × ℂ) =
+      (complexWeierstrassImplicitYAmbientHomeomorph W p hy).symm (0, x) := by
+  classical
+  simp [complexWeierstrassImplicitYChartInv, hx]
+
+/-- The zero-fiber restriction of the ambient inverse-function neighborhood is
+an open partial homeomorphism from the affine equation locus to `ℂ`.  It is a
+finite topological chart whose forward map is the `x`-coordinate. -/
+def complexWeierstrassImplicitYChart
+    (W : WeierstrassCurve ℂ) (P : ComplexWeierstrassAffine W)
+    (hy : complexWeierstrassEquationY W P.1 ≠ 0) :
+    OpenPartialHomeomorph (ComplexWeierstrassAffine W) ℂ := by
+  let e := complexWeierstrassImplicitYAmbientHomeomorph W P.1 hy
+  let inv := complexWeierstrassImplicitYChartInv W P.1 P.2 hy
+  refine
+    { toFun := fun Q => Q.1.1
+      invFun := inv
+      source := {Q | Q.1 ∈ e.source}
+      target := {x | (0, x) ∈ e.target}
+      map_source' := ?_
+      map_target' := ?_
+      left_inv' := ?_
+      right_inv' := ?_
+      open_source := ?_
+      open_target := ?_
+      continuousOn_toFun := ?_
+      continuousOn_invFun := ?_ }
+  · intro Q hQ
+    change (0, Q.1.1) ∈ e.target
+    have hm := e.map_source hQ
+    have hzero : complexWeierstrassEquation W Q.1 = 0 :=
+      (complexWeierstrassEquation_eq_zero_iff W Q.1).2 Q.2
+    simpa [e, hzero] using hm
+  · intro x hx
+    change (inv x).1 ∈ e.source
+    rw [complexWeierstrassImplicitYChartInv_coe_of_mem W P.1 P.2 hy x hx]
+    exact e.map_target hx
+  · intro Q hQ
+    apply Subtype.ext
+    change (inv Q.1.1).1 = Q.1
+    have ht : (0, Q.1.1) ∈ e.target := by
+      have hm := e.map_source hQ
+      have hzero : complexWeierstrassEquation W Q.1 = 0 :=
+        (complexWeierstrassEquation_eq_zero_iff W Q.1).2 Q.2
+      simpa [e, hzero] using hm
+    rw [complexWeierstrassImplicitYChartInv_coe_of_mem W P.1 P.2 hy _ ht]
+    have hleft := e.left_inv hQ
+    have hzero : complexWeierstrassEquation W Q.1 = 0 :=
+      (complexWeierstrassEquation_eq_zero_iff W Q.1).2 Q.2
+    simpa [e, hzero] using hleft
+  · intro x hx
+    rw [complexWeierstrassImplicitYChartInv_coe_of_mem W P.1 P.2 hy x hx]
+    have hright := e.right_inv hx
+    exact congrArg Prod.snd hright
+  · exact continuous_subtype_val.fst.continuousOn
+  · rw [continuousOn_iff_continuous_restrict]
+    let inc : {x : ℂ | (0, x) ∈ e.target} → ℂ × ℂ := fun x => (0, x.1)
+    have hinc : Continuous inc := continuous_const.prodMk continuous_subtype_val
+    have hamb : Continuous (fun x => e.symm (inc x)) :=
+      e.continuousOn_symm.comp_continuous hinc (fun x => x.2)
+    let g : {x : ℂ | (0, x) ∈ e.target} → ComplexWeierstrassAffine W :=
+      fun x => ⟨e.symm (inc x),
+        (complexWeierstrassEquation_eq_zero_iff W _).1 (by
+          have hright := e.right_inv x.2
+          exact congrArg Prod.fst hright)⟩
+    have hg : Continuous g := Continuous.subtype_mk hamb _
+    have heq : {x : ℂ | (0, x) ∈ e.target}.restrict inv = g := by
+      funext x
+      apply Subtype.ext
+      exact complexWeierstrassImplicitYChartInv_coe_of_mem
+        W P.1 P.2 hy x.1 x.2
+    rw [heq]
+    exact hg
+  · exact e.open_source.preimage continuous_subtype_val
+  · exact e.open_target.preimage (continuous_const.prodMk continuous_id)
+
+@[simp] theorem complexWeierstrassImplicitYChart_apply
+    (W : WeierstrassCurve ℂ) (P Q : ComplexWeierstrassAffine W)
+    (hy : complexWeierstrassEquationY W P.1 ≠ 0) :
+    complexWeierstrassImplicitYChart W P hy Q = Q.1.1 :=
+  rfl
+
+theorem complexWeierstrassImplicitYChart_mem_source
+    (W : WeierstrassCurve ℂ) (P : ComplexWeierstrassAffine W)
+    (hy : complexWeierstrassEquationY W P.1 ≠ 0) :
+    P ∈ (complexWeierstrassImplicitYChart W P hy).source :=
+  complexWeierstrassImplicitYAmbientHomeomorph_mem_source W P.1 hy
+
+/-- The inverse-function-theorem neighborhood for the swapped equation.  Its
+forward map is `(y, x) ↦ (F(x,y), y)`. -/
+def complexWeierstrassImplicitXAmbientHomeomorph
+    (W : WeierstrassCurve ℂ) (p : ℂ × ℂ)
+    (hx : complexWeierstrassEquationX W p ≠ 0) :
+    OpenPartialHomeomorph (ℂ × ℂ) (ℂ × ℂ) :=
+  (((contDiff_complexWeierstrassEquationSwap W).contDiffAt.hasStrictFDerivAt
+      (by simp)).implicitFunctionDataOfProdDomain
+        (isInvertible_fderiv_inr_complexWeierstrassEquationSwap W
+          (p.2, p.1) hx)).toOpenPartialHomeomorph
+
+theorem complexWeierstrassImplicitXAmbientHomeomorph_mem_source
+    (W : WeierstrassCurve ℂ) (p : ℂ × ℂ)
+    (hx : complexWeierstrassEquationX W p ≠ 0) :
+    (p.2, p.1) ∈
+      (complexWeierstrassImplicitXAmbientHomeomorph W p hx).source :=
+  ImplicitFunctionData.pt_mem_toOpenPartialHomeomorph_source _
+
+@[simp] theorem complexWeierstrassImplicitXAmbientHomeomorph_apply
+    (W : WeierstrassCurve ℂ) (p q : ℂ × ℂ)
+    (hx : complexWeierstrassEquationX W p ≠ 0) :
+    complexWeierstrassImplicitXAmbientHomeomorph W p hx q =
+      (complexWeierstrassEquationSwap W q, q.1) :=
+  rfl
+
+private def complexWeierstrassImplicitXChartInv
+    (W : WeierstrassCurve ℂ) (p : ℂ × ℂ)
+    (hp : W.toAffine.Equation p.1 p.2)
+    (hx : complexWeierstrassEquationX W p ≠ 0) (y : ℂ) :
+    ComplexWeierstrassAffine W := by
+  classical
+  let e := complexWeierstrassImplicitXAmbientHomeomorph W p hx
+  exact if hy : (0, y) ∈ e.target then
+    ⟨((e.symm (0, y)).2, (e.symm (0, y)).1),
+      (complexWeierstrassEquation_eq_zero_iff W _).1 (by
+        change complexWeierstrassEquationSwap W (e.symm (0, y)) = 0
+        have hright := e.right_inv hy
+        exact congrArg Prod.fst hright)⟩
+  else ⟨p, hp⟩
+
+private theorem complexWeierstrassImplicitXChartInv_coe_of_mem
+    (W : WeierstrassCurve ℂ) (p : ℂ × ℂ)
+    (hp : W.toAffine.Equation p.1 p.2)
+    (hx : complexWeierstrassEquationX W p ≠ 0) (y : ℂ)
+    (hy : (0, y) ∈
+      (complexWeierstrassImplicitXAmbientHomeomorph W p hx).target) :
+    (complexWeierstrassImplicitXChartInv W p hp hx y : ℂ × ℂ) =
+      (((complexWeierstrassImplicitXAmbientHomeomorph W p hx).symm (0, y)).2,
+       ((complexWeierstrassImplicitXAmbientHomeomorph W p hx).symm (0, y)).1) := by
+  classical
+  simp [complexWeierstrassImplicitXChartInv, hy]
+
+/-- The zero-fiber restriction in the other coordinate direction.  This is an
+open partial homeomorphism from the affine equation locus to `ℂ` whose forward
+map is the `y`-coordinate. -/
+def complexWeierstrassImplicitXChart
+    (W : WeierstrassCurve ℂ) (P : ComplexWeierstrassAffine W)
+    (hx : complexWeierstrassEquationX W P.1 ≠ 0) :
+    OpenPartialHomeomorph (ComplexWeierstrassAffine W) ℂ := by
+  let e := complexWeierstrassImplicitXAmbientHomeomorph W P.1 hx
+  let inv := complexWeierstrassImplicitXChartInv W P.1 P.2 hx
+  refine
+    { toFun := fun Q => Q.1.2
+      invFun := inv
+      source := {Q | (Q.1.2, Q.1.1) ∈ e.source}
+      target := {y | (0, y) ∈ e.target}
+      map_source' := ?_
+      map_target' := ?_
+      left_inv' := ?_
+      right_inv' := ?_
+      open_source := ?_
+      open_target := ?_
+      continuousOn_toFun := ?_
+      continuousOn_invFun := ?_ }
+  · intro Q hQ
+    change (0, Q.1.2) ∈ e.target
+    have hm := e.map_source hQ
+    have hzero : complexWeierstrassEquationSwap W (Q.1.2, Q.1.1) = 0 :=
+      (complexWeierstrassEquation_eq_zero_iff W Q.1).2 Q.2
+    simpa [e, hzero] using hm
+  · intro y hy
+    change ((inv y).1.2, (inv y).1.1) ∈ e.source
+    rw [complexWeierstrassImplicitXChartInv_coe_of_mem W P.1 P.2 hx y hy]
+    simpa using e.map_target hy
+  · intro Q hQ
+    apply Subtype.ext
+    change (inv Q.1.2).1 = Q.1
+    have ht : (0, Q.1.2) ∈ e.target := by
+      have hm := e.map_source hQ
+      have hzero : complexWeierstrassEquationSwap W (Q.1.2, Q.1.1) = 0 :=
+        (complexWeierstrassEquation_eq_zero_iff W Q.1).2 Q.2
+      simpa [e, hzero] using hm
+    rw [complexWeierstrassImplicitXChartInv_coe_of_mem W P.1 P.2 hx _ ht]
+    have hleft := e.left_inv hQ
+    have hzero : complexWeierstrassEquationSwap W (Q.1.2, Q.1.1) = 0 :=
+      (complexWeierstrassEquation_eq_zero_iff W Q.1).2 Q.2
+    have hpair : e.symm (0, Q.1.2) = (Q.1.2, Q.1.1) := by
+      simpa [e, hzero] using hleft
+    rw [hpair]
+  · intro y hy
+    rw [complexWeierstrassImplicitXChartInv_coe_of_mem W P.1 P.2 hx y hy]
+    have hright := e.right_inv hy
+    exact congrArg Prod.snd hright
+  · exact continuous_subtype_val.snd.continuousOn
+  · rw [continuousOn_iff_continuous_restrict]
+    let inc : {y : ℂ | (0, y) ∈ e.target} → ℂ × ℂ := fun y => (0, y.1)
+    have hinc : Continuous inc := continuous_const.prodMk continuous_subtype_val
+    have hamb : Continuous (fun y => e.symm (inc y)) :=
+      e.continuousOn_symm.comp_continuous hinc (fun y => y.2)
+    have hswap : Continuous (fun y => ((e.symm (inc y)).2, (e.symm (inc y)).1)) :=
+      hamb.snd.prodMk hamb.fst
+    let g : {y : ℂ | (0, y) ∈ e.target} → ComplexWeierstrassAffine W :=
+      fun y => ⟨((e.symm (inc y)).2, (e.symm (inc y)).1),
+        (complexWeierstrassEquation_eq_zero_iff W _).1 (by
+          change complexWeierstrassEquationSwap W (e.symm (inc y)) = 0
+          have hright := e.right_inv y.2
+          exact congrArg Prod.fst hright)⟩
+    have hg : Continuous g := Continuous.subtype_mk hswap _
+    have heq : {y : ℂ | (0, y) ∈ e.target}.restrict inv = g := by
+      funext y
+      apply Subtype.ext
+      exact complexWeierstrassImplicitXChartInv_coe_of_mem
+        W P.1 P.2 hx y.1 y.2
+    rw [heq]
+    exact hg
+  · exact e.open_source.preimage
+      (continuous_subtype_val.snd.prodMk continuous_subtype_val.fst)
+  · exact e.open_target.preimage (continuous_const.prodMk continuous_id)
+
+@[simp] theorem complexWeierstrassImplicitXChart_apply
+    (W : WeierstrassCurve ℂ) (P Q : ComplexWeierstrassAffine W)
+    (hx : complexWeierstrassEquationX W P.1 ≠ 0) :
+    complexWeierstrassImplicitXChart W P hx Q = Q.1.2 :=
+  rfl
+
+theorem complexWeierstrassImplicitXChart_mem_source
+    (W : WeierstrassCurve ℂ) (P : ComplexWeierstrassAffine W)
+    (hx : complexWeierstrassEquationX W P.1 ≠ 0) :
+    P ∈ (complexWeierstrassImplicitXChart W P hx).source :=
+  complexWeierstrassImplicitXAmbientHomeomorph_mem_source W P.1 hx
+
 /-- At every finite point of a nonsingular complex Weierstrass equation, one
 of the two analytic implicit-coordinate constructions applies. -/
 theorem complexWeierstrassAffine_derivative_ne_zero
@@ -321,9 +597,29 @@ theorem complexWeierstrassAffine_derivative_ne_zero
   simpa [complexWeierstrassEquationX_eq_polynomialX,
     complexWeierstrassEquationY_eq_polynomialY] using hns.2
 
+/-- Every finite point is contained in the source of one of the two explicit
+open partial homeomorphisms to `ℂ`.  Their forward maps are the corresponding
+coordinate projections, so their topology is the existing subtype topology.
+This is the topological chart layer; holomorphic transition packaging is still
+separate. -/
+theorem complexWeierstrassAffine_exists_openPartialHomeomorph
+    (W : WeierstrassCurve ℂ) [W.IsElliptic]
+    (P : ComplexWeierstrassAffine W) :
+    (∃ hy : complexWeierstrassEquationY W P.1 ≠ 0,
+      P ∈ (complexWeierstrassImplicitYChart W P hy).source ∧
+      ∀ Q, complexWeierstrassImplicitYChart W P hy Q = Q.1.1) ∨
+    (∃ hx : complexWeierstrassEquationX W P.1 ≠ 0,
+      P ∈ (complexWeierstrassImplicitXChart W P hx).source ∧
+      ∀ Q, complexWeierstrassImplicitXChart W P hx Q = Q.1.2) := by
+  rcases complexWeierstrassAffine_derivative_ne_zero W P with hx | hy
+  · exact Or.inr ⟨hx, complexWeierstrassImplicitXChart_mem_source W P hx,
+      fun Q => complexWeierstrassImplicitXChart_apply W P Q hx⟩
+  · exact Or.inl ⟨hy, complexWeierstrassImplicitYChart_mem_source W P hy,
+      fun Q => complexWeierstrassImplicitYChart_apply W P Q hy⟩
+
 /-- Every finite curve point admits an honest complex-analytic graph germ in
-one of the two coordinate directions.  This packages the output needed to
-construct the eventual finite chart, without pretending that an atlas has
+one of the two coordinate directions.  This packages the analytic output next
+to the open topological charts, without pretending that a complex atlas has
 already been assembled. -/
 theorem complexWeierstrassAffine_exists_analytic_graph_germ
     (W : WeierstrassCurve ℂ) [W.IsElliptic]
