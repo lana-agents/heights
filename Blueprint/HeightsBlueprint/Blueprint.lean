@@ -167,7 +167,8 @@ $`\wp(z)=\wp(w)` exactly when $`z\equiv w` or $`z\equiv-w\pmod L`, and the
 ordered pair $`(\wp,\wp')` separates classes modulo $`L`.
 
 This is the injective half of the analytic parameterization, not the
-Weierstrass addition theorem or surjectivity onto the curve.
+Weierstrass addition theorem. The successor Liouville argument proves the
+complementary value-existence and curve-point surjectivity statements.
 
 *Status: proved unconditionally away from the period lattice.*
 :::
@@ -186,7 +187,7 @@ analytic or group-theoretic conclusion.
 *Status: proved unconditionally on the complement of the lattice.*
 :::
 
-:::proposition "prop:lattice-quotient-point-map" (uses := "prop:lattice-affine-point-map, prop:weierstrass-fibers") (lean := "Heights.latticePointMap, Heights.latticePointMap_of_mem, Heights.latticePointMap_of_notMem, Heights.latticePointMap_add_lattice, Heights.LatticeQuotient, Heights.latticeQuotientPointMap, Heights.latticeQuotientPointMap_mk, Heights.latticePointMap_zero, Heights.latticePointMap_neg, Heights.latticeQuotientPointMap_zero, Heights.latticeQuotientPointMap_neg, Heights.latticePointMap_eq_iff_sub_mem, Heights.latticeQuotientPointMap_injective")
+:::proposition "prop:lattice-quotient-point-map" (uses := "prop:lattice-affine-point-map, prop:weierstrass-fibers") (lean := "Heights.latticePointMap, Heights.latticePointMap_of_mem, Heights.latticePointMap_of_notMem, Heights.latticePointMap_add_lattice, Heights.LatticeQuotient, Heights.latticeQuotientPointMap, Heights.latticeQuotientPointMap_mk, Heights.latticePointMap_zero, Heights.latticePointMap_neg, Heights.latticeQuotientPointMap_zero, Heights.latticeQuotientPointMap_neg, Heights.latticePointMap_eq_iff_sub_mem, Heights.latticeQuotientPointMap_injective, Heights.exists_notMem_lattice_weierstrassP_eq, Heights.weierstrassP_surjective, Heights.latticePointMap_surjective, Heights.latticeQuotientPointMap_surjective")
 The point-valued Weierstrass map is extended to all of $`\mathbb C`: lattice
 elements are sent to the distinguished point at infinity and non-lattice
 elements retain the point $`(\wp(z),\wp'(z)/2)`. The total map is invariant
@@ -196,14 +197,20 @@ representative. Evenness of $`\wp` and oddness of $`\wp'` also prove that the
 origin maps to infinity and complex negation agrees with elliptic-curve
 negation, before and after descent. The fiber theorem further proves that the
 total map identifies exactly points differing by a period, so the descended
-map is injective.
+map is injective. For surjectivity, if `℘` omitted a finite value `a`, then
+`1/(℘-a)`, extended by zero at the lattice, would be an entire doubly-periodic
+function. Compactness of a fundamental parallelogram and Liouville's theorem
+make it constant, contradicting its nonzero value away from the lattice. Thus
+`℘` attains every finite value away from its poles. The curve equation and the
+two possible signs of `℘′` then prove that both the total and descended point
+maps are surjective.
 
 The descent is not yet a group homomorphism: compatibility with addition has
-not been proved. Surjectivity, hence bijectivity and complex-torus equivalence,
-and uniformization of arbitrary curves also remain open.
+not been proved. Analytic equivalence and uniformization of arbitrary curves
+also remain open.
 
 *Status: total extension, set-theoretic quotient descent, zero/negation
-compatibility, and injectivity are proved unconditionally for the explicit
+compatibility, and bijectivity are proved unconditionally for the explicit
 lattice curve.*
 :::
 
@@ -229,9 +236,10 @@ $`\mathbb C`. Mathlib's compact-range theorem for continuous lattice-periodic
 maps applies to the canonical projection; because that projection is
 surjective, its compact range is the whole quotient $`\mathbb C/L`.
 
-This compactness concerns only the source topology. It does not establish
-injectivity or bijectivity of the descended point map, compatibility with
-addition, a homeomorphism, analyticity, or uniformization.
+This compactness concerns only the source topology. Later results combine it
+with continuity and the now-proved bijectivity of the descended point map to
+obtain a homeomorphism; compatibility with addition, analyticity, and
+arbitrary-curve uniformization remain separate.
 
 *Status: the explicit complex lattice quotient is proved compact
 unconditionally.*
@@ -248,9 +256,10 @@ point space is compact and $`T_4` (in particular Hausdorff and regular), and
 its affine chart is an open embedding.
 
 No topology is installed on arbitrary elliptic-curve point types. In
-particular, this does not prove continuity or analyticity of the descended
-Weierstrass point map at the pole, continuity of the group law, a homeomorphism
-$`\mathbb C/L\simeq E_\tau(\mathbb C)`, or arbitrary-curve uniformization.
+particular, this construction alone does not prove continuity or analyticity
+of the descended Weierstrass point map at the pole, continuity of the group
+law, or arbitrary-curve uniformization. The later point-map theorem combines
+this topology with bijectivity to obtain the stated homeomorphism.
 
 *Status: the conservative compact Hausdorff target topology is packaged
 unconditionally for the explicit lattice curve; analytic uniformization
@@ -274,7 +283,7 @@ lattice curve; the successor `prop:lattice-point-map-continuity` supplies
 continuity at infinity.*
 :::
 
-:::proposition "prop:lattice-point-map-continuity" (uses := "prop:lattice-affine-point-continuity, prop:lattice-quotient-topology, prop:lattice-quotient-compactness") (lean := "Heights.latticeCurvePointMap, Heights.latticeCurvePointMap_eq, Heights.tendsto_weierstrassP_cocompact_at_lattice, Heights.tendsto_latticeCurvePointMap_homeomorph_at_lattice, Heights.continuousAt_latticeCurvePointMap_of_mem, Heights.continuous_latticeCurvePointMap, Heights.latticeQuotientCurvePointMap, Heights.latticeQuotientCurvePointMap_mk, Heights.continuous_latticeQuotientCurvePointMap, Heights.isClosedEmbedding_latticeQuotientCurvePointMap")
+:::proposition "prop:lattice-point-map-continuity" (uses := "prop:lattice-affine-point-continuity, prop:lattice-quotient-topology, prop:lattice-quotient-compactness, prop:lattice-quotient-point-map") (lean := "Heights.latticeCurvePointMap, Heights.latticeCurvePointMap_eq, Heights.tendsto_weierstrassP_cocompact_at_lattice, Heights.tendsto_latticeCurvePointMap_homeomorph_at_lattice, Heights.continuousAt_latticeCurvePointMap_of_mem, Heights.continuous_latticeCurvePointMap, Heights.latticeQuotientCurvePointMap, Heights.latticeQuotientCurvePointMap_mk, Heights.continuous_latticeQuotientCurvePointMap, Heights.isClosedEmbedding_latticeQuotientCurvePointMap, Heights.latticeQuotientCurvePointHomeomorph, Heights.latticeQuotientCurvePointHomeomorph_apply")
 At each period-lattice point, the order-two pole theorem for $`\wp` shows that
 its first coordinate leaves every compact subset of $`\mathbb C`. The first-
 coordinate image of a compact subset of the affine equation locus is compact,
@@ -284,15 +293,17 @@ continuity, this proves the total map $`\mathbb C\to E_\tau(\mathbb C)` is
 continuous. The quotient-map criterion then proves continuity of its descent
 $`\mathbb C/L\to E_\tau(\mathbb C)`. Since the fiber theorem makes this descent
 injective, compactness of the source and Hausdorffness of the target strengthen
-it to a closed topological embedding.
+it to a closed topological embedding. The Liouville surjectivity theorem then
+makes this embedding onto, yielding a homeomorphism
+$`\mathbb C/L\simeq E_\tau(\mathbb C)` for the explicitly attached curve.
 
 This is a topological result for the explicit lattice curve. It does not prove
-analyticity across infinity, compatibility with addition, surjectivity, a
-complex-torus equivalence, or uniformization of arbitrary algebraic curves.
+analyticity across infinity, compatibility with addition, or uniformization of
+an arbitrary algebraic complex elliptic curve.
 
-*Status: continuity and closed-embedding status of the descended explicit
-lattice point map are proved unconditionally; the remaining uniformization
-properties remain open.*
+*Status: continuity, bijectivity, closed-embedding status, and the resulting
+topological equivalence are proved unconditionally for the descended explicit
+lattice point map; the analytic and group-theoretic properties remain open.*
 :::
 
 :::proposition "prop:weighted-log-log" (lean := "Heights.weightedLogOneAdd_le, Heights.infinitePlaceWeightedLogOneAdd_bounds, Heights.infinitePlacePosLogAverage_le_normalizedLogHeight, Heights.infinitePlaceLogLogMax_bounds")

@@ -112,10 +112,16 @@ values differ by a period up to sign. Consequently
 `Heights/LatticePointMapInjectivity.lean` proves that the total map identifies
 exactly period translates and that the descended map `ℂ/L → Eτ(ℂ)` is
 injective. Compactness of the source and Hausdorffness of the target then make
-the continuous descended map a closed topological embedding. The Weierstrass
-addition formula itself, analytic extension across
-infinity, compatibility with addition, surjectivity, complex-torus
-equivalence, and arbitrary-curve uniformization have not been proved.
+the continuous descended map a closed topological embedding.
+`Heights/WeierstrassSurjectivity.lean` proves the complementary existence
+result by Liouville's theorem: if `℘` omitted `a`, the reciprocal of `℘ - a`,
+extended by zero at the lattice, would be entire, doubly periodic, bounded, and
+constant. Hence `℘` attains every finite value away from the lattice; the curve
+equation and the two signs of `℘′` make the total and descended point maps
+surjective. The closed embedding is therefore packaged as a homeomorphism
+`ℂ/L ≃ₜ Eτ(ℂ)`. The Weierstrass addition formula itself, analytic extension
+across infinity, compatibility with addition, and arbitrary-curve
+uniformization have not been proved.
 
 ### Modular forms and the fundamental domain
 
@@ -210,19 +216,25 @@ result.
    and the pole order to prove the exact fibers of `℘` and `(℘,℘′)`; hence
    `Heights/LatticePointMapInjectivity.lean` proves injectivity after quotient
    descent and packages the continuous map as a closed embedding using the
-   compact/Hausdorff topology already constructed. Still missing: the addition
-   formula itself, analytic extension,
-   compatibility with addition, surjectivity, and analyticity of the descended
-   map.
+   compact/Hausdorff topology already constructed.
+   `Heights/WeierstrassSurjectivity.lean` proves finite-value existence for
+   `℘` by extending `1/(℘-a)` across the lattice and applying periodic
+   boundedness plus Liouville, derives surjectivity of the total and descended
+   curve-point maps, and packages the continuous bijection as a homeomorphism.
+   Still missing: the addition formula itself, analytic extension,
+   compatibility with addition, and analyticity of the descended map.
 4. In the converse direction, obtain a lattice from an arbitrary algebraic
    complex elliptic curve (normally via periods of a holomorphic differential
    or an inverse elliptic integral), then identify the resulting curve using
    the same-`j` theorem.
 
 Mathlib has generic quotient-group infrastructure, but the pinned elliptic
-files contain no complex-torus object carrying the required analytic/group
-structure and no descended `℘` equivalence. Steps 3 and 4 therefore require
-major new infrastructure, not glue code.
+files contain no complex-torus object carrying the required analytic structure.
+This repository now supplies a descended topological equivalence for the
+explicit lattice curve, but not its compatibility with the existing group law
+or an analytic equivalence. Those remaining parts of step 3, and especially
+the arbitrary-curve converse in step 4, still require substantial new
+infrastructure rather than glue code.
 
 ## 4. Judgment
 
@@ -241,11 +253,12 @@ and if the formula-defined height is eventually to be related to a genuine
 Faltings height. The compact source quotient topology, a conservative compact
 Hausdorff one-point-compactification topology on the explicit target,
 continuity of the total and descended point maps, their zero/negation
-compatibility, the second-order Weierstrass ODE, the exact Weierstrass fibers,
-and closed-embedding status of the descended map are now available, but they do not resolve
-the addition formula, analytic extension, compatibility with addition,
-surjectivity, or the uniformization gap. Until one
-route lands, the comparison over every number field correctly
+compatibility, the second-order Weierstrass ODE, exact Weierstrass fibers,
+surjectivity, and a homeomorphism from the quotient to the explicit lattice
+curve are now available. They do not resolve the addition formula, analytic
+extension, compatibility with addition, arbitrary-curve uniformization, or
+modular-`j` surjectivity. Until one certificate-level route lands, the
+comparison over every number field correctly
 retains `ArchimedeanPeriodData K W` as its sole remaining realization
 certificate; global minimal-discriminant data is now constructed
 unconditionally.

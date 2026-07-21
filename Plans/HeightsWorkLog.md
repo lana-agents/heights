@@ -413,3 +413,26 @@ result toward #155, not the Weierstrass addition formula: addition
 compatibility, the group-homomorphism package, surjectivity, and uniformization
 remain open. The now-separable surjectivity half of the explicit quotient map
 was filed as ready-to-clanck #159.
+
+## Autonomous run 18 — 2026-07-21
+
+The explicit lattice-curve surjectivity gap #159 is now solved in
+`Heights/WeierstrassSurjectivity.lean`. For any proposed omitted value `a`, the
+proof extends `1/(℘-a)` by zero at the period lattice. The order-two pole theorem
+makes this extension analytic at every lattice point; away from the lattice the
+omitted-value assumption makes the reciprocal analytic. Periodicity and
+mathlib's compact-range theorem make the entire function bounded, so
+Liouville's theorem makes it constant, contradicting its zero value at the
+lattice and nonzero value at a half-period. Thus `℘` attains every complex
+value away from its poles.
+
+The short Weierstrass equation then shows that every affine curve point occurs:
+a preimage of its `x`-coordinate has derivative sign `2y` or `-2y`, and
+negating the parameter handles the second case. Consequently the total and
+descended lattice point maps are surjective. Combined with run 17's
+injectivity, continuity, compact source, and Hausdorff target, the descended
+map is packaged as `latticeQuotientCurvePointHomeomorph : ℂ/L ≃ₜ Eτ(ℂ)`.
+This is an honest topological uniformization of the explicit lattice curve,
+not yet an analytic equivalence or group isomorphism. Addition compatibility
+remains #155, while arbitrary-curve uniformization and modular-`j` surjectivity
+(#128) remain open.
