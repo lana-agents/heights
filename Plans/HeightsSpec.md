@@ -363,9 +363,10 @@ large.
    to a named wrapper of the explicit target point type using closedness and
    local compactness of its affine equation locus. The order-two pole of `℘`
    proves convergence to infinity at every lattice point, so both the total map
-   and its quotient descent are continuous. It still does not prove analytic
-   extension across infinity, group-law compatibility, bijectivity, or a
-   complex-torus equivalence. For the current, deliberately
+   and its quotient descent are continuous. Parity of `℘` and `℘′` proves the
+   map preserves zero and negation before and after descent. It still does not
+   prove analytic extension across infinity, compatibility with addition,
+   bijectivity, or a complex-torus equivalence. For the current, deliberately
    weak `ArchimedeanPeriodData` interface,
    this repository proves that surjectivity of `modularJ` alone would suffice;
    that surjectivity theorem is also absent.

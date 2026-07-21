@@ -166,20 +166,22 @@ analytic or group-theoretic conclusion.
 *Status: proved unconditionally on the complement of the lattice.*
 :::
 
-:::proposition "prop:lattice-quotient-point-map" (uses := "prop:lattice-affine-point-map") (lean := "Heights.latticePointMap, Heights.latticePointMap_of_mem, Heights.latticePointMap_of_notMem, Heights.latticePointMap_add_lattice, Heights.LatticeQuotient, Heights.latticeQuotientPointMap, Heights.latticeQuotientPointMap_mk")
+:::proposition "prop:lattice-quotient-point-map" (uses := "prop:lattice-affine-point-map") (lean := "Heights.latticePointMap, Heights.latticePointMap_of_mem, Heights.latticePointMap_of_notMem, Heights.latticePointMap_add_lattice, Heights.LatticeQuotient, Heights.latticeQuotientPointMap, Heights.latticeQuotientPointMap_mk, Heights.latticePointMap_zero, Heights.latticePointMap_neg, Heights.latticeQuotientPointMap_zero, Heights.latticeQuotientPointMap_neg")
 The point-valued Weierstrass map is extended to all of $`\mathbb C`: lattice
 elements are sent to the distinguished point at infinity and non-lattice
 elements retain the point $`(\wp(z),\wp'(z)/2)`. The total map is invariant
 under lattice translation, so quotient lifting gives a well-defined function
 $`\mathbb C/L\to E_\tau(\mathbb C)` that computes as the total map on every
-representative.
+representative. Evenness of $`\wp` and oddness of $`\wp'` also prove that the
+origin maps to infinity and complex negation agrees with elliptic-curve
+negation, before and after descent.
 
-This descent is purely set-theoretic. No continuity or analyticity at the
-poles, compatibility with the elliptic-curve group law, bijectivity, complex-
-torus equivalence, or uniformization of arbitrary curves is claimed.
+The descent is not yet a group homomorphism: compatibility with addition has
+not been proved. No claim of bijectivity, complex-torus equivalence, or
+uniformization of arbitrary curves is made here.
 
-*Status: total extension and set-theoretic quotient descent proved
-unconditionally for the explicit lattice curve.*
+*Status: total extension, set-theoretic quotient descent, and zero/negation
+compatibility are proved unconditionally for the explicit lattice curve.*
 :::
 
 :::proposition "prop:lattice-quotient-topology" (uses := "prop:lattice-quotient-point-map") (lean := "Heights.latticeQuotientMk, Heights.continuous_latticeQuotientMk, Heights.isOpenMap_latticeQuotientMk, Heights.isQuotientMap_latticeQuotientMk, Heights.latticeQuotientT1Space, Heights.latticeQuotient_nhds_mk")
@@ -205,8 +207,8 @@ maps applies to the canonical projection; because that projection is
 surjective, its compact range is the whole quotient $`\mathbb C/L`.
 
 This compactness concerns only the source topology. It does not establish
-injectivity or bijectivity of the descended point map, compatibility with the
-group laws, a homeomorphism, analyticity, or uniformization.
+injectivity or bijectivity of the descended point map, compatibility with
+addition, a homeomorphism, analyticity, or uniformization.
 
 *Status: the explicit complex lattice quotient is proved compact
 unconditionally.*
@@ -260,8 +262,8 @@ continuous. The quotient-map criterion then proves continuity of its descent
 $`\mathbb C/L\to E_\tau(\mathbb C)`.
 
 This is a topological result for the explicit lattice curve. It does not prove
-analyticity across infinity, compatibility with either group law, bijectivity,
-a complex-torus equivalence, or uniformization of arbitrary algebraic curves.
+analyticity across infinity, compatibility with addition, bijectivity, a
+complex-torus equivalence, or uniformization of arbitrary algebraic curves.
 
 *Status: continuity of the total and descended explicit lattice point maps is
 proved unconditionally; the remaining uniformization properties remain open.*

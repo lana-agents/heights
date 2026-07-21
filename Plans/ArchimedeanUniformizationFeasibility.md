@@ -99,7 +99,9 @@ lattice, using differentiability of `℘` and `℘′`.  The successor
 to prove that the affine coordinates leave every compact set near a lattice
 point.  Thus the total map is continuous into the one-point compactification,
 and the quotient-map criterion proves its descent `ℂ/L → Eτ(ℂ)` continuous.
-Analytic extension across infinity, group-law compatibility, bijectivity,
+`Heights/LatticePointMapNegation.lean` proves that zero and negation are
+preserved before and after descent, using parity of `℘` and `℘′`. Analytic
+extension across infinity, compatibility with addition, bijectivity,
 complex-torus equivalence, and arbitrary-curve uniformization have not been
 proved.
 
@@ -189,8 +191,9 @@ result.
    and regular), and its affine chart is an open embedding.  The pole-free
    point map is continuous into that chart; the order-two pole of `℘` proves
    convergence to infinity at lattice points, hence continuity of the total
-   and descended maps.  Still missing: prove analytic extension, group-law
-   compatibility, bijectivity, and analyticity of the descended map.
+   and descended maps, and prove compatibility with zero and negation. Still
+   missing: prove analytic extension, compatibility with addition, bijectivity,
+   and analyticity of the descended map.
 4. In the converse direction, obtain a lattice from an arbitrary algebraic
    complex elliptic curve (normally via periods of a holomorphic differential
    or an inverse elliptic integral), then identify the resulting curve using
@@ -216,10 +219,11 @@ the shortest path to the repository's present headline theorem; Route B is the
 right long-term path if “period data” is to carry its full geometric meaning
 and if the formula-defined height is eventually to be related to a genuine
 Faltings height. The compact source quotient topology, a conservative compact
-Hausdorff one-point-compactification topology on the explicit target, and
-continuity of the total and descended point maps are now available, but they do
-not resolve analytic extension, group-law compatibility, bijectivity, or the
-uniformization gap. Until one route lands, the comparison over every number field correctly
+Hausdorff one-point-compactification topology on the explicit target,
+continuity of the total and descended point maps, and their zero/negation
+compatibility are now available, but they do not resolve analytic extension,
+compatibility with addition, bijectivity, or the uniformization gap. Until one
+route lands, the comparison over every number field correctly
 retains `ArchimedeanPeriodData K W` as its sole remaining realization
 certificate; global minimal-discriminant data is now constructed
 unconditionally.

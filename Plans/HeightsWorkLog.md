@@ -376,3 +376,10 @@ record the completed arithmetic branch. Full `LAKE_JOBS=6
 ./scripts/ci-checks.sh` passes with 344 public declarations audited, all within
 `{propext, Quot.sound, Classical.choice}`. Taxis #56 was closed; #128/#57 remain
 the hard archimedean front.
+
+The run also landed the first genuine algebraic compatibility of the explicit
+uniformization map in `3162f06`. `LatticePointMapNegation.lean` uses evenness of
+`℘` and oddness of `℘′` to prove that the total and descended maps preserve zero
+and negation. It deliberately does not package a group homomorphism: the
+addition theorem remains open and was filed as standalone ready-to-clanck issue
+#155. CI passes with 349 audited declarations after this slice.
