@@ -481,3 +481,22 @@ theorem: ODE uniqueness has not yet identified the candidates locally with
 `(℘(z+w),℘′(z+w)/2)`, and no identity theorem has globalized that comparison.
 Consequently the point map is still not claimed to preserve addition or
 packaged as a group isomorphism.
+
+## Autonomous run 22 — 2026-07-21
+
+Run 22 closes #155. `Heights/WeierstrassAddition.lean` proves the local
+addition identity by real ODE uniqueness and the complex identity principle,
+then globalizes it on the connected complement of a countable exceptional set.
+The resulting theorem identifies both secant coordinates with
+`(℘(z+w), ℘′(z+w)/2)` whenever the secant is nonvertical.
+
+`Heights/LatticePointMapAddition.lean` matches those coordinates with
+mathlib's affine elliptic-curve addition. For doubling, it chooses an auxiliary
+parameter outside a countable union of lattice translates and reduces the
+tangent case to three already-proved nonvertical secants. Pole, inverse, and
+period cases are then handled separately. The total point map preserves every
+addition, and the bijective descended map is packaged as
+`latticeQuotientPointMapAddEquiv : ℂ/L ≃+ Eτ(ℂ)`. This is a genuine additive
+uniformization of the explicit lattice curve, not a claim of an analytic
+Lie-group equivalence or arbitrary-curve uniformization. Full CI, trust, axiom,
+and Blueprint checks pass with 430 audited declarations.

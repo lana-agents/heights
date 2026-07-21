@@ -4,6 +4,7 @@ import Heights.LatticeEisenstein
 import Heights.WeierstrassPrincipalPart
 import Heights.WeierstrassDifferential
 import Heights.WeierstrassAdditionDifferential
+import Heights.WeierstrassAddition
 import Heights.WeierstrassFibers
 import Heights.LatticeWeierstrass
 import Heights.LatticeAffinePoint
@@ -15,6 +16,7 @@ import Heights.LatticeAffinePointTopology
 import Heights.LatticePointMapTopology
 import Heights.LatticePointMapNegation
 import Heights.LatticePointMapInjectivity
+import Heights.LatticePointMapAddition
 import Heights.WeierstrassSurjectivity
 import Heights.Certificates
 import Heights.SilvermanHeight

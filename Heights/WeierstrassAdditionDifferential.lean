@@ -178,7 +178,7 @@ theorem tendsto_weierstrassSecantAddY_zero (L : PeriodPair) (a b : ℂ) :
     (𝓝[≠] 0) (𝓝 (b / 2))
   exact tendsto_weierstrass_secant_addY_zero L a b
 
-private theorem eventually_weierstrassSecant_domain (L : PeriodPair) (a : ℂ) :
+theorem eventually_weierstrassSecant_domain (L : PeriodPair) (a : ℂ) :
     ∀ᶠ z : ℂ in 𝓝[≠] 0, z ∉ L.lattice ∧ L.weierstrassP z ≠ a := by
   have hz : Tendsto (fun z : ℂ ↦ z) (𝓝[≠] 0) (𝓝 0) :=
     tendsto_id.mono_left nhdsWithin_le_nhds

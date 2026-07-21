@@ -134,9 +134,17 @@ local analytic step.  If `b² = 4a³ - g₂a - g₃`, then away from poles and
 vertical secants the two named secant candidates satisfy
 `X′ = 2Y` and `Y′ = 3X² - g₂/4`; hence `(X,2Y)` obeys the same polynomial ODE
 as `(℘,℘′)`. Installing the already proved limiting values makes both
-candidates analytic at zero.  The Weierstrass addition formula itself, the
-ODE-uniqueness identification, its global analytic extension, compatibility
-with addition, and arbitrary-curve uniformization have not been proved.
+candidates analytic at zero. `Heights/WeierstrassAddition.lean` now applies
+real ODE uniqueness, upgrades equality on a real germ by the complex identity
+principle, and continues through the connected complement of the countable
+exceptional set to prove the global nonvertical secant formula.
+`Heights/LatticePointMapAddition.lean` matches that formula with mathlib's
+affine group law.  It handles tangent addition by choosing an auxiliary point
+outside a countable union of exceptional translates, reducing doubling to
+three nonvertical secants.  Thus the total point map preserves all additions
+and the descended bijection is packaged as an additive equivalence
+`ℂ/L ≃+ Eτ(ℂ)`. Arbitrary-curve uniformization and analyticity of the descended
+equivalence have not been proved.
 
 ### Modular forms and the fundamental domain
 
@@ -233,8 +241,10 @@ result.
    coordinates at infinity. `Heights/WeierstrassAdditionDifferential.lean`
    proves that the pole-free, nonvertical secant candidates satisfy the same
    first-order polynomial ODE as `(℘,℘′)` and that installing their limiting
-   values makes both candidates analytic at zero.  The local ODE-uniqueness
-   comparison and global addition identity are still missing.
+   values makes both candidates analytic at zero.
+   `Heights/WeierstrassAddition.lean` completes the local ODE-uniqueness
+   comparison and global analytic continuation, proving both coordinates of
+   the nonvertical secant addition formula.
    `Heights/WeierstrassFibers.lean` uses ODE uniqueness, analytic continuation,
    and the pole order to prove the exact fibers of `℘` and `(℘,℘′)`; hence
    `Heights/LatticePointMapInjectivity.lean` proves injectivity after quotient
@@ -244,8 +254,11 @@ result.
    `℘` by extending `1/(℘-a)` across the lattice and applying periodic
    boundedness plus Liouville, derives surjectivity of the total and descended
    curve-point maps, and packages the continuous bijection as a homeomorphism.
-   Still missing: the addition formula itself, analytic extension,
-   compatibility with addition, and analyticity of the descended map.
+   `Heights/LatticePointMapAddition.lean` identifies the secant formula with
+   the affine curve group law, reduces the tangent case to generic secants via
+   an auxiliary point outside a countable exceptional set, proves unconditional
+   additivity, and packages the descended bijection as an additive
+   equivalence. Still missing: analyticity of the descended equivalence.
 4. In the converse direction, obtain a lattice from an arbitrary algebraic
    complex elliptic curve (normally via periods of a holomorphic differential
    or an inverse elliptic integral), then identify the resulting curve using
@@ -253,11 +266,11 @@ result.
 
 Mathlib has generic quotient-group infrastructure, but the pinned elliptic
 files contain no complex-torus object carrying the required analytic structure.
-This repository now supplies a descended topological equivalence for the
-explicit lattice curve, but not its compatibility with the existing group law
-or an analytic equivalence. Those remaining parts of step 3, and especially
-the arbitrary-curve converse in step 4, still require substantial new
-infrastructure rather than glue code.
+This repository now supplies both a descended topological equivalence and a
+descended additive equivalence for the explicit lattice curve. It does not
+combine them into an analytic Lie-group equivalence. That remaining analytic
+part of step 3, and especially the arbitrary-curve converse in step 4, still
+require substantial new infrastructure rather than glue code.
 
 ## 4. Judgment
 
@@ -279,10 +292,10 @@ continuity of the total and descended point maps, their zero/negation
 compatibility, the second-order Weierstrass ODE, exact normalized pole limits
 (including the local secant-law cancellations for both coordinates at
 infinity), the secant candidates' pole-free first-order ODE, exact Weierstrass
-fibers, surjectivity, and a homeomorphism from the quotient to the explicit
-lattice curve are now available. They do not resolve the local ODE comparison
-and analytic continuation needed for the global addition formula,
-compatibility with addition, arbitrary-curve
+fibers, surjectivity, the global addition formula, unconditional compatibility
+with the affine elliptic-curve group law, a homeomorphism, and an additive
+equivalence from the quotient to the explicit lattice curve are now available.
+They do not resolve analyticity of that equivalence, arbitrary-curve
 uniformization, or modular-`j` surjectivity.
 Until one certificate-level route lands, the comparison over every number
 field correctly
