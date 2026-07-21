@@ -157,6 +157,21 @@ is uniformized by a lattice.
 $`\tau\in\mathfrak H`.*
 :::
 
+:::proposition "prop:weierstrass-fibers" (uses := "prop:lattice-weierstrass-curve") (lean := "Heights.sub_mem_lattice_of_weierstrassP_eq_of_deriv_eq, Heights.weierstrassP_eq_iff_sub_mem_or_add_mem, Heights.weierstrassP_deriv_eq_iff_sub_mem")
+The second-order equation makes $`(\wp,\wp')` a solution of a locally
+Lipschitz first-order system. Real ODE uniqueness and the complex identity
+theorem show that two equal phase-space values have equal translates. The
+order-two pole then forces the translation difference to be a period.
+Consequently
+$`\wp(z)=\wp(w)` exactly when $`z\equiv w` or $`z\equiv-w\pmod L`, and the
+ordered pair $`(\wp,\wp')` separates classes modulo $`L`.
+
+This is the injective half of the analytic parameterization, not the
+Weierstrass addition theorem or surjectivity onto the curve.
+
+*Status: proved unconditionally away from the period lattice.*
+:::
+
 :::proposition "prop:lattice-affine-point-map" (uses := "prop:lattice-weierstrass-curve") (lean := "Heights.LatticeComplement, Heights.LatticeComplement.translate, Heights.latticeAffinePoint, Heights.latticeAffinePoint_pointEquiv, Heights.latticeAffinePointMap, Heights.latticeAffinePointMap_pointEquiv, Heights.add_lattice_notMem_iff, Heights.latticeAffinePoint_add_lattice, Heights.latticeAffinePointMap_translate")
 On the complement of the period lattice, $`(\wp(z),\wp'(z)/2)` is packaged as
 an actual affine point of the explicit lattice curve. Translation by any
@@ -171,7 +186,7 @@ analytic or group-theoretic conclusion.
 *Status: proved unconditionally on the complement of the lattice.*
 :::
 
-:::proposition "prop:lattice-quotient-point-map" (uses := "prop:lattice-affine-point-map") (lean := "Heights.latticePointMap, Heights.latticePointMap_of_mem, Heights.latticePointMap_of_notMem, Heights.latticePointMap_add_lattice, Heights.LatticeQuotient, Heights.latticeQuotientPointMap, Heights.latticeQuotientPointMap_mk, Heights.latticePointMap_zero, Heights.latticePointMap_neg, Heights.latticeQuotientPointMap_zero, Heights.latticeQuotientPointMap_neg")
+:::proposition "prop:lattice-quotient-point-map" (uses := "prop:lattice-affine-point-map, prop:weierstrass-fibers") (lean := "Heights.latticePointMap, Heights.latticePointMap_of_mem, Heights.latticePointMap_of_notMem, Heights.latticePointMap_add_lattice, Heights.LatticeQuotient, Heights.latticeQuotientPointMap, Heights.latticeQuotientPointMap_mk, Heights.latticePointMap_zero, Heights.latticePointMap_neg, Heights.latticeQuotientPointMap_zero, Heights.latticeQuotientPointMap_neg, Heights.latticePointMap_eq_iff_sub_mem, Heights.latticeQuotientPointMap_injective")
 The point-valued Weierstrass map is extended to all of $`\mathbb C`: lattice
 elements are sent to the distinguished point at infinity and non-lattice
 elements retain the point $`(\wp(z),\wp'(z)/2)`. The total map is invariant
@@ -179,14 +194,17 @@ under lattice translation, so quotient lifting gives a well-defined function
 $`\mathbb C/L\to E_\tau(\mathbb C)` that computes as the total map on every
 representative. Evenness of $`\wp` and oddness of $`\wp'` also prove that the
 origin maps to infinity and complex negation agrees with elliptic-curve
-negation, before and after descent.
+negation, before and after descent. The fiber theorem further proves that the
+total map identifies exactly points differing by a period, so the descended
+map is injective.
 
 The descent is not yet a group homomorphism: compatibility with addition has
-not been proved. No claim of bijectivity, complex-torus equivalence, or
-uniformization of arbitrary curves is made here.
+not been proved. Surjectivity, hence bijectivity and complex-torus equivalence,
+and uniformization of arbitrary curves also remain open.
 
-*Status: total extension, set-theoretic quotient descent, and zero/negation
-compatibility are proved unconditionally for the explicit lattice curve.*
+*Status: total extension, set-theoretic quotient descent, zero/negation
+compatibility, and injectivity are proved unconditionally for the explicit
+lattice curve.*
 :::
 
 :::proposition "prop:lattice-quotient-topology" (uses := "prop:lattice-quotient-point-map") (lean := "Heights.latticeQuotientMk, Heights.continuous_latticeQuotientMk, Heights.isOpenMap_latticeQuotientMk, Heights.isQuotientMap_latticeQuotientMk, Heights.latticeQuotientT1Space, Heights.latticeQuotient_nhds_mk")

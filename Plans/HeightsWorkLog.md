@@ -395,6 +395,18 @@ alternative that `℘′` vanishes identically would make `℘` constant there a
 contradicts its order-two pole. Thus `Heights.deriv_derivWeierstrassP` proves
 `℘′′ = 6℘² - g₂/2` at every non-lattice point.
 
-This is an honest intermediate result toward #155, not the Weierstrass addition
-formula itself. Addition compatibility, the group-homomorphism package,
-bijectivity, and uniformization remain open.
+The ODE has also yielded the exact fiber theorem, rather than only an addition-
+theorem prerequisite. `Heights/WeierstrassFibers.lean` packages `(℘,℘′)` as a
+real locally Lipschitz first-order system. ODE uniqueness gives equality on a
+real interval; the complex identity theorem globalizes it off the translated
+lattices; and the order-two pole forces the translation difference to be a
+period. Thus `℘(z)=℘(w)` iff `z≡±w (mod L)`, while `(℘,℘′)` separates classes
+modulo `L`.
+
+`Heights/LatticePointMapInjectivity.lean` consumes this result to prove
+`latticePointMap_eq_iff_sub_mem` and
+`latticeQuotientPointMap_injective`. This completes the injective half of the
+explicit set-theoretic parameterization. It remains an honest intermediate
+result toward #155, not the Weierstrass addition formula: addition
+compatibility, the group-homomorphism package, surjectivity, and uniformization
+remain open.

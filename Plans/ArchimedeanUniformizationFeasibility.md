@@ -105,10 +105,15 @@ addition frontier now has one further input in
 `Heights/WeierstrassDifferential.lean`: differentiating the cubic relation and
 using analytic no-zero-divisors on the connected lattice complement proves the
 second-order equation `℘′′ = 6℘² - g₂/2`, including at the ramification points
-where pointwise cancellation by `℘′` would be invalid. The Weierstrass addition
-formula itself, analytic extension across infinity, compatibility with
-addition, bijectivity, complex-torus equivalence, and arbitrary-curve
-uniformization have not been proved.
+where pointwise cancellation by `℘′` would be invalid.
+`Heights/WeierstrassFibers.lean` then applies real ODE uniqueness and complex
+analytic continuation: equal `(℘,℘′)` values differ by a period, and equal `℘`
+values differ by a period up to sign. Consequently
+`Heights/LatticePointMapInjectivity.lean` proves that the total map identifies
+exactly period translates and that the descended map `ℂ/L → Eτ(ℂ)` is
+injective. The Weierstrass addition formula itself, analytic extension across
+infinity, compatibility with addition, surjectivity, complex-torus
+equivalence, and arbitrary-curve uniformization have not been proved.
 
 ### Modular forms and the fundamental domain
 
@@ -198,10 +203,13 @@ result.
    convergence to infinity at lattice points, hence continuity of the total
    and descended maps, and compatibility with zero and negation is proved.
    `Heights/WeierstrassDifferential.lean` also proves the second-order ODE
-   `℘′′ = 6℘² - g₂/2` on the lattice complement, an input for an ODE/identity-
-   theorem route to the addition formula. Still missing: the addition formula
-   itself, analytic extension, compatibility with addition, bijectivity, and
-   analyticity of the descended map.
+   `℘′′ = 6℘² - g₂/2` on the lattice complement.
+   `Heights/WeierstrassFibers.lean` uses ODE uniqueness, analytic continuation,
+   and the pole order to prove the exact fibers of `℘` and `(℘,℘′)`; hence
+   `Heights/LatticePointMapInjectivity.lean` proves injectivity after quotient
+   descent. Still missing: the addition formula itself, analytic extension,
+   compatibility with addition, surjectivity, and analyticity of the descended
+   map.
 4. In the converse direction, obtain a lattice from an arbitrary algebraic
    complex elliptic curve (normally via periods of a holomorphic differential
    or an inverse elliptic integral), then identify the resulting curve using
@@ -229,9 +237,10 @@ and if the formula-defined height is eventually to be related to a genuine
 Faltings height. The compact source quotient topology, a conservative compact
 Hausdorff one-point-compactification topology on the explicit target,
 continuity of the total and descended point maps, their zero/negation
-compatibility, and the second-order Weierstrass ODE are now available, but they
-do not resolve the addition formula, analytic extension, compatibility with
-addition, bijectivity, or the uniformization gap. Until one
+compatibility, the second-order Weierstrass ODE, the exact Weierstrass fibers,
+and injectivity of the descended map are now available, but they do not resolve
+the addition formula, analytic extension, compatibility with addition,
+surjectivity, or the uniformization gap. Until one
 route lands, the comparison over every number field correctly
 retains `ArchimedeanPeriodData K W` as its sole remaining realization
 certificate; global minimal-discriminant data is now constructed

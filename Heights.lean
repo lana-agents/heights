@@ -2,6 +2,7 @@ import Heights.WeilHeight
 import Heights.ModularJ
 import Heights.LatticeEisenstein
 import Heights.WeierstrassDifferential
+import Heights.WeierstrassFibers
 import Heights.LatticeWeierstrass
 import Heights.LatticeAffinePoint
 import Heights.LatticeQuotientPoint
@@ -11,6 +12,7 @@ import Heights.LatticeCurveTopology
 import Heights.LatticeAffinePointTopology
 import Heights.LatticePointMapTopology
 import Heights.LatticePointMapNegation
+import Heights.LatticePointMapInjectivity
 import Heights.Certificates
 import Heights.SilvermanHeight
 import Heights.IdealFactorization
