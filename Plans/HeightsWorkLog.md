@@ -731,3 +731,23 @@ any claim at infinity. Taxis #178 remains the honest blocker for a compact
 curve manifold and for extending this affine biholomorphism globally. Full
 `LAKE_JOBS=6 ./scripts/ci-checks.sh` passes; the axiom audit covers 766
 public declarations, all within the permitted subset.
+
+## Autonomous run 35 — 2026-07-21
+
+Constructed the local projective analytic half of taxis #178 in
+`Heights/WeierstrassInfinityAnalytic.lean`. In `Y ≠ 0` projective coordinates
+`(u,v) = (X/Y,Z/Y)`, the homogenized Weierstrass equation has invertible
+`v`-derivative at `(0,0)`. The complex inverse-function theorem now supplies an
+ambient neighborhood whose zero-fiber restriction is an explicit
+`OpenPartialHomeomorph` from the equation-defined projective branch to `ℂ`.
+Its inverse is holomorphic at every target point and agrees with the implicit
+holomorphic graph `v = v(u)`.
+
+The origin is proved to be the only branch point with `v = 0`. Deleting it
+gives a homeomorphism to the `y ≠ 0` affine equation locus via
+`(x,y) = (u/v,1/v)`, with both rational ambient overlap formulas holomorphic.
+This is substantial but intentionally partial progress on #178: the projective
+branch chart has not yet been identified topologically with a neighborhood of
+infinity in the existing one-point compactification, so no compact
+`ChartedSpace` or `IsManifold` is claimed. The feasibility report and blueprint
+now isolate that topology/gluing comparison as the remaining gate-2 step.

@@ -337,8 +337,26 @@ structure on its existing subtype topology. No lattice parameter or transported
 atlas enters the construction.
 
 *Status: the finite affine complex atlas and manifold are proved
-unconditionally. The chart at infinity and a manifold structure on the compact
-point type remain open.*
+unconditionally. The separate projective analytic branch at infinity is now
+also constructed, but its gluing to the compact point topology remains open.*
+:::
+
+:::proposition "prop:complex-weierstrass-infinity-branch" (uses := "prop:complex-weierstrass-topology, prop:complex-weierstrass-finite-manifold") (lean := "Heights.complexWeierstrassInfinityEquation, Heights.complexWeierstrassInfinityImplicitV, Heights.contDiffAt_complexWeierstrassInfinityImplicitV, Heights.complexWeierstrassInfinityAmbientHomeomorph, Heights.complexWeierstrassInfinityBranchChart, Heights.complexWeierstrassInfinityBranchOrigin_mem_chart_source, Heights.complexWeierstrassInfinityBranchChart_symm_coe_of_mem, Heights.contDiffAt_complexWeierstrassInfinityBranchChart_symm_coe_of_mem, Heights.complexWeierstrassInfinityBranch_snd_eq_zero_iff, Heights.complexWeierstrassInfinityPuncturedHomeomorph, Heights.contDiffOn_complexWeierstrassInfinity_toAffine")
+In the projective chart $`Y\ne0`, put $`u=X/Y` and $`v=Z/Y`. The homogenized
+Weierstrass equation has $`v`-derivative one at the point at infinity
+$`(u,v)=(0,0)`. The complex implicit-function theorem therefore gives a local
+holomorphic branch $`v=v(u)`. Restricting the ambient inverse-function
+neighborhood to the equation's zero fiber packages this branch as an explicit
+open partial homeomorphism with coordinate $`u` and holomorphic inverse.
+
+The origin is the only branch point with $`v=0`. On the punctured branch, the
+formulas $`(x,y)=(u/v,1/v)` give a homeomorphism to the $`y\ne0` affine locus,
+with holomorphic rational overlap maps in both directions.
+
+*Status: the independent projective analytic germ and its affine overlap are
+proved. Identifying this germ with a neighborhood of infinity in the existing
+one-point-compactification topology, and then assembling the compact atlas,
+remain open; no compact-curve manifold is claimed.*
 :::
 
 :::proposition "prop:variable-change-ambient-biholomorph" (uses := "prop:complex-weierstrass-topology, prop:complex-weierstrass-finite-manifold") (lean := "Heights.variableChangeAffineAmbientEquiv, Heights.variableChangeAffineAmbientBiholomorph, Heights.variableChangeAffineAmbientBiholomorph_apply, Heights.variableChangeAffineAmbientBiholomorph_symm_apply, Heights.variableChangeAffineLocusHomeomorph_coe, Heights.variableChangeAffineLocusHomeomorph_symm_coe, Heights.contMDiff_variableChangeAffineLocusHomeomorph, Heights.contMDiff_variableChangeAffineLocusHomeomorph_symm, Heights.variableChangeAffineLocusBiholomorph")

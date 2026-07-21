@@ -143,11 +143,22 @@ explicit variable-change polynomials proves that every admissible variable
 change is a biholomorphism between the independently constructed finite
 manifolds.
 
-The other essential chart is still wholly open: at infinity, use a
-projective/local parameter such as `-x/y` and prove the coordinate formulas
-extend holomorphically and induce the existing one-point-compactification
-topology. The completed finite affine atlas does not by itself discharge this
-compactification layer.
+`Heights/WeierstrassInfinityAnalytic.lean` now closes the local analytic half
+of the other essential chart. In the projective `Y ≠ 0` coordinates
+`(u,v) = (X/Y,Z/Y)`, it computes the homogenized equation, proves its
+`v`-derivative at `(0,0)` is invertible, and restricts the ambient complex
+inverse-function neighborhood along the zero fiber to an explicit
+`OpenPartialHomeomorph` with coordinate `u`. Every inverse chart branch is
+holomorphic in ambient coordinates. The origin is the only branch point with
+`v = 0`, and the punctured branch is homeomorphic to the `y ≠ 0` affine locus
+by `(x,y) = (u/v,1/v)`; both rational overlap formulas are holomorphic on their
+ambient domains.
+
+The topological gluing half remains open: prove that this projective branch
+chart induces the existing one-point-compactification topology on a
+neighborhood of `ComplexWeierstrassPoint` infinity, then combine it with the
+finite atlas. Thus the analytic germ is no longer missing, but no compact-curve
+`ChartedSpace` or `IsManifold` is claimed yet.
 
 ### 3.3 Integration exists in ambient normed spaces, not yet on manifolds here
 
@@ -184,8 +195,10 @@ The remaining work should be split into the following gates.
    Hausdorff topology and variable-change homeomorphisms are complete. The
    finite affine equation locus now has its intrinsic one-dimensional complex
    manifold structure, including whole-overlap holomorphic transitions. The
-   infinity chart remains open. Construct it and combine it with the finite
-   atlas to give every nonsingular complex Weierstrass point type a
+   projective infinity branch has an explicit holomorphic local chart and
+   proved rational overlap with the affine equation. Identify its topology
+   with a neighborhood in the one-point compactification, then combine it with
+   the finite atlas to give every nonsingular complex Weierstrass point type a
    one-dimensional complex-manifold structure without using any selected `τ`.
 3. **Invariant differential.** Define the global regular form represented by
    `dx/(2y+a₁x+a₃)`, including the alternate local expressions needed where
@@ -208,13 +221,14 @@ The remaining work should be split into the following gates.
    the project address the Hodge bundle, its metric and Arakelov degree. This is
    a further project, not a consequence of period realization alone.
 
-The atlas/projection portion of gate 1 and the topology plus entire finite
-atlas slice of gate 2 are complete. The affine variable-change slice of gate 4
-is also complete at the intrinsic manifold level, but no compact-curve
-biholomorphism follows until the map and atlas are controlled at infinity.
-Descending `dz` finishes gate 1;
-the infinity chart and compact-atlas assembly finish gate 2; gate 3, the
-remaining parts of gates 4--6, and then gate 7 remain substantial.
+The atlas/projection portion of gate 1, the topology plus entire finite atlas
+slice of gate 2, and the local projective analytic branch at infinity are
+complete. The affine variable-change slice of gate 4 is also complete at the
+intrinsic manifold level, but no compact-curve biholomorphism follows until the
+projective branch topology is identified with the one-point compactification
+and the compact atlas is assembled. Descending `dz` finishes gate 1; the
+infinity topology/gluing comparison and compact-atlas assembly finish gate 2;
+gate 3, the remaining parts of gates 4--6, and then gate 7 remain substantial.
 
 ## 5. Judgment for the heights mission
 

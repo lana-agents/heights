@@ -18,6 +18,7 @@ import Heights.WeierstrassCurveTopology
 import Heights.VariableChangeAnalytic
 import Heights.WeierstrassFiniteAnalytic
 import Heights.WeierstrassFiniteManifold
+import Heights.WeierstrassInfinityAnalytic
 import Heights.LatticeCurveTopology
 import Heights.LatticeAffinePointTopology
 import Heights.LatticePointMapTopology
@@ -57,8 +58,12 @@ zero-fiber neighborhood gives an open topological chart. Their transition
 maps are holomorphic on whole overlaps, giving the affine equation locus an
 intrinsic one-dimensional complex-manifold structure. Its ambient coordinate
 inclusion is analytic, and every admissible affine variable change is a
-biholomorphism for these independently constructed structures. The project
-still does not construct the chart at infinity or a complex atlas on the
-compact curve, prove the uniformization analytic, formalize periods by integration, or
-construct an Arakelov Faltings height.
+biholomorphism for these independently constructed structures. In the
+projective `Y ≠ 0` chart at infinity, the homogenized equation now has an
+explicit implicit-function branch chart with holomorphic inverse, and its
+punctured branch is identified with the affine curve by the rational overlap
+formulas. The project still does not identify that branch chart with a
+neighborhood in the existing one-point-compactification topology or assemble a
+complex atlas on the compact curve, prove the uniformization analytic,
+formalize periods by integration, or construct an Arakelov Faltings height.
 -/
