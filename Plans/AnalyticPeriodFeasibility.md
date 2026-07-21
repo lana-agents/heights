@@ -121,18 +121,22 @@ admissible variable change is a homeomorphism for the independently
 constructed source and target topologies. It also packages the forward and
 inverse polynomial coordinate changes as a genuine ambient biholomorphism of
 `ℂ × ℂ`, and proves that the affine-locus homeomorphism is its restriction.
-Thus the affine analytic calculation for variable changes is complete, but
-restriction to curve manifolds still requires their missing atlases. This
-compact Hausdorff topology is enough for continuity, but it is not a complex
-atlas. The natural target construction must therefore add independent charts:
 
-* at a finite nonsingular point, use whichever partial derivative of the
-  Weierstrass equation is nonzero and a complex implicit-function theorem;
-* at infinity, use a projective/local parameter such as `-x/y` and prove the
-  coordinate formulas extend holomorphically.
+`Heights/WeierstrassFiniteAnalytic.lean` now begins the independent finite
+atlas construction. It computes the exact complex Fréchet derivative of the
+affine equation, proves that one partial derivative is nonzero at every finite
+curve point, and applies mathlib's complex implicit-function theorem in both
+coordinate directions. The resulting functions are analytic at the base
+coordinate, locally unique, and have graphs lying on the equation near the
+base point. They are honest analytic graph germs, not yet bundled charts:
+open chart domains, holomorphic transitions on those domains, and the
+`ChartedSpace` assembly remain to be constructed.
 
-This is the largest foundational layer. The general compact Hausdorff wrapper
-is now complete, but topology alone does not discharge it.
+The other essential chart is still wholly open: at infinity, use a
+projective/local parameter such as `-x/y` and prove the coordinate formulas
+extend holomorphically and induce the existing one-point-compactification
+topology. The finite germ results and topology do not by themselves discharge
+this foundational layer.
 
 ### 3.3 Integration exists in ambient normed spaces, not yet on manifolds here
 
@@ -166,10 +170,12 @@ The remaining work should be split into the following gates.
    is locally biholomorphic. **Still open:** package and descend the constant
    form `dz`.
 2. **Intrinsic target topology and atlas.** The equation-defined compact
-   Hausdorff topology and variable-change homeomorphisms are complete. Give
-   every nonsingular complex Weierstrass point type a one-dimensional
-   complex-manifold structure from its equation, independently of any selected
-   `τ`.
+   Hausdorff topology and variable-change homeomorphisms are complete. At
+   finite points, the derivative alternative and analytic implicit graph germs
+   are now proved; bundling them as charts and proving transitions remains.
+   The infinity chart also remains open. Assemble these independent charts to
+   give every nonsingular complex Weierstrass point type a one-dimensional
+   complex-manifold structure without using any selected `τ`.
 3. **Invariant differential.** Define the global regular form represented by
    `dx/(2y+a₁x+a₃)`, including the alternate local expressions needed where
    that denominator vanishes and at infinity. Prove it is holomorphic and
@@ -191,12 +197,13 @@ The remaining work should be split into the following gates.
    the project address the Hodge bundle, its metric and Arakelov degree. This is
    a further project, not a consequence of period realization alone.
 
-The atlas/projection portion of gate 1 and the topology-only slice of gate 2
-are complete. The ambient affine variable-change slice of gate 4 is also
-complete, but no curve-level biholomorphism follows until gate 2 supplies its
-atlas and the map is controlled at infinity. Descending `dz` finishes gate 1;
-the complex-atlas part of gate 2, gate 3, the remaining parts of gates 4--6,
-and then gate 7 remain substantial.
+The atlas/projection portion of gate 1 and the topology plus finite-analytic-
+germ slices of gate 2 are complete. The ambient affine variable-change slice
+of gate 4 is also complete, but no curve-level biholomorphism follows until
+those germs are bundled into the gate-2 atlas and the map is controlled at
+infinity. Descending `dz` finishes gate 1; finite chart assembly and the
+infinity chart finish gate 2; gate 3, the remaining parts of gates 4--6, and
+then gate 7 remain substantial.
 
 ## 5. Judgment for the heights mission
 
