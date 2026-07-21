@@ -47,9 +47,9 @@ theorem isQuotientMap_latticeQuotientMk (τ : ℍ) :
   QuotientAddGroup.isQuotientMap_mk _
 
 /-- The canonical projection is the quotient covering map for translation by
-its discrete period lattice. This is the topological input for a future
-independently constructed complex-manifold structure on `ℂ / L`; no such
-structure is asserted here. -/
+its discrete period lattice. This is the topological input used by
+`Heights.LatticeQuotientManifold`; no manifold structure is asserted in this
+file itself. -/
 theorem isAddQuotientCoveringMap_latticeQuotientMk (τ : ℍ) :
     IsAddQuotientCoveringMap (latticeQuotientMk τ)
       (periodPairOfUpperHalfPlane τ).lattice.toAddSubgroup := by

@@ -12,6 +12,7 @@ import Heights.ModularJFibers
 import Heights.LatticeAffinePoint
 import Heights.LatticeQuotientPoint
 import Heights.LatticeQuotientTopology
+import Heights.LatticeQuotientManifold
 import Heights.LatticeQuotientCompact
 import Heights.WeierstrassCurveTopology
 import Heights.LatticeCurveTopology
@@ -41,9 +42,11 @@ fundamental-domain parameter. Same-`j` classification over `ℂ` then supplies a
 actual algebraic variable change between the embedded input curve and the
 explicit lattice curve, eliminating the complex twisting objection. Its
 coordinate map transports the lattice quotient uniformization to the embedded
-input curve as an additive equivalence. Every nonsingular complex target now
-has an independently equation-defined compact Hausdorff topology, invariant
-under admissible variable changes. The project still does not construct a
-complex atlas, prove the uniformization analytic, formalize periods by
-integration, or construct an Arakelov Faltings height.
+input curve as an additive equivalence. The source quotient now has an
+independently constructed complex-manifold structure for which its projection
+from `ℂ` is locally biholomorphic. Every nonsingular complex target has an
+equation-defined compact Hausdorff topology, invariant under admissible
+variable changes. The project still does not construct a complex atlas on the
+curve, prove the uniformization analytic, formalize periods by integration, or
+construct an Arakelov Faltings height.
 -/

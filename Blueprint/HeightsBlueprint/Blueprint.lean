@@ -263,12 +263,29 @@ a quotient class are the images of neighborhoods of any chosen representative.
 
 These facts alone topologize only the source of the descended point map. Later
 nodes prove continuity, bijectivity, and additivity after separately
-constructing the explicit target topology. They still do not produce a
-complex-manifold structure or an intrinsic analytic equivalence.
+constructing the explicit target topology. The next node adds a complex atlas
+to this source topology; no intrinsic analytic equivalence with the curve
+follows from the topology alone.
 
 *Status: the source quotient topology and covering map are packaged
-unconditionally. A verified complex-manifold structure and intrinsic analytic
-uniformization remain open.*
+unconditionally.*
+:::
+
+:::proposition "prop:lattice-quotient-manifold" (uses := "prop:lattice-quotient-topology") (lean := "Heights.latticeQuotientChartedSpace, Heights.latticeQuotientComplexManifold, Heights.latticeQuotientLocalInverse_mem_maximalAtlas, Heights.isLocalDiffeomorph_latticeQuotientMk, Heights.contMDiff_latticeQuotientMk")
+The covering-local-inverse charts equip $`\mathbb C/L` with a one-dimensional
+complex-manifold structure on its existing quotient topology. On an overlap,
+two lifted coordinates differ locally by a fixed lattice element, so every
+transition map is locally a complex translation. Every local inverse supplied
+by the covering belongs to the resulting holomorphic maximal atlas.
+
+The canonical projection $`\mathbb C\to\mathbb C/L` is therefore a local
+complex-analytic diffeomorphism, in particular a holomorphic map. This
+construction is intrinsic to the lattice quotient: it does not transport an
+atlas from a curve uniformization. It does not yet package the descended form
+$`dz` or prove that the Weierstrass point map is analytic.
+
+*Status: the source complex-manifold structure and locally biholomorphic
+quotient projection are proved unconditionally.*
 :::
 
 :::proposition "prop:lattice-quotient-compactness" (uses := "prop:lattice-quotient-topology") (lean := "Heights.isCompact_range_latticeQuotientMk, Heights.isCompact_univ_latticeQuotient, Heights.latticeQuotientCompactSpace")

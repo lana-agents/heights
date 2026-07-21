@@ -98,11 +98,14 @@ Mathlib also provides chart construction from a local homeomorphism via
 `IsLocalHomeomorph.chartedSpace`, and quotient-action charted-space
 infrastructure in `Mathlib.Geometry.Manifold.Instances.Quotient`.
 
-There is nevertheless a real gap: that quotient-manifold file explicitly
-leaves proving the induced `IsManifold` instance and smoothness of the
-projection as TODOs. For this translation action the transition maps should be
-complex translations, so the gap is focused and plausible, but it still needs
-proof.
+The repository now closes the missing manifold step for this particular
+translation action in `Heights/LatticeQuotientManifold.lean`. It constructs the
+covering-local-inverse charts, proves their transitions are locally translations
+by lattice elements, obtains a one-dimensional complex `IsManifold` instance,
+and proves `latticeQuotientMk` is a local complex-analytic diffeomorphism. This
+specialized proof is needed because mathlib's general quotient-manifold file
+still lists the corresponding smoothness results as TODOs. Descending `dz` as
+a bundled global one-form remains open.
 
 ### 3.2 Complex manifolds exist in mathlib, but not elliptic-curve manifolds
 
@@ -154,9 +157,10 @@ already packaged.
 
 The remaining work should be split into the following gates.
 
-1. **Source complex manifold.** Construct the complex charted/manifold
-   structure on `ℂ/L`, prove the quotient projection locally biholomorphic, and
-   descend the constant form `dz`.
+1. **Source complex manifold.** **Atlas and projection complete:** `ℂ/L` has
+   an intrinsic complex charted/manifold structure and the quotient projection
+   is locally biholomorphic. **Still open:** package and descend the constant
+   form `dz`.
 2. **Intrinsic target topology and atlas.** The equation-defined compact
    Hausdorff topology and variable-change homeomorphisms are complete. Give
    every nonsingular complex Weierstrass point type a one-dimensional
@@ -180,9 +184,9 @@ The remaining work should be split into the following gates.
    the project address the Hodge bundle, its metric and Arakelov degree. This is
    a further project, not a consequence of period realization alone.
 
-The topology-only slice of gate 2 is complete. Gate 1 remains a plausible
-standalone task; the complex-atlas part of gate 2 through gate 6 together
-remain mathlib-scale. Gate 7 is larger still.
+The atlas/projection portion of gate 1 and the topology-only slice of gate 2
+are complete. Descending `dz` finishes gate 1; the complex-atlas part of gate 2
+through gate 6 together remain mathlib-scale. Gate 7 is larger still.
 
 ## 5. Judgment for the heights mission
 
@@ -195,6 +199,7 @@ Proposition 2.1 comparison is therefore honest as a theorem about that formula.
 Calling the result a comparison with an independently constructed Arakelov
 Faltings height would still be unjustified. The next honest milestone is not a
 single “prove `τ` is the period” declaration; it is the independently built
-complex curve and invariant differential through gates 1--6 above. The new
-covering-map theorem is concrete progress toward gate 1, but it does not alter
-that overall feasibility judgment.
+complex curve and invariant differential through gates 1--6 above. The source
+complex torus and locally biholomorphic projection are now concrete completed
+infrastructure, but they do not by themselves alter that overall feasibility
+judgment.
