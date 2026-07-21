@@ -154,11 +154,15 @@ holomorphic in ambient coordinates. The origin is the only branch point with
 by `(x,y) = (u/v,1/v)`; both rational overlap formulas are holomorphic on their
 ambient domains.
 
-The topological gluing half remains open: prove that this projective branch
-chart induces the existing one-point-compactification topology on a
-neighborhood of `ComplexWeierstrassPoint` infinity, then combine it with the
-finite atlas. Thus the analytic germ is no longer missing, but no compact-curve
-`ChartedSpace` or `IsManifold` is claimed yet.
+The branch now also has an explicit map to the one-point compactification,
+sending its origin to infinity and using the rational overlap elsewhere. This
+map is proved continuous at the origin: compact affine subsets have bounded
+`y`-coordinate, while `y=1/v` escapes them as `v → 0`. The converse local
+openness/homeomorphism statement remains open. Prove that the branch map
+identifies a whole chart source with an open neighborhood of
+`ComplexWeierstrassPoint` infinity, then combine it with the finite atlas. Thus
+the analytic germ and one direction of the topology comparison are no longer
+missing, but no compact-curve `ChartedSpace` or `IsManifold` is claimed yet.
 
 ### 3.3 Integration exists in ambient normed spaces, not yet on manifolds here
 

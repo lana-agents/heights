@@ -25,7 +25,7 @@ kept as an explicit remaining step.
 -/
 
 open Filter
-open scoped ContDiff Topology
+open scoped ContDiff OnePoint Topology
 
 noncomputable section
 
@@ -467,6 +467,92 @@ noncomputable def complexWeierstrassInfinityPuncturedHomeomorph
       continuous_subtype_val.comp continuous_subtype_val
     exact (h.fst.div₀ h.snd (fun P => P.2)).prodMk
       (continuous_const.div₀ h.snd (fun P => P.2))
+
+/-- The projective branch maps to the one-point compactification of the
+affine curve: its origin goes to infinity and its punctured part uses the
+rational overlap homeomorphism. -/
+noncomputable def complexWeierstrassInfinityBranchToOnePoint
+    (W : WeierstrassCurve ℂ) (Q : ComplexWeierstrassInfinityBranch W) :
+    OnePoint (ComplexWeierstrassAffine W) := by
+  classical
+  exact if hv : Q.1.2 = 0 then ∞ else
+    ((complexWeierstrassInfinityPuncturedHomeomorph W ⟨Q, hv⟩).1 :
+      ComplexWeierstrassAffine W)
+
+@[simp] theorem complexWeierstrassInfinityBranchToOnePoint_origin
+    (W : WeierstrassCurve ℂ) :
+    complexWeierstrassInfinityBranchToOnePoint W
+      (complexWeierstrassInfinityBranchOrigin W) =
+        (∞ : OnePoint (ComplexWeierstrassAffine W)) := by
+  simp [complexWeierstrassInfinityBranchToOnePoint,
+    complexWeierstrassInfinityBranchOrigin]
+
+/-- The projective-to-one-point map is continuous at the branch origin.  This
+is one direction of the still-open topology identification: compact subsets of
+the affine curve have bounded `y`-coordinate, whereas `y=1/v` diverges as the
+projective coordinate `v` tends to zero. -/
+theorem continuousAt_complexWeierstrassInfinityBranchToOnePoint_origin
+    (W : WeierstrassCurve ℂ) :
+    ContinuousAt (complexWeierstrassInfinityBranchToOnePoint W)
+      (complexWeierstrassInfinityBranchOrigin W) := by
+  rw [ContinuousAt]
+  rw [complexWeierstrassInfinityBranchToOnePoint_origin]
+  rw [OnePoint.hasBasis_nhds_infty.tendsto_right_iff]
+  intro K hK
+  rcases hK with ⟨hKclosed, hKcompact⟩
+  have hycont : Continuous
+      (fun P : ComplexWeierstrassAffine W => P.1.2) :=
+    continuous_subtype_val.snd
+  have hycompact : IsCompact
+      ((fun P : ComplexWeierstrassAffine W => P.1.2) '' K) :=
+    hKcompact.image hycont
+  rcases (Metric.isBounded_iff_subset_closedBall (0 : ℂ)).1
+      hycompact.isBounded with ⟨r, hr⟩
+  let R : ℝ := max r 0 + 1
+  have hR : 0 < R := by
+    dsimp [R]
+    linarith [le_max_right r 0]
+  have hc : ContinuousAt
+      (fun Q : ComplexWeierstrassInfinityBranch W => Q.1.2)
+      (complexWeierstrassInfinityBranchOrigin W) :=
+    continuous_subtype_val.snd.continuousAt
+  have hvlim : Tendsto
+      (fun Q : ComplexWeierstrassInfinityBranch W => Q.1.2)
+      (𝓝 (complexWeierstrassInfinityBranchOrigin W)) (𝓝 0) := by
+    change Tendsto (fun Q : ComplexWeierstrassInfinityBranch W => Q.1.2)
+      (𝓝 (complexWeierstrassInfinityBranchOrigin W))
+      (𝓝 ((complexWeierstrassInfinityBranchOrigin W).1.2)) at hc
+    simpa [complexWeierstrassInfinityBranchOrigin] using hc
+  have hball : Metric.ball (0 : ℂ) R⁻¹ ∈ 𝓝 0 :=
+    Metric.ball_mem_nhds 0 (inv_pos.mpr hR)
+  filter_upwards [hvlim hball] with Q hQ
+  by_cases hv : Q.1.2 = 0
+  · right
+    simp [complexWeierstrassInfinityBranchToOnePoint, hv]
+  · left
+    let P : ComplexWeierstrassAffine W :=
+      (complexWeierstrassInfinityPuncturedHomeomorph W ⟨Q, hv⟩).1
+    refine ⟨P, ?_, ?_⟩
+    · intro hPK
+      have hy_mem : P.1.2 ∈
+          (fun T : ComplexWeierstrassAffine W => T.1.2) '' K :=
+        ⟨P, hPK, rfl⟩
+      have hyr : ‖P.1.2‖ ≤ r := by
+        have := hr hy_mem
+        simpa [Metric.mem_closedBall, dist_zero_right] using this
+      have hrR : r < R := by
+        dsimp [R]
+        linarith [le_max_left r 0]
+      have hvpos : 0 < ‖Q.1.2‖ := norm_pos_iff.mpr hv
+      have hvsmall : ‖Q.1.2‖ < R⁻¹ := by
+        simpa [Metric.mem_ball, dist_zero_right] using hQ
+      have hlarge : R < ‖Q.1.2‖⁻¹ :=
+        (lt_inv_comm₀ hvpos hR).mp hvsmall
+      have hyformula : ‖P.1.2‖ = ‖Q.1.2‖⁻¹ := by
+        simp [P, complexWeierstrassInfinityPuncturedHomeomorph, norm_inv]
+      rw [hyformula] at hyr
+      linarith
+    · simp [complexWeierstrassInfinityBranchToOnePoint, hv, P]
 
 /-- The rational projective-to-affine overlap formula is holomorphic wherever
 `v ≠ 0`. -/

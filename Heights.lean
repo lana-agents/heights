@@ -62,8 +62,9 @@ biholomorphism for these independently constructed structures. In the
 projective `Y ≠ 0` chart at infinity, the homogenized equation now has an
 explicit implicit-function branch chart with holomorphic inverse, and its
 punctured branch is identified with the affine curve by the rational overlap
-formulas. The project still does not identify that branch chart with a
-neighborhood in the existing one-point-compactification topology or assemble a
-complex atlas on the compact curve, prove the uniformization analytic,
+formulas. Its natural map to the one-point compactification is continuous at
+the branch origin. The project still does not prove that this map is a local
+homeomorphism onto a neighborhood of infinity or assemble a complex atlas on
+the compact curve, prove the uniformization analytic,
 formalize periods by integration, or construct an Arakelov Faltings height.
 -/

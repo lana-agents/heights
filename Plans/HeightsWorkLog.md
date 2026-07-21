@@ -751,3 +751,11 @@ branch chart has not yet been identified topologically with a neighborhood of
 infinity in the existing one-point compactification, so no compact
 `ChartedSpace` or `IsManifold` is claimed. The feasibility report and blueprint
 now isolate that topology/gluing comparison as the remaining gate-2 step.
+
+A follow-up commit closes one direction of that topology comparison. The
+projective branch now maps explicitly to the one-point compactification,
+sending `(0,0)` to infinity and using the rational affine overlap elsewhere.
+This map is continuous at the branch origin: the proof bounds the
+`y`-coordinate on an arbitrary compact affine subset and uses `y=1/v` to show
+that sufficiently small nonzero `v` escapes it. What remains is the converse
+local-openness/homeomorphism result and compact atlas assembly.
