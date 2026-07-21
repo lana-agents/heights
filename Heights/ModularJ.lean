@@ -12,7 +12,7 @@ analytic discriminant includes the additional factor `(2π) ^ 12`. The modular
 in front of `E₄ ^ 3 / Δ`.
 -/
 
-open scoped UpperHalfPlane MatrixGroups
+open scoped UpperHalfPlane MatrixGroups Manifold Modular
 
 open Filter Topology Asymptotics UpperHalfPlane
 open Matrix.SpecialLinearGroup CongruenceSubgroup
@@ -244,6 +244,119 @@ private theorem exp_two_pi_im_tendsto_atImInfty : Tendsto
     (fun τ : ℍ => Real.exp (2 * Real.pi * τ.im)) atImInfty atTop := by
   exact Real.tendsto_exp_atTop.comp
     (im_tendsto_atImInfty.const_mul_atTop (mul_pos two_pos Real.pi_pos))
+
+/-- The modular `j`-function is holomorphic on the upper half-plane. -/
+theorem modularJ_mdifferentiable : MDiff modularJ := by
+  exact (ModularFormClass.holo ModularForm.E₄).pow 3 |>.div
+    (by simpa only [CuspForm.coe_discriminant] using
+      ModularFormClass.holo CuspForm.discriminant)
+    (fun τ => ModularForm.discriminant_ne_zero τ)
+
+/-- The norm of modular `j` tends to infinity at the cusp. -/
+theorem modularJ_norm_tendsto_atImInfty :
+    Tendsto (fun τ : ℍ => ‖modularJ τ‖) atImInfty atTop := by
+  rw [tendsto_atTop]
+  intro R
+  have hs : ∀ᶠ τ in atImInfty,
+      (1 / 2 : ℝ) < ‖modularJ τ‖ * Real.exp (-2 * Real.pi * τ.im) :=
+    scaledModularJ_tendsto_atImInfty.eventually (Ioi_mem_nhds (by norm_num))
+  have he : ∀ᶠ τ in atImInfty,
+      2 * R < Real.exp (2 * Real.pi * τ.im) :=
+    exp_two_pi_im_tendsto_atImInfty.eventually (eventually_gt_atTop (2 * R))
+  filter_upwards [hs, he] with τ hsτ heτ
+  have hj_eq : ‖modularJ τ‖ =
+      (‖modularJ τ‖ * Real.exp (-2 * Real.pi * τ.im)) *
+        Real.exp (2 * Real.pi * τ.im) := by
+    rw [mul_assoc, ← Real.exp_add]
+    ring_nf
+    simp
+  rw [hj_eq]
+  nlinarith [Real.exp_pos (2 * Real.pi * τ.im)]
+
+/-- The image of modular `j` is open. This is the open mapping theorem, with
+nonconstancy supplied by its growth at the cusp. -/
+theorem isOpen_range_modularJ : IsOpen (Set.range modularJ) := by
+  let g : ℂ → ℂ := modularJ ∘ UpperHalfPlane.ofComplex
+  have hg : AnalyticOnNhd ℂ g upperHalfPlaneSet := by
+    exact (UpperHalfPlane.mdifferentiable_iff.mp modularJ_mdifferentiable).analyticOnNhd
+      isOpen_upperHalfPlaneSet
+  have hpre : IsPreconnected upperHalfPlaneSet :=
+    (Complex.isConnected_of_upperHalfPlane subset_rfl (by grind)).isPreconnected
+  obtain hconst | hopen := hg.is_constant_or_isOpen hpre
+  · exfalso
+    obtain ⟨w, hw⟩ := hconst
+    have hev : ∀ᶠ τ in atImInfty, ‖w‖ < ‖modularJ τ‖ :=
+      modularJ_norm_tendsto_atImInfty.eventually (eventually_gt_atTop ‖w‖)
+    obtain ⟨τ, hτ⟩ := hev.exists
+    have heq := hw (τ : ℂ) τ.im_pos
+    simp only [g, Function.comp_apply, UpperHalfPlane.ofComplex_apply] at heq
+    rw [heq] at hτ
+    exact (lt_irrefl _ hτ)
+  · have himage : IsOpen (g '' upperHalfPlaneSet) :=
+      hopen upperHalfPlaneSet subset_rfl isOpen_upperHalfPlaneSet
+    have heq : g '' upperHalfPlaneSet = Set.range modularJ := by
+      ext z
+      constructor
+      · rintro ⟨w, hw, rfl⟩
+        exact ⟨UpperHalfPlane.ofComplex w, rfl⟩
+      · rintro ⟨τ, rfl⟩
+        exact ⟨(τ : ℂ), τ.im_pos, by simp [g]⟩
+    exact heq ▸ himage
+
+/-- The image of modular `j` is closed. Move a convergent sequence of values
+into the standard fundamental domain. Cusp growth bounds the corresponding
+imaginary parts, so compactness of a truncated fundamental domain supplies a
+convergent subsequence of preimages. -/
+theorem isClosed_range_modularJ : IsClosed (Set.range modularJ) := by
+  apply IsSeqClosed.isClosed
+  intro u z hu huz
+  choose τ hτ using hu
+  choose γ hγ using fun n => ModularGroup.exists_smul_mem_fd (τ n)
+  let σ : ℕ → ℍ := fun n => γ n • τ n
+  have hσfd (n : ℕ) : σ n ∈ ModularGroup.fd := hγ n
+  have hσJ (n : ℕ) : modularJ (σ n) = u n := by
+    change modularJ (γ n • τ n) = u n
+    rw [modularJ_smul, hτ n]
+  let R : ℝ := ‖z‖ + 1
+  have hu_norm : Tendsto (fun n => ‖u n‖) atTop (𝓝 ‖z‖) :=
+    continuous_norm.continuousAt.tendsto.comp huz
+  have hu_bound : ∀ᶠ n in atTop, ‖u n‖ < R :=
+    hu_norm.eventually (Iio_mem_nhds (by simp [R]))
+  rw [eventually_atTop] at hu_bound
+  obtain ⟨N, hN⟩ := hu_bound
+  have hcusp : ∀ᶠ ξ in atImInfty, R < ‖modularJ ξ‖ :=
+    modularJ_norm_tendsto_atImInfty.eventually (eventually_gt_atTop R)
+  rw [atImInfty, eventually_comap, eventually_atTop] at hcusp
+  obtain ⟨y, hy⟩ := hcusp
+  have hshift (n : ℕ) : σ (n + N) ∈ ModularGroup.truncatedFundamentalDomain y := by
+    refine ⟨hσfd _, ?_⟩
+    by_contra hnot
+    have him : y ≤ (σ (n + N)).im := le_of_not_ge hnot
+    have hlarge : R < ‖modularJ (σ (n + N))‖ := hy _ him _ rfl
+    rw [hσJ] at hlarge
+    exact (not_lt_of_ge (le_of_lt (hN (n + N) (Nat.le_add_left N n)))) hlarge
+  obtain ⟨ξ, _hξ, φ, hφmono, hφlim⟩ :=
+    (ModularGroup.isCompact_truncatedFundamentalDomain y).isSeqCompact hshift
+  refine ⟨ξ, ?_⟩
+  have hlimJ : Tendsto (fun n => modularJ (σ (φ n + N))) atTop (𝓝 (modularJ ξ)) :=
+    modularJ_mdifferentiable.continuous.continuousAt.tendsto.comp hφlim
+  have hindex : Tendsto (fun n => φ n + N) atTop atTop :=
+    (tendsto_add_atTop_nat N).comp hφmono.tendsto_atTop
+  have hlimu : Tendsto (fun n => u (φ n + N)) atTop (𝓝 z) := huz.comp hindex
+  have heq : (fun n => modularJ (σ (φ n + N))) = (fun n => u (φ n + N)) := by
+    funext n
+    exact hσJ _
+  rw [heq] at hlimJ
+  exact tendsto_nhds_unique hlimJ hlimu
+
+/-- The normalized modular `j`-function maps the upper half-plane onto the
+complex plane. The image is nonempty, open by holomorphic nonconstancy, and
+closed by cusp growth and compactness of truncated fundamental domains. -/
+theorem modularJ_surjective : Function.Surjective modularJ := by
+  have hrange : Set.range modularJ = Set.univ :=
+    IsClopen.eq_univ ⟨isClosed_range_modularJ, isOpen_range_modularJ⟩
+      ⟨modularJ UpperHalfPlane.I, ⟨UpperHalfPlane.I, rfl⟩⟩
+  exact Set.range_eq_univ.mp hrange
 
 private theorem log_max_modularJ_div_im_tendsto : Tendsto
     (fun τ : ℍ => Real.log (max ‖modularJ τ‖ (Real.exp 1)) / τ.im)

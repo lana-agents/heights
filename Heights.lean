@@ -30,10 +30,10 @@ Silverman's formula-defined elliptic-curve height (cf. [Silv], Proposition
 2.1). See `Plans/HeightsSpec.md` for the honesty boundary.
 
 The public API contains the unconditional Weil-height and modular estimates,
-explicit interfaces for missing realization data, Silverman's formula-defined
-certificate-level height, and certified forms of Proposition 2.1. Global
-minimal-discriminant data is constructed unconditionally over every number
-field; compatible archimedean period data remains an input. The project does
-not claim an Arakelov Faltings height or an unconditional all-curves comparison
-theorem.
+constructed formula-level realization data, Silverman's formula-defined
+height, and certified and all-curves forms of Proposition 2.1. The
+archimedean construction uses only surjectivity of modular `j` to choose a
+matching fundamental-domain parameter; it does not claim periods obtained from
+the given curve. The project does not claim an Arakelov Faltings height or an
+analytic uniformization theorem for arbitrary curves.
 -/

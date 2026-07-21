@@ -1020,4 +1020,40 @@ theorem proposition_2_1_semistable_of_periods :
   intro K _ _ W _ p hs
   exact hall K W (globalMinimalDiscriminantData W) p hs
 
+/-- Silverman's corrected two-sided comparison over every number field and
+elliptic Weierstrass curve, for the formula-defined height obtained from the
+constructed finite data and a classical choice of weak `j`-compatible
+archimedean data. This theorem makes no Arakelov Faltings-height claim. -/
+theorem proposition_2_1 :
+    ∃ C : ℝ, 0 ≤ C ∧
+      ∀ (K : Type*) [Field K] [NumberField K]
+        (W : WeierstrassCurve K) [W.IsElliptic],
+        -C ≤ normalizedLogHeight K W.j +
+              logIdealNorm (unstableMinimalDiscriminantOfCurve W) /
+                (Module.finrank ℚ K : ℝ) -
+            12 * silvermanHeightOfCurve W ∧
+          normalizedLogHeight K W.j +
+              logIdealNorm (unstableMinimalDiscriminantOfCurve W) /
+                (Module.finrank ℚ K : ℝ) -
+            12 * silvermanHeightOfCurve W ≤
+          6 * Real.log (1 + normalizedLogHeight K W.j) + C := by
+  rcases proposition_2_1_of_periods with ⟨C, hC, hall⟩
+  refine ⟨C, hC, ?_⟩
+  intro K _ _ W _
+  exact hall K W (archimedeanPeriodData W)
+
+/-- The semistable specialization of `proposition_2_1` for the same
+formula-defined, classically chosen height. -/
+theorem proposition_2_1_semistable :
+    ∃ C : ℝ, 0 ≤ C ∧
+      ∀ (K : Type*) [Field K] [NumberField K]
+        (W : WeierstrassCurve K) [W.IsElliptic],
+        IsSemistableOfCurve K W →
+        |normalizedLogHeight K W.j - 12 * silvermanHeightOfCurve W| ≤
+          6 * Real.log (1 + normalizedLogHeight K W.j) + C := by
+  rcases proposition_2_1_semistable_of_periods with ⟨C, hC, hall⟩
+  refine ⟨C, hC, ?_⟩
+  intro K _ _ W _ hs
+  exact hall K W (archimedeanPeriodData W) hs
+
 end Heights

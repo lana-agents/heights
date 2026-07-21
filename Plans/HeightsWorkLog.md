@@ -500,3 +500,25 @@ addition, and the bijective descended map is packaged as
 uniformization of the explicit lattice curve, not a claim of an analytic
 Lie-group equivalence or arbitrary-curve uniformization. Full CI, trust, axiom,
 and Blueprint checks pass with 430 audited declarations.
+
+## Autonomous run 23 — 2026-07-21
+
+Run 23 closes the weak archimedean realization gap #128/#57 without a valence
+theorem or modular-curve compactification. `Heights/ModularJ.lean` first proves
+that `‖modularJ τ‖ → ∞` at the cusp from the existing scaled `q`-asymptotic.
+The complex open mapping theorem then makes the nonconstant holomorphic image
+open. To prove it closed, a convergent sequence of values is lifted and moved
+into the standard fundamental domain; cusp growth bounds the imaginary parts,
+and compactness of the corresponding truncated fundamental domain supplies a
+convergent subsequence of preimages. Connectedness of `ℂ` gives
+`Heights.modularJ_surjective`.
+
+`Heights.nonempty_archimedeanPeriodData` now constructs the deliberately weak
+`j`-compatible data for every elliptic curve over a number field. This is not a
+claim that the selected parameters arise by integrating a differential on the
+input curve. `silvermanHeightOfCurve`, `proposition_2_1`, and
+`proposition_2_1_semistable` instantiate both formula-level data interfaces,
+while explicitly retaining the honesty boundary: no independently constructed
+Arakelov Faltings height or arbitrary-curve analytic uniformization is claimed.
+Full CI, trust, axiom, comparator, and Blueprint checks pass with 441 audited
+declarations.

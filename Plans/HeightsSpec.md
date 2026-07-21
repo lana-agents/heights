@@ -198,9 +198,9 @@ theorem proposition_2_1_semistable_certified :
         6 * Real.log (1 + normalizedLogHeight K W.j) + C
 ```
 
-This is the largest currently justified headline result. It is conditional only
-on geometric/arithmetic realization data absent from mathlib, not on any form of
-the desired comparison.
+This was the largest initially justified headline result. The finite data and
+the deliberately weak `j`-compatible archimedean interface are now constructed;
+the distinction from an Arakelov Faltings height remains essential.
 
 #### What is not claimed
 
@@ -208,11 +208,13 @@ The repository does **not** claim:
 
 * an unconditional construction of the Faltings height as the Arakelov degree of
   the Hodge bundle;
-* existence of compatible periods for every complex embedding of every `W/K`;
-* an algebraic/analytic isomorphism `E(ℂ) ≃ ℂ/(ℤ+ℤτ)`;
-* the unconditional all-curves form of Proposition 2.1. The certified theorem
-  is proved, and over every number field its sole remaining realization input
-  is `ArchimedeanPeriodData K W`.
+* genuine periods obtained by integrating a differential on every embedded
+  `W/K` (the constructed weak data records only matching `j`);
+* an algebraic/analytic isomorphism for an arbitrary curve
+  `E(ℂ) ≃ ℂ/(ℤ+ℤτ)`;
+* an unconditional all-curves comparison with an independently constructed
+  Arakelov Faltings height. The all-curves theorem now proved concerns only
+  `silvermanHeightOfCurve`, the explicitly formula-defined height.
 
 Those become targets only after the feasibility gate in P8. Merely restricting to
 `K = ℚ` or to a totally real field does not remove the archimedean term: even a
@@ -354,23 +356,17 @@ large.
    `GlobalMinimalDiscriminantData K W` for every number field (taxis #56).
 2. **Complex uniformization bridge.** Mathlib has upper-half-plane geometry,
    modular forms, the modular discriminant, period lattices, and Weierstrass
-   `℘`, but no theorem producing periods from an algebraic elliptic curve over
-   `ℂ` and no `ℂ/L` elliptic-curve equivalence. This repository now constructs
-   the explicit curve attached to `(τ, 1)`, identifies its algebraic `j` with
-   `modularJ τ`, extends the Weierstrass point map at lattice poles by the point
-   at infinity, descends it set-theoretically to `ℂ/L`, proves the source
-   quotient compact, transports a compact Hausdorff one-point-compactification topology
-   to a named wrapper of the explicit target point type using closedness and
-   local compactness of its affine equation locus. The order-two pole of `℘`
-   proves convergence to infinity at every lattice point, so both the total map
-   and its quotient descent are continuous. Parity of `℘` and `℘′` proves the
-   map preserves zero and negation before and after descent. It still does not
-   prove analytic extension across infinity, compatibility with addition,
-   bijectivity, or a complex-torus equivalence. For the current, deliberately
-   weak `ArchimedeanPeriodData` interface,
-   this repository proves that surjectivity of `modularJ` alone would suffice;
-   that surjectivity theorem is also absent.
-   See `Plans/ArchimedeanUniformizationFeasibility.md` and taxis #57.
+   `℘`, but no theorem producing periods from an arbitrary algebraic elliptic
+   curve over `ℂ`. This repository constructs the explicit curve attached to
+   `(τ, 1)` and proves that its descended Weierstrass map is both a
+   homeomorphism and an additive equivalence `ℂ/L ≃+ Eτ(ℂ)`. It also proves
+   `Function.Surjective modularJ` by showing the holomorphic image is open and,
+   using cusp growth plus compact truncated fundamental domains, closed. This
+   constructs the deliberately weak `ArchimedeanPeriodData` interface for every
+   curve. It still does not prove that these chosen parameters arise as periods
+   of the given curve, an analytic Lie-group equivalence, arbitrary-curve
+   analytic uniformization, or an Arakelov identification.
+   See `Plans/ArchimedeanUniformizationFeasibility.md` and taxis #57/#128.
 
 Forbidden in every phase:
 
@@ -608,7 +604,7 @@ The detailed briefs below are retained as historical design context. This table
 is the current status; a completed row means the repository has the promised
 mathematical content, not that the abandoned review ceremony was performed.
 
-| Phase | Current status (2026-07-20) |
+| Phase | Current status (updated 2026-07-21) |
 |---|---|
 | P0 | Complete: package and reviewed honesty specification. |
 | P1 | Complete: blueprint, comparator, bounded CI, trust and axiom audits. |
@@ -618,8 +614,8 @@ mathematical content, not that the abandoned review ceremony was performed.
 | P5 | Complete: denominator divisibility, canonical unstable ideal, exact finite/archimedean decomposition, semistability. |
 | P6 | Complete: both certified Proposition 2.1 theorems and the expanded comparator target. |
 | P7 | Partially complete: rational arithmetic, equation (11), and ε-absorption are proved; no uncertified Faltings-height corollary is claimed. |
-| P8 | Arithmetic branch GO and complete over every number field (#56). Archimedean branch STOP as phase-sized work, although the explicit lattice curve, total point map, descent through `ℂ/L`, compact source quotient topology, conservative explicit-target topology, and continuity of the total/descended map (including at the poles) are complete Route B slices; see `Plans/ArchimedeanUniformizationFeasibility.md` and #57. Analytic extension, the remaining uniformization properties, and Arakelov identification remain unavailable. |
-| P9 | Partially instantiated: `proposition_2_1_of_periods` removes the finite realization certificate over every number field. `ArchimedeanPeriodData K W` remains, so no unconditional all-curves or Arakelov Faltings-height theorem is claimed. |
+| P8 | Arithmetic branch GO and complete over every number field (#56). Weak archimedean Route A GO and complete: `modularJ_surjective` constructs `ArchimedeanPeriodData` (#57/#128). Route B also gives a topological and additive uniformization of the explicit lattice curve. Arbitrary-curve analytic uniformization and Arakelov identification remain unavailable. |
+| P9 | Complete for the formula-defined object: `silvermanHeightOfCurve`, `proposition_2_1`, and its semistable specialization have no realization-certificate arguments. No comparison with an independently constructed Arakelov Faltings height is claimed. |
 
 ### P0 — Bootstrap (already committed)
 
@@ -765,11 +761,11 @@ report for:
 * relating the formula-defined height to a future Arakelov/Hodge-bundle
   Faltings height.
 
-**Decision.** If these are not phase-sized, stop with P6/P7 as the honest result
-and open/deduplicate big-subproject issues. The global reduction part should
-reference existing issue #5 where appropriate. The complex uniformization
-bridge is likely a new child issue. An all-curves theorem must not be scheduled
-merely because certificate-level Proposition 2.1 is complete.
+**Decision.** The finite branch and the weak archimedean branch are GO and
+complete. The latter uses modular-`j` surjectivity rather than claiming genuine
+periods of the arbitrary input curve. Full arbitrary-curve analytic
+uniformization and Arakelov identification remain STOP as separate
+mathlib-scale projects.
 
 **Checks.** Gap report cites exact failed/successful APIs and contains no
 noncompiling tracked Lean experiments.
@@ -779,11 +775,10 @@ noncompiling tracked Lean experiments.
 
 ### P9 — Unconditional instantiation (only after a P8 `GO`)
 
-**Scope.** Construct both certificates for every elliptic `W/K`, derive the
-unconditional Proposition 2.1 and semistable specialization, and state the exact
-relationship to whichever formal Faltings-height object has actually been
-constructed. This phase must be split into additional phase-sized commits if P8
-finds more than one tractable subproject.
+**Scope.** Construct both formula-level certificates for every elliptic `W/K`
+and derive the unconditional formula-defined Proposition 2.1 and semistable
+specialization. This is now complete. No independent formal Faltings-height
+object has been constructed, so no Arakelov relationship is stated.
 
 **Checks.** Full bounded build, blueprint, comparator, trust, and all-public axiom
 audits; remove every “certified” hypothesis only via an existence theorem.

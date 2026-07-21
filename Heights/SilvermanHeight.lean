@@ -54,8 +54,9 @@ theorem logIdealNorm_nonneg
 The finite term is the norm of the certified minimal-discriminant ideal. The
 archimedean term uses actual period ratios and the actual modular discriminant,
 including `(2π) ^ 12`, and the whole expression is divided by `12 [K : ℚ]`.
-The minimal-discriminant input can now be constructed over every number field;
-the archimedean period input remains a genuine realization certificate. -/
+Both inputs can now be constructed over every number field. The archimedean
+input is only the weak, `j`-compatible data of `ArchimedeanPeriodData`; no
+Arakelov or analytic-uniformization interpretation is asserted. -/
 noncomputable def silvermanHeight
     {K : Type*} [Field K] [NumberField K]
     (W : WeierstrassCurve K) [W.IsElliptic]
@@ -68,13 +69,21 @@ noncomputable def silvermanHeight
     (12 * (Module.finrank ℚ K : ℝ))
 
 /-- Silverman's formula-defined height using the chosen global
-minimal-discriminant data. Only compatible archimedean periods remain as an
-external realization input. -/
+minimal-discriminant data and supplied weak archimedean data. -/
 noncomputable def silvermanHeightOfPeriods
     {K : Type*} [Field K] [NumberField K]
     (W : WeierstrassCurve K) [W.IsElliptic]
     (p : ArchimedeanPeriodData K W) : ℝ :=
   silvermanHeight W (globalMinimalDiscriminantData W) p
+
+/-- Silverman's formula-defined height using classical choices of both the
+global minimal-discriminant data and the weak `j`-compatible archimedean data.
+This is not claimed to be an independently constructed Arakelov Faltings
+height. -/
+noncomputable def silvermanHeightOfCurve
+    {K : Type*} [Field K] [NumberField K]
+    (W : WeierstrassCurve K) [W.IsElliptic] : ℝ :=
+  silvermanHeightOfPeriods W (archimedeanPeriodData W)
 
 /-- Every archimedean logarithm argument in `silvermanHeight` is strictly
 positive. -/
