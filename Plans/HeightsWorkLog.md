@@ -711,4 +711,6 @@ one-dimensional complex-analytic `IsManifold` instance.
 
 This resolves the finite-affine deliverable of taxis #177 without claiming a
 chart at infinity or a complex atlas on the compact point wrapper. Those remain
-the separate taxis #178 / compact-assembly gate.
+the separate taxis #178 / compact-assembly gate. Filed ready-to-clanck taxis
+#179 for the newly separable proof that affine variable changes are
+biholomorphic for these intrinsic finite manifold structures.
