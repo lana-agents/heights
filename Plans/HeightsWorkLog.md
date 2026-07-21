@@ -409,4 +409,5 @@ modulo `L`.
 explicit set-theoretic parameterization. It remains an honest intermediate
 result toward #155, not the Weierstrass addition formula: addition
 compatibility, the group-homomorphism package, surjectivity, and uniformization
-remain open.
+remain open. The now-separable surjectivity half of the explicit quotient map
+was filed as ready-to-clanck #159.
