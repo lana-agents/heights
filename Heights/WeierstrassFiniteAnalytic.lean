@@ -444,6 +444,47 @@ theorem complexWeierstrassImplicitYChart_mem_source
     P ∈ (complexWeierstrassImplicitYChart W P hy).source :=
   complexWeierstrassImplicitYAmbientHomeomorph_mem_source W P.1 hy
 
+/-- On its target, the inverse topological chart is exactly the graph of the
+implicit analytic `y`-function constructed above. -/
+theorem complexWeierstrassImplicitYChart_symm_coe_of_mem
+    (W : WeierstrassCurve ℂ) (P : ComplexWeierstrassAffine W)
+    (hy : complexWeierstrassEquationY W P.1 ≠ 0) (x : ℂ)
+    (hx : x ∈ (complexWeierstrassImplicitYChart W P hy).target) :
+    ((complexWeierstrassImplicitYChart W P hy).symm x :
+        ComplexWeierstrassAffine W) =
+      (x, complexWeierstrassImplicitY W P.1 hy x) := by
+  let e := complexWeierstrassImplicitYAmbientHomeomorph W P.1 hy
+  change (complexWeierstrassImplicitYChartInv W P.1 P.2 hy x : ℂ × ℂ) = _
+  rw [complexWeierstrassImplicitYChartInv_coe_of_mem W P.1 P.2 hy x hx]
+  apply Prod.ext_iff.mpr
+  constructor
+  · have hright := e.right_inv hx
+    exact congrArg Prod.snd hright
+  · have hzero : complexWeierstrassEquation W P.1 = 0 :=
+      (complexWeierstrassEquation_eq_zero_iff W P.1).2 P.2
+    change (e.symm (0, x)).2 = (e.symm (complexWeierstrassEquation W P.1, x)).2
+    rw [hzero]
+
+/-- The inverse of the finite `x`-coordinate chart is complex analytic at its
+center, for the ambient affine coordinates. -/
+theorem contDiffAt_complexWeierstrassImplicitYChart_symm_coe
+    (W : WeierstrassCurve ℂ) (P : ComplexWeierstrassAffine W)
+    (hy : complexWeierstrassEquationY W P.1 ≠ 0) :
+    ContDiffAt ℂ ω (fun x =>
+      (((complexWeierstrassImplicitYChart W P hy).symm x :
+        ComplexWeierstrassAffine W) : ℂ × ℂ)) P.1.1 := by
+  let c := complexWeierstrassImplicitYChart W P hy
+  have hPc : P ∈ c.source := complexWeierstrassImplicitYChart_mem_source W P hy
+  have hPt : P.1.1 ∈ c.target := c.map_source hPc
+  have ht : c.target ∈ 𝓝 P.1.1 := c.open_target.mem_nhds hPt
+  have heq : (fun x => ((c.symm x : ComplexWeierstrassAffine W) : ℂ × ℂ)) =ᶠ[𝓝 P.1.1]
+      (fun x => (x, complexWeierstrassImplicitY W P.1 hy x)) := by
+    filter_upwards [ht] with x hx
+    exact complexWeierstrassImplicitYChart_symm_coe_of_mem W P hy x hx
+  apply (contDiffAt_id.prodMk
+    (contDiffAt_complexWeierstrassImplicitY W P.1 hy)).congr_of_eventuallyEq
+  simpa [c] using heq
+
 /-- The inverse-function-theorem neighborhood for the swapped equation.  Its
 forward map is `(y, x) ↦ (F(x,y), y)`. -/
 def complexWeierstrassImplicitXAmbientHomeomorph
@@ -584,6 +625,48 @@ theorem complexWeierstrassImplicitXChart_mem_source
     (hx : complexWeierstrassEquationX W P.1 ≠ 0) :
     P ∈ (complexWeierstrassImplicitXChart W P hx).source :=
   complexWeierstrassImplicitXAmbientHomeomorph_mem_source W P.1 hx
+
+/-- On its target, the inverse topological chart is exactly the graph of the
+implicit analytic `x`-function, written back in `(x,y)` order. -/
+theorem complexWeierstrassImplicitXChart_symm_coe_of_mem
+    (W : WeierstrassCurve ℂ) (P : ComplexWeierstrassAffine W)
+    (hx : complexWeierstrassEquationX W P.1 ≠ 0) (y : ℂ)
+    (hy : y ∈ (complexWeierstrassImplicitXChart W P hx).target) :
+    ((complexWeierstrassImplicitXChart W P hx).symm y :
+        ComplexWeierstrassAffine W) =
+      (complexWeierstrassImplicitX W P.1 hx y, y) := by
+  let e := complexWeierstrassImplicitXAmbientHomeomorph W P.1 hx
+  change (complexWeierstrassImplicitXChartInv W P.1 P.2 hx y : ℂ × ℂ) = _
+  rw [complexWeierstrassImplicitXChartInv_coe_of_mem W P.1 P.2 hx y hy]
+  have hfirst : (e.symm (0, y)).2 = complexWeierstrassImplicitX W P.1 hx y := by
+    have hzero : complexWeierstrassEquationSwap W (P.1.2, P.1.1) = 0 :=
+      (complexWeierstrassEquation_eq_zero_iff W P.1).2 P.2
+    change (e.symm (0, y)).2 =
+      (e.symm (complexWeierstrassEquationSwap W (P.1.2, P.1.1), y)).2
+    rw [hzero]
+  have hright := e.right_inv hy
+  have hsecond : (e.symm (0, y)).1 = y := congrArg Prod.snd hright
+  exact Prod.ext hfirst hsecond
+
+/-- The inverse of the finite `y`-coordinate chart is complex analytic at its
+center, for the ambient affine coordinates. -/
+theorem contDiffAt_complexWeierstrassImplicitXChart_symm_coe
+    (W : WeierstrassCurve ℂ) (P : ComplexWeierstrassAffine W)
+    (hx : complexWeierstrassEquationX W P.1 ≠ 0) :
+    ContDiffAt ℂ ω (fun y =>
+      (((complexWeierstrassImplicitXChart W P hx).symm y :
+        ComplexWeierstrassAffine W) : ℂ × ℂ)) P.1.2 := by
+  let c := complexWeierstrassImplicitXChart W P hx
+  have hPc : P ∈ c.source := complexWeierstrassImplicitXChart_mem_source W P hx
+  have hPt : P.1.2 ∈ c.target := c.map_source hPc
+  have ht : c.target ∈ 𝓝 P.1.2 := c.open_target.mem_nhds hPt
+  have heq : (fun y => ((c.symm y : ComplexWeierstrassAffine W) : ℂ × ℂ)) =ᶠ[𝓝 P.1.2]
+      (fun y => (complexWeierstrassImplicitX W P.1 hx y, y)) := by
+    filter_upwards [ht] with y hy
+    exact complexWeierstrassImplicitXChart_symm_coe_of_mem W P hx y hy
+  apply ((contDiffAt_complexWeierstrassImplicitX W P.1 hx).prodMk
+    contDiffAt_id).congr_of_eventuallyEq
+  simpa [c] using heq
 
 /-- At every finite point of a nonsingular complex Weierstrass equation, one
 of the two analytic implicit-coordinate constructions applies. -/

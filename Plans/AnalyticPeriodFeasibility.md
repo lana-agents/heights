@@ -130,10 +130,11 @@ coordinate directions. The resulting functions are analytic at the base
 coordinate, locally unique, and have graphs lying on the equation near the
 base point. The corresponding ambient inverse-function neighborhoods are now
 restricted along the zero fiber to explicit open partial homeomorphisms from
-the affine locus to `ℂ`; every finite point lies in one of their sources, and
-their topology is definitionally the existing subtype topology. Holomorphic
-transitions on those open domains and the `ChartedSpace` assembly remain to be
-packaged.
+the affine locus to `ℂ`; every finite point lies in one of their sources, their
+inverses agree with the analytic graph functions and are analytic at their
+centers, and their topology is definitionally the existing subtype topology.
+Holomorphic transitions on whole chart overlaps and the `ChartedSpace`
+assembly remain to be packaged.
 
 The other essential chart is still wholly open: at infinity, use a
 projective/local parameter such as `-x/y` and prove the coordinate formulas
