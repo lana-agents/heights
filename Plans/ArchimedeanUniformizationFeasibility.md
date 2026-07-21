@@ -3,10 +3,12 @@
 **Date:** 2026-07-20  
 **Scope:** taxis #57; `ArchimedeanPeriodData` in
 `Heights/Certificates.lean`; mathlib `v4.32.0`  
-**Decision (updated 2026-07-21, run 26):** **GO for the formula certificate,
+**Decision (updated 2026-07-21, run 27):** **GO for the formula certificate,
 its algebraic realization, and point-level additive transport; all are
 complete.** Full integration-based arbitrary-curve analytic uniformization
-remains a separate mathlib-scale project.
+remains a separate mathlib-scale project. Its exact post-run-26 boundary and a
+decomposed theorem stack are assessed in
+`Plans/AnalyticPeriodFeasibility.md`.
 
 ## 1. The exact blocker is smaller than full uniformization
 
@@ -275,7 +277,10 @@ principle, and Rouché theorem.
    the affine curve group law, reduces the tangent case to generic secants via
    an auxiliary point outside a countable exceptional set, proves unconditional
    additivity, and packages the descended bijection as an additive
-   equivalence. Still missing: analyticity of the descended equivalence.
+   equivalence. `Heights/LatticeQuotientTopology.lean` now also packages the
+   quotient projection as a covering map. Still missing: an independently
+   verified complex-manifold structure and analyticity of the descended
+   equivalence.
 4. **Completed algebraically in
    `Heights/ArchimedeanAlgebraicRealization.lean`:** modular-`j` surjectivity
    supplies a lattice curve with the same invariant as the embedded arbitrary
@@ -288,8 +293,11 @@ principle, and Rouché theorem.
    and analyticity on the arbitrary target, an invariant differential and its
    integrals, and a connection from those integrals to the lattice.
 
-Mathlib has generic quotient-group infrastructure, but the pinned elliptic
-files contain no complex-torus object carrying the required analytic structure.
+Mathlib has generic quotient-group and covering-map infrastructure, and this
+repository now proves that `ℂ → ℂ/L` is the quotient covering map. The pinned
+elliptic files still contain no complex-torus object carrying a verified
+complex-manifold structure or intrinsic analytic structure on a Weierstrass
+curve point type.
 This repository now supplies both a descended topological equivalence and a
 descended additive equivalence for the explicit lattice curve, plus an actual
 algebraic variable change and additive point equivalence to every embedded

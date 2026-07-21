@@ -210,10 +210,11 @@ The repository does **not** claim:
 * an unconditional construction of the Faltings height as the Arakelov degree of
   the Hodge bundle;
 * periods defined by integrating a differential on every embedded `W/K`
-  (although the selected lattice curve is now related to it by an actual
-  algebraic variable change);
-* a packaged point-level analytic isomorphism for an arbitrary curve
-  `E(ℂ) ≃ ℂ/(ℤ+ℤτ)` (the equation-level algebraic change is proved);
+  (although the selected lattice curve is related to it by an actual algebraic
+  variable change and the induced point map is an additive equivalence);
+* a packaged point-level **analytic** isomorphism for an arbitrary curve
+  `E(ℂ) ≃ ℂ/(ℤ+ℤτ)`. The underlying bijective additive-group isomorphism is
+  proved; an intrinsic complex-manifold structure on the target is not;
 * an unconditional all-curves comparison with an independently constructed
   Arakelov Faltings height. The all-curves theorem now proved concerns only
   `silvermanHeightOfCurve`, the explicitly formula-defined height.
@@ -222,8 +223,8 @@ Those become targets only after the feasibility gate in P8. Merely restricting t
 `K = ℚ` or to a totally real field does not remove the archimedean term: even a
 real place requires a complex period lattice. Corollary 2.3 also depends on
 Proposition 2.1 and therefore does not bypass this gap. Its elementary rational
-identities are honest intermediate results, but its Faltings-height inequalities
-remain certificate-level until uniformization is instantiated.
+identities and the formula-defined comparison are proved, but a version stated
+for an independently constructed Arakelov Faltings height remains unavailable.
 
 ### 2.2 Exact interface signatures for missing geometric realization
 
@@ -379,10 +380,13 @@ discharged; an analytic/integration gap remains.
    constructs the minimal `ArchimedeanPeriodData` interface for every curve.
    Same-`j` classification over `ℂ` now gives an actual algebraic variable
    change from each embedded input curve to its selected lattice curve, and the
-   invariant-differential denominator scaling is explicit. It still does not
-   package that change as an additive/analytic point equivalence, define periods
-   by integration, or give an Arakelov identification.
-   See `Plans/ArchimedeanUniformizationFeasibility.md` and taxis #57/#128/#174.
+   invariant-differential denominator scaling is explicit. The variable change
+   is now packaged as an additive point equivalence and composed with the
+   lattice quotient equivalence. It still does not install an intrinsic complex
+   manifold structure on the arbitrary target, define periods by integration,
+   or give an Arakelov identification. See
+   `Plans/ArchimedeanUniformizationFeasibility.md`,
+   `Plans/AnalyticPeriodFeasibility.md`, and taxis #57/#128/#174.
 
 Forbidden in every phase:
 
@@ -495,12 +499,17 @@ The following was checked against `.lake/packages/mathlib/Mathlib/`.
   `Heights/LatticeQuotientCompact.lean`; `Heights/LatticeAffinePointTopology.lean`
   proves continuity on the pole-free affine chart, and
   `Heights/LatticePointMapTopology.lean` uses the pole order to prove continuity
-  of the total and descended maps at infinity. Search still found no analytic
-  complex torus attached to a `PeriodPair`, no analytic extension across
-  infinity, and no algebraic elliptic-curve uniformization theorem.
+  of the total and descended maps at infinity. The repository subsequently
+  proves bijectivity, additivity, same-`j` algebraic realization, and an
+  additive equivalence to every embedded input curve. It now also packages
+  `ℂ → ℂ/L` as a covering map. Search still found no verified complex-manifold
+  structure on that quotient or on a Weierstrass point type, no global
+  invariant holomorphic differential there, and no integration-based period
+  theorem.
 * `UpperHalfPlane`, its `SL₂` action, `qParam`, and the analytic ingredients are
-  therefore present. The missing part is the bridge from an algebraic curve to
-  this analytic data, not the modular discriminant itself.
+  therefore present. The remaining bridge is specifically from the proved
+  algebraic/additive uniformization to intrinsic complex-analytic and
+  differential-form data, not to the modular discriminant itself.
 * A case-insensitive source search found no occurrence of “Faltings” in
   mathlib and no alternate Faltings-height definition.
 
@@ -778,10 +787,12 @@ report for:
   Faltings height.
 
 **Decision.** The finite branch, the formula-level archimedean branch, and its
-algebraic realization are GO and complete. The latter combines modular-`j`
-surjectivity with same-`j` classification over `ℂ`. Point-level arbitrary-curve
-analytic uniformization, integration of invariant differentials, and Arakelov
-identification remain STOP as separate mathlib-scale projects.
+algebraic and additive-group realization are GO and complete. The latter
+combines modular-`j` surjectivity, explicit lattice uniformization, and same-`j`
+classification over `ℂ`. Intrinsic arbitrary-curve analytic uniformization,
+integration of invariant differentials, and Arakelov identification are not
+tractable as one phase; they are GO only as the decomposed infrastructure
+project assessed in `Plans/AnalyticPeriodFeasibility.md`.
 
 **Checks.** Gap report cites exact failed/successful APIs and contains no
 noncompiling tracked Lean experiments.

@@ -151,8 +151,8 @@ $`\wp(z)-z^{-2}` and $`\wp'(z)+2z^{-3}` tend to zero.
 These cancellations also show that for arbitrary $`a,b\in\mathbb C` both
 secant-formula coordinate candidates extend across $`z=0` with values $`a`
 and $`b/2`. These are the local coordinate cancellations required at the
-point at infinity. They are not the global Weierstrass addition theorem:
-equality with the coordinates at $`z+w` remains open.
+point at infinity. This proposition alone is not the global Weierstrass
+addition theorem; that theorem is proved in the later addition node.
 
 *Status: proved unconditionally.*
 :::
@@ -166,9 +166,9 @@ $`
 `
 Consequently $`(X,2Y)` satisfies the same polynomial first-order ODE as
 $`(\wp,\wp')`. Installing the preceding limiting values at zero makes both
-candidates analytic there. This gives a local ODE route toward the addition
-theorem, but ODE uniqueness and global analytic continuation have not yet
-identified $`X,Y` with the coordinates at $`z+w`.
+candidates analytic there. This is the local ODE input used by the later
+addition theorem, where ODE uniqueness and global analytic continuation do
+identify $`X,Y` with the coordinates at $`z+w`.
 
 *Status: proved on the pole-free, nonvertical secant domain.*
 :::
@@ -253,20 +253,22 @@ bijectivity, and (in the later addition node) additivity are proved
 unconditionally for the explicit lattice curve.*
 :::
 
-:::proposition "prop:lattice-quotient-topology" (uses := "prop:lattice-quotient-point-map") (lean := "Heights.latticeQuotientMk, Heights.continuous_latticeQuotientMk, Heights.isOpenMap_latticeQuotientMk, Heights.isQuotientMap_latticeQuotientMk, Heights.latticeQuotientT1Space, Heights.latticeQuotient_nhds_mk")
+:::proposition "prop:lattice-quotient-topology" (uses := "prop:lattice-quotient-point-map") (lean := "Heights.latticeQuotientMk, Heights.continuous_latticeQuotientMk, Heights.isOpenMap_latticeQuotientMk, Heights.isQuotientMap_latticeQuotientMk, Heights.isAddQuotientCoveringMap_latticeQuotientMk, Heights.isCoveringMap_latticeQuotientMk, Heights.latticeQuotientT1Space, Heights.latticeQuotient_nhds_mk")
 The additive quotient $`\mathbb C/L` carries mathlib's standard quotient
 topology. Its canonical projection from $`\mathbb C` is continuous, open, and
-a quotient map. Since the period lattice is closed, the quotient is a
-$`T_1` topological additive group. Neighborhoods of a quotient class are the
-images of neighborhoods of any chosen representative.
+a quotient map. Discreteness of the period lattice further makes it the
+quotient covering map for lattice translations. Since the period lattice is
+closed, the quotient is a $`T_1` topological additive group. Neighborhoods of
+a quotient class are the images of neighborhoods of any chosen representative.
 
-These facts topologize only the source of the descended point map. They do not
-put a topology on the algebraic elliptic-curve point type or prove that the
-point map is continuous or analytic at its poles, a group homomorphism, a
-bijection, or an analytic equivalence.
+These facts alone topologize only the source of the descended point map. Later
+nodes prove continuity, bijectivity, and additivity after separately
+constructing the explicit target topology. They still do not produce a
+complex-manifold structure or an intrinsic analytic equivalence.
 
-*Status: the source quotient topology is packaged unconditionally; analytic
-uniformization remains open.*
+*Status: the source quotient topology and covering map are packaged
+unconditionally. A verified complex-manifold structure and intrinsic analytic
+uniformization remain open.*
 :::
 
 :::proposition "prop:lattice-quotient-compactness" (uses := "prop:lattice-quotient-topology") (lean := "Heights.isCompact_range_latticeQuotientMk, Heights.isCompact_univ_latticeQuotient, Heights.latticeQuotientCompactSpace")
@@ -469,10 +471,11 @@ positive. Period integration and an Arakelov identification remain unproved.*
 :::
 
 :::proposition "prop:proposition-1-1-certified" (uses := "def:silverman-height")
-With genuine minimal-discriminant and period certificates, the preceding
-formula is the elliptic-curve height formula corresponding to Proposition
-1.1. The finite data is now constructed; this node does not assert
-unconditional period existence or an Arakelov/Hodge-bundle construction.
+The preceding expression is the formula corresponding to Proposition 1.1.
+Both minimal formula-level data interfaces are now constructed, and the period
+parameter has an algebraic/additive realization. This node would additionally
+identify that expression with an independently constructed
+Arakelov/Hodge-bundle height; no such object is yet available.
 
 *Status: not started (conditional/certificate-level target).*
 :::
@@ -522,7 +525,8 @@ the lattice quotient equivalence. It does not topologize the arbitrary target
 or package this as an analytic point equivalence, define periods by integrating
 an invariant differential, or construct an Arakelov Faltings height. The precise
 archimedean findings are recorded in
-`Plans/ArchimedeanUniformizationFeasibility.md`.
+`Plans/ArchimedeanUniformizationFeasibility.md` and the focused follow-up
+`Plans/AnalyticPeriodFeasibility.md`.
 
 {blueprint_graph}
 {blueprint_summary}

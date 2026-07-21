@@ -1,5 +1,6 @@
 import Heights.LatticeQuotientPoint
 import Mathlib.Topology.Algebra.Group.Quotient
+import Mathlib.Topology.Covering.Quotient
 
 set_option linter.style.header false
 
@@ -44,6 +45,24 @@ theorem isOpenMap_latticeQuotientMk (τ : ℍ) :
 theorem isQuotientMap_latticeQuotientMk (τ : ℍ) :
     Topology.IsQuotientMap (latticeQuotientMk τ) :=
   QuotientAddGroup.isQuotientMap_mk _
+
+/-- The canonical projection is the quotient covering map for translation by
+its discrete period lattice. This is the topological input for a future
+independently constructed complex-manifold structure on `ℂ / L`; no such
+structure is asserted here. -/
+theorem isAddQuotientCoveringMap_latticeQuotientMk (τ : ℍ) :
+    IsAddQuotientCoveringMap (latticeQuotientMk τ)
+      (periodPairOfUpperHalfPlane τ).lattice.toAddSubgroup := by
+  apply AddSubgroup.isAddQuotientCoveringMap_of_comm
+  rw [isDiscrete_iff_discreteTopology]
+  change DiscreteTopology (periodPairOfUpperHalfPlane τ).lattice
+  infer_instance
+
+/-- The canonical projection from `ℂ` to its period-lattice quotient is a
+covering map. -/
+theorem isCoveringMap_latticeQuotientMk (τ : ℍ) :
+    IsCoveringMap (latticeQuotientMk τ) :=
+  (isAddQuotientCoveringMap_latticeQuotientMk τ).isCoveringMap
 
 /-- The lattice quotient is `T1` because a period lattice is closed in `ℂ`. -/
 instance latticeQuotientT1Space (τ : ℍ) : T1Space (LatticeQuotient τ) :=
