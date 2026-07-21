@@ -307,10 +307,14 @@ This supplies a period ratio in the standard fundamental domain and its
 compatibility with the algebraic `j`-invariant. It does not contain a bound on
 `τ.im`, a bound on `discriminant`, the height formula, or the target comparison.
 The signature is justified by complex uniformization and classification of
-complex elliptic curves by `j`; choosing the fundamental domain removes the
-`SL₂(ℤ)` ambiguity. The formula for `silvermanHeight` uses the actual
-`silvermanModularDiscriminant` (including `(2π)^12`) and the actual `τ.im`, so
-both archimedean factors of Proposition 1.1 remain visible.
+complex elliptic curves by `j`; choosing the fundamental domain makes the
+global modular bounds directly applicable. The repository now separately
+proves that equal `modularJ` values lie in one `SL₂(ℤ)` orbit and that
+`‖silvermanModularDiscriminant τ‖ * τ.im ^ 6` is invariant on that orbit.
+Thus `silvermanHeight` is independent of the qualifying weak period-data
+choice. Its formula still uses the actual `silvermanModularDiscriminant`
+(including `(2π)^12`) and the actual `τ.im`, so both archimedean factors of
+Proposition 1.1 remain visible.
 
 A stronger future interface may replace `j_eq` by an explicit analytic group
 isomorphism from the complex base change of `W` to the lattice quotient and then

@@ -300,6 +300,11 @@ equivalence from the quotient to the explicit lattice curve are now available.
 They do not resolve analyticity of that equivalence or arbitrary-curve
 uniformization. The weak `ArchimedeanPeriodData K W` interface is now
 constructed unconditionally from modular-`j` surjectivity, as is global
-minimal-discriminant data. This closes the realization inputs needed by the
-formula-defined comparison, but still does not identify that formula with an
-independently constructed Arakelov Faltings height.
+minimal-discriminant data. The remaining choice ambiguity is also discharged:
+`exists_smul_eq_of_modularJ_eq` proves that equal `modularJ` values differ by
+`SL(2, ℤ)`, using homothety and rigidity of the associated period lattices, and
+the weight-twelve transformation law proves the formula independent of the
+chosen weak data. This closes the realization inputs needed by the
+formula-defined comparison, but still does not identify the weak parameters
+with periods of the input curve or the formula with an independently
+constructed Arakelov Faltings height.

@@ -523,3 +523,21 @@ Arakelov Faltings height or arbitrary-curve analytic uniformization is claimed.
 Full CI, trust, axiom, comparator, and Blueprint checks pass with 441 audited
 declarations. Filed ready-to-clanck #173 for the now-separable canonicality
 question: prove the formula is independent of the weak period-data choice.
+
+## Autonomous run 24 — 2026-07-21
+
+Run 24 resolves #173 without assuming orbit equivalence. A reciprocal-coordinate
+ODE at the pole proves that `g₂` and `g₃` determine a period lattice. Equality
+of modular `j` gives an algebraic variable change between the two explicit
+lattice curves; its `c₄` and `c₆` transformation laws therefore identify the
+lattices up to homothety. Comparing their two integral bases and using positivity
+of the upper-half-plane imaginary parts constructs an actual `SL(2, ℤ)` element,
+proving `Heights.exists_smul_eq_of_modularJ_eq`.
+
+The weight-twelve discriminant law and imaginary-part transformation then show
+that `‖silvermanModularDiscriminant τ‖ * τ.im ^ 6` depends only on `modularJ τ`.
+Consequently `silvermanHeight_periodData_independent` proves equality for any
+two qualifying weak `ArchimedeanPeriodData` values, and every such value agrees
+with `silvermanHeightOfCurve`. This makes the formula canonical while preserving
+the existing honesty boundary: no chosen `τ` is proved to be a genuine period
+of the input curve, and no Arakelov Faltings-height identification is claimed.

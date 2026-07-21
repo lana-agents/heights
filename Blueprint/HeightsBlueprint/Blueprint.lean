@@ -66,16 +66,18 @@ nonvanishing follows from nonvanishing of both factors.
 formalized unconditionally.*
 :::
 
-:::definition "def:modular-j" (lean := "Heights.modularJ, Heights.modularJ_mul_discriminant, Heights.modularJ_eq_zero_iff, Heights.modularJ_smul, Heights.exists_mem_fd_modularJ_eq_of_surjective")
+:::definition "def:modular-j" (lean := "Heights.modularJ, Heights.modularJ_mul_discriminant, Heights.modularJ_eq_zero_iff, Heights.modularJ_smul, Heights.exists_mem_fd_modularJ_eq_of_surjective, Heights.exists_smul_eq_of_modularJ_eq, Heights.silvermanModularDiscriminant_norm_mul_im_pow_eq_of_modularJ_eq")
 The quotient $`E_4^3/\Delta` has leading term $`q^{-1}` and is therefore the
 $`q^{-1}+744+\cdots` modular invariant used in the height estimates, with no
 extra factor of $`1728`. The $`E_4,E_6,\Delta` identity checks this convention,
 while modular invariance permits a preimage to be moved into the standard
 fundamental domain.
 
-*Status: `Heights.modularJ` and the linked normalization/invariance lemmas are
-formalized unconditionally; `prop:modular-estimates` proves the required global
-bounds.*
+*Status: formalized unconditionally. Surjectivity is complemented by a proof
+that equal values lie in one $`\mathrm{SL}_2(\mathbb Z)` orbit; the latter uses
+homothety and rigidity of the associated period lattices. Consequently the
+Petersson-normalized absolute discriminant depends only on $`j`.
+`prop:modular-estimates` proves the required global bounds.*
 :::
 
 # Unconditional mathematics
@@ -425,7 +427,7 @@ existence and `Heights.reducedPrincipalIdealData` fixes a canonical choice.*
 
 # Certificate-level height and comparisons
 
-:::definition "def:silverman-height" (uses := "def:silverman-modular-discriminant, def:global-minimal-discriminant-data, def:archimedean-period-data") (lean := "Heights.silvermanHeight, Heights.silvermanHeightOfPeriods, Heights.silvermanHeightOfCurve, Heights.silvermanHeight_archimedean_log_arg_pos, Heights.silvermanHeight_denominator_pos")
+:::definition "def:silverman-height" (uses := "def:silverman-modular-discriminant, def:global-minimal-discriminant-data, def:archimedean-period-data") (lean := "Heights.silvermanHeight, Heights.silvermanHeight_periodData_independent, Heights.silvermanHeightOfPeriods, Heights.silvermanHeightOfCurve, Heights.silvermanHeightOfPeriods_eq_silvermanHeightOfCurve, Heights.silvermanHeight_archimedean_log_arg_pos, Heights.silvermanHeight_denominator_pos")
 Silverman's formula balances the finite bad-reduction contribution
 $`\log N(\Delta_{\min})` against the archimedean norm of the discriminant
 differential, $`\log(|\Delta_{\mathrm{Silv}}(\tau)|\operatorname{Im}(\tau)^6)`.
@@ -436,7 +438,10 @@ constructed Arakelov height.
 
 *Status: formalized. `Heights.silvermanHeightOfCurve` supplies the constructed
 finite data and a classical choice of the now-constructed weak archimedean
-data. Positivity of every logarithm argument and denominator is proved, but no
+data. Equal modular $`j`-values are proved to lie in one
+$`\mathrm{SL}_2(\mathbb Z)` orbit, so the Petersson-normalized discriminant and
+hence the formula are independent of that weak choice. Positivity of every
+logarithm argument and denominator is proved, but no analytic-period or
 Arakelov identification is claimed.*
 :::
 
