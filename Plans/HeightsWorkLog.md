@@ -383,3 +383,18 @@ uniformization map in `3162f06`. `LatticePointMapNegation.lean` uses evenness of
 and negation. It deliberately does not package a group homomorphism: the
 addition theorem remains open and was filed as standalone ready-to-clanck issue
 #155. CI passes with 349 audited declarations after this slice.
+
+## Autonomous run 17 — 2026-07-20
+
+The first addition-theorem prerequisite is now formalized in
+`Heights/WeierstrassDifferential.lean`. Differentiating mathlib's cubic
+Weierstrass relation initially gives the desired second-order equation times
+`℘′`. Rather than divide pointwise and lose the ramification points, the proof
+uses analytic no-zero-divisors on the connected lattice complement. The
+alternative that `℘′` vanishes identically would make `℘` constant there and
+contradicts its order-two pole. Thus `Heights.deriv_derivWeierstrassP` proves
+`℘′′ = 6℘² - g₂/2` at every non-lattice point.
+
+This is an honest intermediate result toward #155, not the Weierstrass addition
+formula itself. Addition compatibility, the group-homomorphism package,
+bijectivity, and uniformization remain open.

@@ -100,10 +100,15 @@ to prove that the affine coordinates leave every compact set near a lattice
 point.  Thus the total map is continuous into the one-point compactification,
 and the quotient-map criterion proves its descent `ℂ/L → Eτ(ℂ)` continuous.
 `Heights/LatticePointMapNegation.lean` proves that zero and negation are
-preserved before and after descent, using parity of `℘` and `℘′`. Analytic
-extension across infinity, compatibility with addition, bijectivity,
-complex-torus equivalence, and arbitrary-curve uniformization have not been
-proved.
+preserved before and after descent, using parity of `℘` and `℘′`. The analytic
+addition frontier now has one further input in
+`Heights/WeierstrassDifferential.lean`: differentiating the cubic relation and
+using analytic no-zero-divisors on the connected lattice complement proves the
+second-order equation `℘′′ = 6℘² - g₂/2`, including at the ramification points
+where pointwise cancellation by `℘′` would be invalid. The Weierstrass addition
+formula itself, analytic extension across infinity, compatibility with
+addition, bijectivity, complex-torus equivalence, and arbitrary-curve
+uniformization have not been proved.
 
 ### Modular forms and the fundamental domain
 
@@ -191,9 +196,12 @@ result.
    and regular), and its affine chart is an open embedding.  The pole-free
    point map is continuous into that chart; the order-two pole of `℘` proves
    convergence to infinity at lattice points, hence continuity of the total
-   and descended maps, and prove compatibility with zero and negation. Still
-   missing: prove analytic extension, compatibility with addition, bijectivity,
-   and analyticity of the descended map.
+   and descended maps, and compatibility with zero and negation is proved.
+   `Heights/WeierstrassDifferential.lean` also proves the second-order ODE
+   `℘′′ = 6℘² - g₂/2` on the lattice complement, an input for an ODE/identity-
+   theorem route to the addition formula. Still missing: the addition formula
+   itself, analytic extension, compatibility with addition, bijectivity, and
+   analyticity of the descended map.
 4. In the converse direction, obtain a lattice from an arbitrary algebraic
    complex elliptic curve (normally via periods of a holomorphic differential
    or an inverse elliptic integral), then identify the resulting curve using
@@ -220,9 +228,10 @@ right long-term path if “period data” is to carry its full geometric meaning
 and if the formula-defined height is eventually to be related to a genuine
 Faltings height. The compact source quotient topology, a conservative compact
 Hausdorff one-point-compactification topology on the explicit target,
-continuity of the total and descended point maps, and their zero/negation
-compatibility are now available, but they do not resolve analytic extension,
-compatibility with addition, bijectivity, or the uniformization gap. Until one
+continuity of the total and descended point maps, their zero/negation
+compatibility, and the second-order Weierstrass ODE are now available, but they
+do not resolve the addition formula, analytic extension, compatibility with
+addition, bijectivity, or the uniformization gap. Until one
 route lands, the comparison over every number field correctly
 retains `ArchimedeanPeriodData K W` as its sole remaining realization
 certificate; global minimal-discriminant data is now constructed

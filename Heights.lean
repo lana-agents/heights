@@ -1,6 +1,7 @@
 import Heights.WeilHeight
 import Heights.ModularJ
 import Heights.LatticeEisenstein
+import Heights.WeierstrassDifferential
 import Heights.LatticeWeierstrass
 import Heights.LatticeAffinePoint
 import Heights.LatticeQuotientPoint

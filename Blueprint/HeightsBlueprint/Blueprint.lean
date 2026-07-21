@@ -135,7 +135,12 @@ torus, descend $`\wp`, or uniformize an algebraic elliptic curve.
 *Status: proved unconditionally.*
 :::
 
-:::proposition "prop:lattice-weierstrass-curve" (uses := "prop:lattice-eisenstein-normalization, def:modular-j") (lean := "Heights.latticeWeierstrassCurve, Heights.weierstrassP_on_latticeWeierstrassCurve, Heights.latticeWeierstrassCurve_c4, Heights.latticeWeierstrassCurve_discriminant, Heights.latticeWeierstrassCurve_discriminant_eq_modularDiscriminant, Heights.latticeWeierstrassCurve_j")
+:::proposition "prop:lattice-weierstrass-curve" (uses := "prop:lattice-eisenstein-normalization, def:modular-j") (lean := "Heights.deriv_derivWeierstrassP, Heights.latticeWeierstrassCurve, Heights.weierstrassP_on_latticeWeierstrassCurve, Heights.latticeWeierstrassCurve_c4, Heights.latticeWeierstrassCurve_discriminant, Heights.latticeWeierstrassCurve_discriminant_eq_modularDiscriminant, Heights.latticeWeierstrassCurve_j")
+Differentiating the cubic Weierstrass relation and using analytic
+no-zero-divisors on the connected lattice complement gives the second-order
+identity $`\wp''=6\wp^2-g_2/2`; the order-two pole excludes the spurious case
+that $`\wp'` vanishes identically.
+
 The lattice invariants define the short Weierstrass curve
 $`y^2=x^3-g_2x/4-g_3/4`. Away from the lattice, the differential equation for
 $`\wp` proves that $`(\wp(z),\wp'(z)/2)` lies on this curve. Its algebraic
