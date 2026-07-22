@@ -790,4 +790,7 @@ complex Weierstrass point type is now an intrinsic one-dimensional complex-
 analytic manifold, with no selected lattice parameter and no transported
 atlas. This completes analytic gate 2. Analyticity of the explicit lattice
 uniformization, global invariant differentials, integration, and the Arakelov
-identification remain open.
+identification remain open. Filed ready-to-clanck taxis #180 for extending
+admissible variable changes to compact biholomorphisms and #181 for proving
+the explicit lattice-quotient uniformization biholomorphic between the two
+independently constructed compact manifolds.
