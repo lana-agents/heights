@@ -759,3 +759,35 @@ This map is continuous at the branch origin: the proof bounds the
 `y`-coordinate on an arbitrary compact affine subset and uses `y=1/v` to show
 that sufficiently small nonzero `v` escapes it. What remains is the converse
 local-openness/homeomorphism result and compact atlas assembly.
+
+## Autonomous run 36 — 2026-07-21
+
+Completed the topology comparison at projective infinity. An explicit cubic
+properness bound controls affine points whose projective coordinates remain
+small, proving reverse continuity at one-point infinity. The complete
+projective branch is therefore homeomorphic to the open compact-curve
+neighborhood obtained by deleting the compact affine `y = 0` locus. Its local
+`u`-chart lifts through this open embedding, while every preferred finite chart
+lifts through the affine open embedding. `Heights/WeierstrassCompactCharts.lean`
+combines these into a `ChartedSpace ℂ` on the independently defined compact
+Hausdorff topology. Mixed transition holomorphicity, and hence the compact
+`IsManifold` instance, remained explicit.
+
+## Autonomous run 37 — 2026-07-21
+
+Closed the mixed analytic gluing gate. On a finite-to-infinity overlap, the
+transition is `x/y`; in the reverse direction it is `u/v` for a preferred
+`x`-coordinate chart and `1/v` for a preferred `y`-coordinate chart. Equality
+with these rational formulas follows from the proved projective/affine branch
+identification, and overlap membership proves the relevant denominator is
+nonzero. Analyticity of the finite and projective inverse graph maps then gives
+whole-overlap holomorphicity in both directions.
+
+Together with the finite/finite transition theorem and the identity
+infinity/infinity transition, this installs
+`complexWeierstrassPointIsManifold`: every nonsingular equation-defined compact
+complex Weierstrass point type is now an intrinsic one-dimensional complex-
+analytic manifold, with no selected lattice parameter and no transported
+atlas. This completes analytic gate 2. Analyticity of the explicit lattice
+uniformization, global invariant differentials, integration, and the Arakelov
+identification remain open.

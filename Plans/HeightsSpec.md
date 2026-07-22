@@ -214,8 +214,10 @@ The repository does **not** claim:
   variable change and the induced point map is an additive equivalence);
 * a packaged point-level **analytic** isomorphism for an arbitrary curve
   `E(ℂ) ≃ ℂ/(ℤ+ℤτ)`. The underlying bijective additive-group isomorphism is
-  proved, as is an intrinsic compact Hausdorff topology on every nonsingular
-  complex Weierstrass point type; a complex-manifold atlas is not;
+  proved, and every nonsingular complex Weierstrass point type now has an
+  intrinsic compact one-dimensional complex-manifold structure; analyticity
+  of the explicit uniformization between the independently built source and
+  target structures is not yet proved;
 * an unconditional all-curves comparison with an independently constructed
   Arakelov Faltings height. The all-curves theorem now proved concerns only
   `silvermanHeightOfCurve`, the explicitly formula-defined height.
@@ -382,10 +384,11 @@ discharged; an analytic/integration gap remains.
    invariant-differential denominator scaling is explicit. The variable change
    is now packaged as an additive point equivalence and composed with the
    lattice quotient equivalence. Every nonsingular complex Weierstrass point
-   type now also has an independently equation-defined compact Hausdorff
-   topology, and admissible variable changes are homeomorphisms for these
-   topologies. This still does not install an intrinsic complex-manifold
-   structure, define periods by integration, or give an Arakelov identification. See
+   type now also has an independently equation-defined compact one-dimensional
+   complex-manifold structure, and admissible variable changes are
+   homeomorphisms for the underlying independently defined topologies. This
+   still does not prove the explicit uniformization analytic, define periods by
+   integration, or give an Arakelov identification. See
    `Plans/ArchimedeanUniformizationFeasibility.md`,
    `Plans/AnalyticPeriodFeasibility.md`, and taxis #57/#128/#174.
 
@@ -524,10 +527,12 @@ The following was checked against `.lake/packages/mathlib/Mathlib/`.
   manifold in `Heights/LatticeQuotientManifold.lean`, with the projection
   locally biholomorphic. Every nonsingular complex Weierstrass point type has
   an intrinsic compact Hausdorff topology, and its affine equation locus has
-  a verified intrinsic complex-manifold atlas. There is still no assembled
-  complex-manifold structure on the compact point type, no chart at infinity,
-  no global invariant holomorphic differential there, and no integration-based
-  period theorem.
+  a verified intrinsic complex-manifold atlas. The projective infinity branch
+  supplies the remaining compact chart, and the rational mixed transitions are
+  proved holomorphic in both directions, giving the compact point type an
+  independently assembled one-dimensional complex `IsManifold` structure.
+  There is still no global invariant holomorphic differential there and no
+  integration-based period theorem.
 * `UpperHalfPlane`, its `SL₂` action, `qParam`, and the analytic ingredients are
   therefore present. The remaining bridge is specifically from the proved
   algebraic/additive uniformization to intrinsic complex-analytic and

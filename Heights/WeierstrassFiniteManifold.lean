@@ -174,6 +174,53 @@ noncomputable instance complexWeierstrassAffineChartedSpace
   mem_chart_source := complexWeierstrassAffineChartAt_mem_source W
   chart_mem_atlas := fun P => Set.mem_range_self P
 
+/-- The inverse of a preferred finite chart is analytic in ambient
+coordinates at every point of its target. -/
+theorem contDiffAt_complexWeierstrassAffineChartAt_symm_coe_of_mem
+    (W : WeierstrassCurve ℂ) [W.IsElliptic]
+    (P : ComplexWeierstrassAffine W) (z : ℂ)
+    (hz : z ∈ (complexWeierstrassAffineChartAt W P).target) :
+    ContDiffAt ℂ ω (fun z =>
+      (((complexWeierstrassAffineChartAt W P).symm z :
+        ComplexWeierstrassAffine W) : ℂ × ℂ)) z := by
+  by_cases hP : complexWeierstrassEquationY W P.1 ≠ 0
+  · rw [complexWeierstrassAffineChartAt_eq_implicitY W P hP] at hz ⊢
+    exact contDiffAt_complexWeierstrassImplicitYChart_symm_coe_of_mem W P hP z hz
+  · let hX :=
+      (complexWeierstrassAffine_derivative_ne_zero W P).resolve_right hP
+    rw [complexWeierstrassAffineChartAt_eq_implicitX W P hP] at hz ⊢
+    exact contDiffAt_complexWeierstrassImplicitXChart_symm_coe_of_mem W P hX z hz
+
+/-- Any transition between two preferred finite charts is analytic on its
+whole overlap. -/
+theorem contDiffOn_complexWeierstrassAffineChartAt_transition
+    (W : WeierstrassCurve ℂ) [W.IsElliptic]
+    (P Q : ComplexWeierstrassAffine W) :
+    ContDiffOn ℂ ω
+      ((complexWeierstrassAffineChartAt W P).symm.trans
+        (complexWeierstrassAffineChartAt W Q))
+      ((complexWeierstrassAffineChartAt W P).symm.trans
+        (complexWeierstrassAffineChartAt W Q)).source := by
+  by_cases hP : complexWeierstrassEquationY W P.1 ≠ 0
+  · rw [complexWeierstrassAffineChartAt_eq_implicitY W P hP]
+    by_cases hQ : complexWeierstrassEquationY W Q.1 ≠ 0
+    · rw [complexWeierstrassAffineChartAt_eq_implicitY W Q hQ]
+      exact contDiffOn_complexWeierstrassImplicitYChart_transition W P Q hP hQ
+    · rw [complexWeierstrassAffineChartAt_eq_implicitX W Q hQ]
+      exact contDiffOn_complexWeierstrassImplicitYChart_ImplicitXChart_transition
+        W P Q hP
+          ((complexWeierstrassAffine_derivative_ne_zero W Q).resolve_right hQ)
+  · rw [complexWeierstrassAffineChartAt_eq_implicitX W P hP]
+    by_cases hQ : complexWeierstrassEquationY W Q.1 ≠ 0
+    · rw [complexWeierstrassAffineChartAt_eq_implicitY W Q hQ]
+      exact contDiffOn_complexWeierstrassImplicitXChart_ImplicitYChart_transition
+        W P Q
+          ((complexWeierstrassAffine_derivative_ne_zero W P).resolve_right hP) hQ
+    · rw [complexWeierstrassAffineChartAt_eq_implicitX W Q hQ]
+      exact contDiffOn_complexWeierstrassImplicitXChart_transition W P Q
+        ((complexWeierstrassAffine_derivative_ne_zero W P).resolve_right hP)
+        ((complexWeierstrassAffine_derivative_ne_zero W Q).resolve_right hQ)
+
 /-- The intrinsic finite affine charted space is a one-dimensional complex
 analytic manifold.  Compatibility is proved from the four explicit
 whole-overlap transition theorems above. -/

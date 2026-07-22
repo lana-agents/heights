@@ -979,6 +979,56 @@ projective coordinate `u`. -/
     OpenPartialHomeomorph.lift_openEmbedding_apply]
   rfl
 
+/-- Away from the branch origin, the open projective embedding agrees with
+its explicit rational affine point. -/
+theorem complexWeierstrassInfinityBranchToPoint_eq_affine
+    (W : WeierstrassCurve ℂ) [W.IsElliptic]
+    (Q : ComplexWeierstrassInfinityBranch W) (hv : Q.1.2 ≠ 0) :
+    complexWeierstrassInfinityBranchToPoint W Q =
+      complexWeierstrassPointOfAffine W
+        (complexWeierstrassInfinityPuncturedHomeomorph W ⟨Q, hv⟩).1 := by
+  apply (complexWeierstrassPointHomeomorph W).injective
+  rw [complexWeierstrassPointHomeomorph_affine]
+  simp only [complexWeierstrassInfinityBranchToPoint, Function.comp_apply,
+    Homeomorph.apply_symm_apply]
+  exact complexWeierstrassInfinityBranchToOnePoint_of_snd_ne_zero W Q hv
+
+/-- A projective branch point representing an affine compact-curve point is
+not the branch origin. -/
+theorem complexWeierstrassInfinityBranch_snd_ne_zero_of_toPoint_eq_affine
+    (W : WeierstrassCurve ℂ) [W.IsElliptic]
+    (Q : ComplexWeierstrassInfinityBranch W)
+    (P : ComplexWeierstrassAffine W)
+    (h : complexWeierstrassInfinityBranchToPoint W Q =
+      complexWeierstrassPointOfAffine W P) :
+    Q.1.2 ≠ 0 := by
+  intro hv
+  have hQ := (complexWeierstrassInfinityBranch_snd_eq_zero_iff W Q).1 hv
+  rw [hQ, complexWeierstrassInfinityBranchToPoint_origin] at h
+  have hh := congrArg (complexWeierstrassPointHomeomorph W) h
+  rw [complexWeierstrassPointHomeomorph_infinity,
+    complexWeierstrassPointHomeomorph_affine] at hh
+  exact OnePoint.infty_ne_coe P hh
+
+/-- If a projective branch point and an affine point represent the same
+compact-curve point, their coordinates satisfy the rational overlap formula. -/
+theorem complexWeierstrassAffine_coe_eq_of_branchToPoint_eq
+    (W : WeierstrassCurve ℂ) [W.IsElliptic]
+    (Q : ComplexWeierstrassInfinityBranch W)
+    (P : ComplexWeierstrassAffine W)
+    (h : complexWeierstrassInfinityBranchToPoint W Q =
+      complexWeierstrassPointOfAffine W P) :
+    (P : ℂ × ℂ) = (Q.1.1 / Q.1.2, 1 / Q.1.2) := by
+  have hv :=
+    complexWeierstrassInfinityBranch_snd_ne_zero_of_toPoint_eq_affine W Q P h
+  have h' :=
+    (complexWeierstrassInfinityBranchToPoint_eq_affine W Q hv).symm.trans h
+  have hP :
+      (complexWeierstrassInfinityPuncturedHomeomorph W ⟨Q, hv⟩).1 = P :=
+    (isOpenEmbedding_complexWeierstrassPointOfAffine W).injective h'
+  rw [← hP]
+  rfl
+
 /-- The rational projective-to-affine overlap formula is holomorphic wherever
 `v ≠ 0`. -/
 theorem contDiffOn_complexWeierstrassInfinity_toAffine :

@@ -66,8 +66,9 @@ punctured branch is identified with the affine curve by the rational overlap
 formulas. An explicit cubic properness estimate proves that the whole branch
 is homeomorphic to the open compact-curve neighborhood obtained by deleting
 the affine `y = 0` locus. Lifting the finite and infinity charts through their
-open embeddings gives a compact `ChartedSpace ℂ` on the independently defined
-topology. The project still does not package the mixed finite/infinity
-transitions into an `IsManifold` instance, prove the uniformization analytic,
-formalize periods by integration, or construct an Arakelov Faltings height.
+open embeddings, and proving both rational mixed transitions holomorphic,
+gives the independently topologized compact curve a one-dimensional complex-
+analytic `IsManifold` structure. The project still does not prove the explicit
+uniformization analytic for this intrinsic structure, formalize periods by
+integration, or construct an Arakelov Faltings height.
 -/

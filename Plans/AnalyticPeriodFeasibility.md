@@ -163,8 +163,10 @@ the compact affine `y = 0` locus. In particular the branch embeds openly into
 chart there. `Heights/WeierstrassCompactCharts.lean` lifts the finite charts
 through the affine open embedding and combines them with this infinity chart,
 installing a compact-curve `ChartedSpace ℂ` on the independently defined
-topology. The mixed finite/infinity transitions have not yet been packaged as
-an `IsManifold` proof, so no compact complex manifold is claimed yet.
+topology. It identifies both mixed transition directions with the rational
+projective overlap formulas and proves them holomorphic on their whole
+overlaps. Thus the compact point type now has a one-dimensional complex-
+analytic `IsManifold` instance without selecting any period parameter.
 
 ### 3.3 Integration exists in ambient normed spaces, not yet on manifolds here
 
@@ -197,16 +199,15 @@ The remaining work should be split into the following gates.
    an intrinsic complex charted/manifold structure and the quotient projection
    is locally biholomorphic. **Still open:** package and descend the constant
    form `dz`.
-2. **Intrinsic target topology and atlas.** The equation-defined compact
-   Hausdorff topology and variable-change homeomorphisms are complete. The
-   finite affine equation locus has its intrinsic one-dimensional complex
+2. **Intrinsic target topology and atlas.** **Complete.** The equation-defined
+   compact Hausdorff topology and variable-change homeomorphisms are complete.
+   The finite affine equation locus has its intrinsic one-dimensional complex
    manifold structure, including whole-overlap holomorphic transitions. The
-   projective infinity branch is now identified homeomorphically with an open
-   one-point-compactification neighborhood, and its holomorphic `u`-chart has
-   been combined topologically with the lifted finite charts into a compact
-   `ChartedSpace ℂ`. Still open: package holomorphicity of the mixed
-   finite/infinity transitions and install the resulting one-dimensional
-   `IsManifold` instance without using any selected `τ`.
+   projective infinity branch is identified homeomorphically with an open
+   one-point-compactification neighborhood, and its holomorphic `u`-chart is
+   combined with the lifted finite charts into a compact `ChartedSpace ℂ`.
+   Both rational mixed transition directions are holomorphic, yielding the
+   compact one-dimensional `IsManifold` instance without any selected `τ`.
 3. **Invariant differential.** Define the global regular form represented by
    `dx/(2y+a₁x+a₃)`, including the alternate local expressions needed where
    that denominator vanishes and at infinity. Prove it is holomorphic and
@@ -228,13 +229,11 @@ The remaining work should be split into the following gates.
    the project address the Hodge bundle, its metric and Arakelov degree. This is
    a further project, not a consequence of period realization alone.
 
-The atlas/projection portion of gate 1 and the topology, finite manifold,
-infinity topology comparison, and topological compact-atlas assembly portions
-of gate 2 are complete. The affine variable-change slice of gate 4 is also
-complete at the intrinsic finite-manifold level. Descending `dz` finishes gate
-1; mixed finite/infinity holomorphic compatibility and the compact
-`IsManifold` instance finish gate 2. Gate 3, the remaining parts of gates 4--6,
-and then gate 7 remain substantial.
+The atlas/projection portion of gate 1 and all of gate 2, including the
+compact `IsManifold` instance, are complete. The affine variable-change slice
+of gate 4 is also complete at the intrinsic finite-manifold level. Descending
+`dz` finishes gate 1. Gate 3, the remaining parts of gates 4--6, and then gate
+7 remain substantial.
 
 ## 5. Judgment for the heights mission
 
