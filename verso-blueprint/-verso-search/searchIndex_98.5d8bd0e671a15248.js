@@ -1,0 +1,1 @@
+window.docContents[98].resolve({"/#Weil-and-Silverman-Height-Comparisons":{"contents":"\n\n\n\n\n\n\n\n\n\n\n\n\n\n","context":"","header":"Weil and Silverman Height Comparisons","id":"/#Weil-and-Silverman-Height-Comparisons"}});

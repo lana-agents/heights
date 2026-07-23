@@ -1,0 +1,1 @@
+window.docContents[139].resolve({"/Blueprint-Summary/#Weil-and-Silverman-Height-Comparisons--Blueprint-Summary":{"contents":"\n\n","context":"Weil and Silverman Height Comparisons","header":"Blueprint Summary","id":"/Blueprint-Summary/#Weil-and-Silverman-Height-Comparisons--Blueprint-Summary"}});
