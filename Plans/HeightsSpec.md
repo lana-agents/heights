@@ -13,15 +13,13 @@ status table in §5 is authoritative.
 This repository aims to formalize the comparison between the absolute logarithmic
 Weil height of the `j`-invariant and the elliptic-curve/Faltings height in J. H.
 Silverman, “Heights and Elliptic Curves,” Chapter X of Cornell–Silverman (eds.),
-*Arithmetic Geometry*, Springer (1986), especially Proposition 2.1. The local
-source of truth is the complete chapter extraction
-`references/silverman-heights.txt`; the page images are in the private file
-`references/arithmetic_geometry.pdf`.
+*Arithmetic Geometry*, Springer (1986), especially Proposition 2.1. Copyrighted
+source scans and OCR extracts are excluded from this public repository; consult
+a legally obtained copy of the published chapter when checking the literature.
 
-The extraction is from a scan and has OCR/ligature errors. In particular, the
-factor in Proposition 1.1 can look like `12` in the extraction. Equations (8) and
-(9), and the later comparison with `12 h(E/K)`, disambiguate it: the formula to
-formalize is
+The source scan can have OCR/ligature ambiguities. In particular, the factor in
+Proposition 1.1 may be misread as `12`. Equations (8) and (9), and the later
+comparison with `12 h(E/K)`, disambiguate it: the formula to formalize is
 
 \[
 h_{\mathrm{Silv}}(E/K)=\frac{1}{12d}\left(

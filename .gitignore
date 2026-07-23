@@ -2,3 +2,5 @@
 .pi/orchestration/taxis.env
 .pi/orchestration/prompts/
 .pi/orchestration/logs/
+/references/arithmetic_geometry.pdf
+/references/silverman-heights.txt

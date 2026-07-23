@@ -794,3 +794,12 @@ identification remain open. Filed ready-to-clanck taxis #180 for extending
 admissible variable changes to compact biholomorphisms and #181 for proving
 the explicit lattice-quotient uniformization biholomorphic between the two
 independently constructed compact manifolds.
+
+## Public repository handoff — 2026-07-23
+
+Transferred the canonical repository to `lana-agents/heights`. Removed the
+copyrighted Silverman scan and OCR extract from the tracked tree and rewrote Git
+history to exclude both objects before public release. Retired the
+`dagur-clanker`-specific server orchestration files. The clean handoff remains
+main at the rewritten equivalent of `61e35a9`; actionable Taxis issues #180 and
+#181 are unassigned and labeled `ready-to-clanck`.

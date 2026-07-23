@@ -13,12 +13,11 @@ open Informal
 
 # Scope, privacy, and honesty boundary
 
-## PRIVATE COPYRIGHTED SOURCES — NOT FOR PUBLIC RELEASE
+## Source and copyright boundary
 
-> `references/arithmetic_geometry.pdf` and
-> `references/silverman-heights.txt` are private, non-redistributable reference
-> material. They must be removed from history or otherwise excluded before any
-> public release. This blueprint does not reproduce substantial source text.
+> Copyrighted source scans and OCR extracts are excluded from this public
+> repository and its history. This blueprint cites the published literature and
+> does not reproduce substantial source text.
 
 This blueprint tracks the program specified in `Plans/HeightsSpec.md`. There
 are two deliberately separate layers:
