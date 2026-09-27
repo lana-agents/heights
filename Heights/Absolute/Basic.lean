@@ -83,6 +83,13 @@ theorem logHeight_comp_ringHom {L : Type*} [Field L] [NumberField L] (φ : L →
     rfl
   rw [logHeight, ← h1, hcomp, h2]
 
+/-- `logHeight_comp_ringHom` stated for `x = φ ∘ y`. -/
+theorem logHeight_eq_of_eq_comp {L : Type*} [Field L] [NumberField L] (φ : L →+* Qbar)
+    {x : ι → Qbar} {y : ι → L} (h : x = φ ∘ y) :
+    logHeight x = Height.logHeight y / finrank ℚ L := by
+  subst h
+  exact logHeight_comp_ringHom φ y
+
 /-- The absolute height computed in any finite-dimensional intermediate field containing the
 coordinates. -/
 theorem logHeight_eq_of_mem (F : IntermediateField ℚ Qbar) [FiniteDimensional ℚ F]
@@ -289,5 +296,20 @@ theorem finrank_mul_logHeight_comp_ringHom_eq_sum {L : Type*} [Field L] [NumberF
         ∑ᶠ v : FinitePlace L, Real.log (⨆ i, v (y i)) := by
   rw [logHeight_comp_ringHom φ y,
     mul_div_cancel₀ _ (Nat.cast_pos.mpr (finrank_pos (R := ℚ) (M := L))).ne', logHeight_eq_sum hy]
+
+/-- The local formula for the height of an element `b` of a number field `L` embedded in `ℚ̄`:
+`[L : ℚ] · h(φ b) = ∑_{w | ∞} mult w · log⁺ |b|_w + ∑_{v ∤ ∞} log⁺ |b|_v`. -/
+theorem finrank_mul_logHeight_one_comp_ringHom_eq_sum {L : Type*} [Field L] [NumberField L]
+    (φ : L →+* Qbar) (b : L) :
+    finrank ℚ L * logHeight ![1, φ b] =
+      ∑ w : InfinitePlace L, (w.mult : ℝ) * Real.posLog (w b) +
+        ∑ᶠ v : FinitePlace L, Real.posLog (v b) := by
+  have H := logHeight_comp_ringHom φ ![1, b]
+  have hfun : (fun i => φ ((![1, b] : Fin 2 → L) i)) = ![1, φ b] := by
+    ext i
+    fin_cases i <;> simp
+  rw [hfun, Height.logHeight_swap, ← Height.logHeight₁_eq_logHeight] at H
+  rw [H, mul_div_cancel₀ _ (Nat.cast_pos.mpr (finrank_pos (R := ℚ) (M := L))).ne',
+    NumberField.logHeight₁_eq]
 
 end Heights.Absolute
