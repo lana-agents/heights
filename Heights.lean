@@ -38,6 +38,7 @@ import Heights.Absolute.Northcott
 import Heights.Different.QuotientBasis
 import Heights.Different.SerreCore
 import Heights.Different.SerreBound
+import Heights.Different.NumberField
 import Heights.Local.Compactness
 import Heights.Local.PlaceEmbedding
 import Heights.Local.LimitPlace
