@@ -419,7 +419,6 @@ theorem exists_torsion_x_bound :
       mul_inv_cancel₀ (Units.ne_zero C.u), one_pow, norm_one, one_mul]
   have hlat : (latticeWeierstrassCurve τ).Δ = silvermanModularDiscriminant τ := by
     rw [latticeWeierstrassCurve_discriminant_eq_modularDiscriminant, silvermanModularDiscriminant]
-    push_cast
     ring
   have hj : modularJ τ = W.j := hτj
   -- the lower bound for the lattice discriminant
