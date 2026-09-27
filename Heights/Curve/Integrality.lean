@@ -234,4 +234,186 @@ theorem log_apply_le_of_eq_nonarch (hw : ∀ a b, w (a + b) ≤ max (w a) (w b))
 
 end PolyBound
 
+/-! ### Integral equations of quotients -/
+
+section Integral
+
+variable {K : Type*} [Field K] [CharZero K] [IsCurveField K]
+
+/-- If `r` lies in every place containing all the `g l`, then `r` satisfies a monic equation
+whose coefficients are polynomials with rational coefficients in the `g l`. -/
+theorem exists_integral_eq {κ : Type*} (g : κ → K) (r : K)
+    (hr : ∀ P : Place K, (∀ l, g l ∈ P.1) → r ∈ P.1) :
+    ∃ n : ℕ, ∃ Q : ℕ → MvPolynomial κ ℚ,
+      r ^ n + ∑ k ∈ Finset.range n, MvPolynomial.aeval g (Q k) * r ^ k = 0 := by
+  set S : Set K := Set.range (algebraMap ℚ K) ∪ Set.range g with hS
+  have hmem : r ∈ (⨅ V : {V : ValuationSubring K // S ⊆ V.toSubring}, V.1.toSubring) := by
+    rw [Subring.mem_iInf]
+    rintro ⟨V, hV⟩
+    by_cases htop : V = ⊤
+    · subst htop
+      exact trivial
+    · have hq : ∀ q : ℚ, (q : K) ∈ V := fun q => hV (Or.inl ⟨q, (eq_ratCast _ q)⟩)
+      exact hr ⟨V, htop, hq⟩ fun l => hV (Or.inr ⟨l, rfl⟩)
+  rw [iInf_valuationSubring_superset] at hmem
+  obtain ⟨p, hpm, hp⟩ : IsIntegral (Subring.closure S) r := hmem
+  have hcl : ∀ c : Subring.closure S, ∃ Q : MvPolynomial κ ℚ,
+      MvPolynomial.aeval g Q = (c : K) := by
+    intro c
+    have h1 : (c : K) ∈ (Algebra.adjoin ℚ (Set.range g)).toSubring := by
+      rw [Algebra.adjoin_eq_ring_closure]
+      exact c.2
+    rw [Subalgebra.mem_toSubring, Algebra.adjoin_range_eq_range_aeval] at h1
+    exact h1
+  choose Q hQ using hcl
+  refine ⟨p.natDegree, fun k => Q (p.coeff k), ?_⟩
+  have h := hp
+  rw [hpm.as_sum, eval₂_add, eval₂_X_pow, eval₂_finsetSum] at h
+  simp only [eval₂_mul, eval₂_C, eval₂_X_pow] at h
+  simp only [hQ]
+  exact h
+
+end Integral
+
+/-! ### Evaluation of polynomial expressions at points -/
+
+section Evaluation
+
+variable {K : Type*} [Field K] [CharZero K] [IsCurveField K]
+
+/-- Evaluation at `x` as a ring homomorphism `𝒪_{x} → ℚ(x)`. -/
+noncomputable def evalF (x : QbarPoint K) : x.P.1 →+* x.fieldOf :=
+  x.residueFieldEquiv.toRingHom.comp x.P.residue
+
+theorem coe_evalF (x : QbarPoint K) (f : x.P.1) : ((evalF x f : x.fieldOf) : Qbar) =
+    x.eval f.1 f.2 := rfl
+
+theorem evalF_comp_ratHom (x : QbarPoint K) :
+    (evalF x).comp x.P.ratHom = Rat.castHom x.fieldOf := RingHom.ext_rat _ _
+
+/-- Polynomial expressions in functions regular at `x` are regular at `x`, and evaluation
+commutes with them. -/
+theorem aeval_mem_and_evalF {κ : Type*} (x : QbarPoint K) (g : κ → K) (hg : ∀ l, g l ∈ x.P.1)
+    (Q : MvPolynomial κ ℚ) : ∃ h : MvPolynomial.aeval g Q ∈ x.P.1,
+      evalF x ⟨_, h⟩ = MvPolynomial.eval₂ (Rat.castHom x.fieldOf)
+        (fun l => evalF x ⟨g l, hg l⟩) Q := by
+  set g' : κ → x.P.1 := fun l => ⟨g l, hg l⟩
+  set e := MvPolynomial.eval₂ x.P.ratHom g' Q with he
+  have hcoe : (e : K) = MvPolynomial.aeval g Q := by
+    have := MvPolynomial.eval₂_comp_left x.P.1.subtype x.P.ratHom g' Q
+    rw [MvPolynomial.aeval_def]
+    have h1 : x.P.1.subtype.comp x.P.ratHom = algebraMap ℚ K := RingHom.ext_rat _ _
+    rw [h1] at this
+    exact this
+  refine ⟨hcoe ▸ e.2, ?_⟩
+  have h2 : (⟨MvPolynomial.aeval g Q, hcoe ▸ e.2⟩ : x.P.1) = e := Subtype.ext hcoe.symm
+  rw [h2, he, MvPolynomial.eval₂_comp_left, evalF_comp_ratHom]
+  rfl
+
+end Evaluation
+
+/-! ### From local to global bounds -/
+
+section LocalGlobal
+
+variable {ι κ : Type*} [Fintype ι] [Fintype κ]
+
+/-- Finitely many finite places see a nonzero tuple with maximum `≠ 1`. -/
+theorem hasFiniteSupport_log_iSup (F : IntermediateField ℚ Qbar) [FiniteDimensional ℚ F]
+    {y : ι → F} (hy : y ≠ 0) :
+    (fun v : FinitePlace F => Real.log (⨆ i, v (y i))).HasFiniteSupport := by
+  have hfin : ∀ i, y i ≠ 0 → {v : FinitePlace F | v (y i) ≠ 1}.Finite := fun i hi =>
+    FinitePlace.hasFiniteMulSupport hi
+  refine (Set.Finite.biUnion (Set.finite_univ.inter_of_left {i | y i ≠ 0})
+    fun i hi => hfin i hi.2).subset fun v hv => ?_
+  simp only [Function.mem_support, ne_eq] at hv
+  simp only [Set.mem_iUnion, Set.mem_inter_iff, Set.mem_univ, true_and, Set.mem_setOf_eq,
+    exists_prop]
+  by_contra hall
+  push Not at hall
+  apply hv
+  obtain ⟨i₀, hi₀⟩ : ∃ i, y i ≠ 0 := by
+    by_contra h
+    push Not at h
+    exact hy (funext h)
+  haveI : Nonempty ι := ⟨i₀⟩
+  have hsup : (⨆ i, v (y i)) = 1 := by
+    apply le_antisymm
+    · refine ciSup_le fun i => ?_
+      rcases eq_or_ne (y i) 0 with h | h
+      · rw [h, map_zero]
+        exact zero_le_one
+      · exact (hall i h).le
+    · exact le_ciSup_of_le (Finite.bddAbove_range _) i₀ (hall i₀ hi₀).ge
+  rw [hsup, Real.log_one]
+
+theorem hasFiniteSupport_posLog (F : IntermediateField ℚ Qbar) [FiniteDimensional ℚ F] (b : F) :
+    (fun v : FinitePlace F => Real.posLog (v b)).HasFiniteSupport := by
+  rcases eq_or_ne b 0 with rfl | hb
+  · simp [Function.HasFiniteSupport]
+  refine (FinitePlace.hasFiniteMulSupport hb).subset fun v hv => ?_
+  simp only [Function.mem_support, ne_eq] at hv
+  simp only [Function.mem_mulSupport, ne_eq]
+  intro h1
+  rw [h1] at hv
+  simp at hv
+
+/-- **Local-to-global**: if at every place `|y|_w ≤ e^{c_w} |z|_w` with
+`c_w = [w | ∞]·c + ∑_τ log⁺ |q_τ|_w` for finitely many rationals `q_τ`, then
+`h(y) ≤ h(z) + c + ∑_τ h(q_τ)`. -/
+theorem logHeight_le_of_forall_place (F : IntermediateField ℚ Qbar) [FiniteDimensional ℚ F]
+    {y : ι → F} {z : κ → F} (hy : y ≠ 0) (hz : z ≠ 0) (c : ℝ) {T : Type*} (U : Finset T)
+    (q : T → ℚ)
+    (hinf : ∀ w : InfinitePlace F, Real.log (⨆ i, w (y i)) ≤
+      Real.log (⨆ l, w (z l)) + c + ∑ τ ∈ U, Real.posLog (w (q τ : F)))
+    (hfin : ∀ v : FinitePlace F, Real.log (⨆ i, v (y i)) ≤
+      Real.log (⨆ l, v (z l)) + ∑ τ ∈ U, Real.posLog (v (q τ : F))) :
+    logHeight (fun i => (y i : Qbar)) ≤ logHeight (fun l => (z l : Qbar)) + c +
+      ∑ τ ∈ U, Height.logHeight₁ (q τ) := by
+  have hF : (0 : ℝ) < Module.finrank ℚ F := Nat.cast_pos.mpr Module.finrank_pos
+  have hy' := finrank_mul_logHeight_eq_sum F hy
+  have hz' := finrank_mul_logHeight_eq_sum F hz
+  -- the heights of the rationals
+  have hq : ∀ τ, (Module.finrank ℚ F : ℝ) * Height.logHeight₁ (q τ) =
+      ∑ w : InfinitePlace F, (w.mult : ℝ) * Real.posLog (w (q τ : F)) +
+        ∑ᶠ v : FinitePlace F, Real.posLog (v (q τ : F)) := by
+    intro τ
+    have := finrank_mul_logHeight_one_comp_ringHom_eq_sum (F.val : F →+* Qbar) (q τ : F)
+    have h2 : (F.val : F →+* Qbar) (q τ : F) = algebraMap ℚ Qbar (q τ) := by simp
+    rw [← this, h2, logHeight_one_ratCast]
+  -- infinite places
+  have hsumw : ∑ w : InfinitePlace F, (w.mult : ℝ) = Module.finrank ℚ F := by
+    exact_mod_cast InfinitePlace.sum_mult_eq
+  have hinfsum : ∑ w : InfinitePlace F, (w.mult : ℝ) * Real.log (⨆ i, w (y i)) ≤
+      ∑ w : InfinitePlace F, (w.mult : ℝ) * Real.log (⨆ l, w (z l)) +
+        (Module.finrank ℚ F : ℝ) * c +
+        ∑ τ ∈ U, ∑ w : InfinitePlace F, (w.mult : ℝ) * Real.posLog (w (q τ : F)) := by
+    rw [Finset.sum_comm, ← hsumw, Finset.sum_mul, ← Finset.sum_add_distrib,
+      ← Finset.sum_add_distrib]
+    refine Finset.sum_le_sum fun w _ => ?_
+    have := mul_le_mul_of_nonneg_left (hinf w) (Nat.cast_nonneg w.mult)
+    calc (w.mult : ℝ) * Real.log (⨆ i, w (y i)) ≤ (w.mult : ℝ) * (Real.log (⨆ l, w (z l)) + c +
+          ∑ τ ∈ U, Real.posLog (w (q τ : F))) := this
+      _ = _ := by rw [mul_add, mul_add, Finset.mul_sum]
+  -- finite places
+  have hfinsum : ∑ᶠ v : FinitePlace F, Real.log (⨆ i, v (y i)) ≤
+      ∑ᶠ v : FinitePlace F, Real.log (⨆ l, v (z l)) +
+        ∑ τ ∈ U, ∑ᶠ v : FinitePlace F, Real.posLog (v (q τ : F)) := by
+    rw [← finsum_sum_comm U (fun (v : FinitePlace F) (τ : T) => Real.posLog (v (q τ : F)))
+      (fun τ _ => hasFiniteSupport_posLog F _)]
+    rw [← finsum_add_distrib (hasFiniteSupport_log_iSup F hz)]
+    · refine finsum_le_finsum' (hasFiniteSupport_log_iSup F hy) ?_ fun v => hfin v
+      exact (hasFiniteSupport_log_iSup F hz).add
+        (Function.HasFiniteSupport.sum (fun τ => hasFiniteSupport_posLog F _) U)
+    · exact Function.HasFiniteSupport.sum (fun τ => hasFiniteSupport_posLog F _) U
+  have htot : (Module.finrank ℚ F : ℝ) * logHeight (fun i => (y i : Qbar)) ≤
+      (Module.finrank ℚ F : ℝ) * (logHeight (fun l => (z l : Qbar)) + c +
+        ∑ τ ∈ U, Height.logHeight₁ (q τ)) := by
+    rw [mul_add, mul_add, hy', hz', Finset.mul_sum]
+    simp only [hq, Finset.sum_add_distrib]
+    linarith
+  exact le_of_mul_le_mul_left htot hF
+
+end LocalGlobal
+
 end Heights.Curve
