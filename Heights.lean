@@ -34,6 +34,7 @@ import Heights.IdealFactorization
 import Heights.Absolute.Extension
 import Heights.Absolute.Basic
 import Heights.Absolute.RootBound
+import Heights.Absolute.Northcott
 
 /-!
 # Heights
