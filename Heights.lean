@@ -31,6 +31,7 @@ import Heights.Certificates
 import Heights.ArchimedeanAlgebraicRealization
 import Heights.SilvermanHeight
 import Heights.IdealFactorization
+import Heights.VeluProduct
 
 /-!
 # Heights
