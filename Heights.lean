@@ -32,6 +32,7 @@ import Heights.ArchimedeanAlgebraicRealization
 import Heights.SilvermanHeight
 import Heights.IdealFactorization
 import Heights.VeluProduct
+import Heights.TorsionArchimedean
 
 /-!
 # Heights
