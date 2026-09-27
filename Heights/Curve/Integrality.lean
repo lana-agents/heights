@@ -416,4 +416,304 @@ theorem logHeight_le_of_forall_place (F : IntermediateField ℚ Qbar) [FiniteDim
 
 end LocalGlobal
 
+/-! ### The comparison theorem -/
+
+section Comparison
+
+variable {K : Type*} [Field K] [CharZero K] [IsCurveField K] {ι κ : Type*} [Fintype ι] [Fintype κ]
+
+/-- The maximum of `|y_i|_W` compared with the maximum of `|z_l|_W`, given bounds for the
+quotients `y_i / z_j` at a maximal `z_j`. -/
+theorem log_iSup_le_of_forall {F : Type*} [Field F] (W : AbsoluteValue F ℝ) {y : ι → F}
+    {z : κ → F} (hy : y ≠ 0) (hz : z ≠ 0) (B : ℝ)
+    (h : ∀ i j, (∀ l, W (z l) ≤ W (z j)) → z j ≠ 0 → y i ≠ 0 → Real.log (W (y i / z j)) ≤ B) :
+    Real.log (⨆ i, W (y i)) ≤ Real.log (⨆ l, W (z l)) + B := by
+  obtain ⟨i₀, hi₀⟩ : ∃ i, y i ≠ 0 := by
+    by_contra hh
+    push Not at hh
+    exact hy (funext hh)
+  obtain ⟨l₀, hl₀⟩ : ∃ l, z l ≠ 0 := by
+    by_contra hh
+    push Not at hh
+    exact hz (funext hh)
+  haveI : Nonempty ι := ⟨i₀⟩
+  haveI : Nonempty κ := ⟨l₀⟩
+  obtain ⟨i, -, hi⟩ := Finset.exists_max_image Finset.univ (fun i => W (y i)) ⟨i₀, by simp⟩
+  obtain ⟨j, -, hj⟩ := Finset.exists_max_image Finset.univ (fun l => W (z l)) ⟨l₀, by simp⟩
+  have hsupy : (⨆ i, W (y i)) = W (y i) :=
+    le_antisymm (ciSup_le fun i' => hi i' (by simp))
+      (le_ciSup (f := fun i => W (y i)) (Finite.bddAbove_range _) i)
+  have hsupz : (⨆ l, W (z l)) = W (z j) :=
+    le_antisymm (ciSup_le fun l => hj l (by simp))
+      (le_ciSup (f := fun l => W (z l)) (Finite.bddAbove_range _) j)
+  have hzj : z j ≠ 0 := by
+    intro h0
+    have := hj l₀ (by simp)
+    rw [h0, map_zero] at this
+    exact hl₀ (W.eq_zero.mp (le_antisymm this (W.nonneg _)))
+  have hyi : y i ≠ 0 := by
+    intro h0
+    have := hi i₀ (by simp)
+    rw [h0, map_zero] at this
+    exact hi₀ (W.eq_zero.mp (le_antisymm this (W.nonneg _)))
+  have hbound := h i j (fun l => hj l (by simp)) hzj hyi
+  rw [hsupy, hsupz]
+  have hWz : 0 < W (z j) := W.pos hzj
+  have hWy : 0 < W (y i / z j) := W.pos (div_ne_zero hyi hzj)
+  have : W (y i) = W (y i / z j) * W (z j) := by
+    rw [← map_mul, div_mul_cancel₀ _ hzj]
+  rw [this, Real.log_mul hWy.ne' hWz.ne']
+  linarith
+
+/-- For a place `P` at which `t_j` has minimal order, all `s_i / t_j` are regular, provided
+`min ord_P(t) ≤ min ord_P(s)`. -/
+theorem div_mem_of_forall_div_mem {s : ι → K} {t : κ → K} (hs : ∃ i, s i ≠ 0)
+    (ht : ∃ j, t j ≠ 0) {P : Place K} (hle : minOrd P t ≤ minOrd P s) (i : ι) (j : κ)
+    (hj : ∀ l, t l / t j ∈ P.1) : s i / t j ∈ P.1 := by
+  rcases eq_or_ne (s i) 0 with hsi | hsi
+  · rw [hsi, zero_div]
+    exact zero_mem _
+  rcases eq_or_ne (t j) 0 with htj | htj
+  · rw [htj, div_zero]
+    exact zero_mem _
+  have hmin : P.ord (t j) ≤ minOrd P t := by
+    rw [minOrd_eq ht]
+    have h1 := hj (normIdx P t ht)
+    have h2 := P.ord_nonneg_of_mem h1
+    rw [P.ord_div (normIdx_ne_zero ht) htj] at h2
+    linarith
+  apply P.mem_of_ord_nonneg
+  rw [P.ord_div hsi htj]
+  have := minOrd_le (P := P) hs hsi
+  linarith
+
+/-- **Comparison of heights of tuples** ([GenEll], Proposition 1.4 (ii), (iii) for curves): if
+`A_s ≤ A_t`, i.e. `min_j ord_P(t_j) ≤ min_i ord_P(s_i)` at every place `P`, then
+`h_s ≲ h_t` on all algebraic points. -/
+theorem tupleHeight_le_of_minOrd_le {s : ι → K} {t : κ → K} (hs : ∃ i, s i ≠ 0)
+    (ht : ∃ j, t j ≠ 0) (hle : ∀ P : Place K, minOrd P t ≤ minOrd P s) :
+    ∃ C, ∀ x : QbarPoint K, tupleHeight s x ≤ tupleHeight t x + C := by
+  -- integral equations for all quotients `s_i / t_j`
+  have hint : ∀ p : ι × κ, ∃ n : ℕ, ∃ Q : ℕ → MvPolynomial κ ℚ,
+      (s p.1 / t p.2) ^ n + ∑ k ∈ Finset.range n,
+        MvPolynomial.aeval (fun l => t l / t p.2) (Q k) * (s p.1 / t p.2) ^ k = 0 :=
+    fun p => exists_integral_eq _ _ fun P hP =>
+      div_mem_of_forall_div_mem hs ht (hle P) p.1 p.2 hP
+  choose n Q hQ using hint
+  -- the rational coefficients and the constants
+  set U : Finset (Σ p : ι × κ, Σ _ : ℕ, κ →₀ ℕ) :=
+    Finset.univ.sigma fun p => (Finset.range (n p)).sigma fun k => (Q p k).support with hU
+  set q : (Σ p : ι × κ, Σ _ : ℕ, κ →₀ ℕ) → ℚ := fun τ => (Q τ.1 τ.2.1).coeff τ.2.2 with hq
+  set N : ℝ := ∑ p : ι × κ, ∑ k ∈ Finset.range (n p), ((Q p k).support.card : ℝ) with hN
+  set c : ℝ := Real.log (1 + N) with hc
+  have hN0 : ∀ p, 0 ≤ ∑ k ∈ Finset.range (n p), ((Q p k).support.card : ℝ) := fun p =>
+    Finset.sum_nonneg fun _ _ => Nat.cast_nonneg _
+  have hNp : ∀ p, ∑ k ∈ Finset.range (n p), ((Q p k).support.card : ℝ) ≤ N := fun p =>
+    Finset.single_le_sum (f := fun p => ∑ k ∈ Finset.range (n p), ((Q p k).support.card : ℝ))
+      (fun p _ => hN0 p) (Finset.mem_univ p)
+  -- local constants dominate each pair
+  have hloc : ∀ {F : Type} [Field F] [CharZero F] (W : AbsoluteValue F ℝ) (p : ι × κ),
+      ∑ k ∈ Finset.range (n p), ∑ m ∈ (Q p k).support, Real.posLog (W (((Q p k).coeff m : ℚ) : F))
+        ≤ ∑ τ ∈ U, Real.posLog (W (q τ : F)) := by
+    intro F _ _ W p
+    have hsub : ((Finset.range (n p)).sigma fun k => (Q p k).support).map
+        ⟨fun τ => (⟨p, τ⟩ : Σ p : ι × κ, Σ _ : ℕ, κ →₀ ℕ), fun a b h => by
+          simp only [Sigma.mk.injEq, heq_eq_eq, true_and] at h; exact h⟩ ⊆ U := by
+      intro τ hτ
+      simp only [Finset.mem_map, Finset.mem_sigma, Finset.mem_range,
+        Function.Embedding.coeFn_mk] at hτ
+      obtain ⟨⟨k, m⟩, ⟨hk, hm⟩, rfl⟩ := hτ
+      simp [hU, hk, hm]
+    calc ∑ k ∈ Finset.range (n p), ∑ m ∈ (Q p k).support,
+          Real.posLog (W (((Q p k).coeff m : ℚ) : F))
+        = ∑ τ ∈ ((Finset.range (n p)).sigma fun k => (Q p k).support).map
+            ⟨fun τ => (⟨p, τ⟩ : Σ p : ι × κ, Σ _ : ℕ, κ →₀ ℕ), fun a b h => by
+              simp only [Sigma.mk.injEq, heq_eq_eq, true_and] at h; exact h⟩,
+            Real.posLog (W (q τ : F)) := by
+          rw [Finset.sum_map, Finset.sum_sigma]
+          rfl
+      _ ≤ ∑ τ ∈ U, Real.posLog (W (q τ : F)) :=
+          Finset.sum_le_sum_of_subset_of_nonneg hsub fun _ _ _ => Real.posLog_nonneg
+  -- the exceptional points
+  set E : Set (Place K) := {P | minOrd P s ≠ minOrd P t} with hE
+  have hEfin : E.Finite := by
+    have h1 : ∀ (u : ι → K) (hu : ∃ i, u i ≠ 0), {P : Place K | minOrd P u ≠ 0} ⊆
+        ⋃ i ∈ {i | u i ≠ 0}, {P : Place K | P.ord (u i) ≠ 0} := by
+      intro u hu P hP
+      simp only [Set.mem_setOf_eq] at hP
+      simp only [Set.mem_iUnion, Set.mem_setOf_eq, exists_prop]
+      rw [minOrd_eq hu] at hP
+      exact ⟨_, normIdx_ne_zero hu, hP⟩
+    have h2 : ∀ (u : κ → K) (hu : ∃ i, u i ≠ 0), {P : Place K | minOrd P u ≠ 0} ⊆
+        ⋃ i ∈ {i | u i ≠ 0}, {P : Place K | P.ord (u i) ≠ 0} := by
+      intro u hu P hP
+      simp only [Set.mem_setOf_eq] at hP
+      simp only [Set.mem_iUnion, Set.mem_setOf_eq, exists_prop]
+      rw [minOrd_eq hu] at hP
+      exact ⟨_, normIdx_ne_zero hu, hP⟩
+    refine ((Set.Finite.biUnion (Set.toFinite _) fun i _ => Place.finite_setOf_ord_ne_zero (s i)).subset
+      (h1 s hs) |>.union ((Set.Finite.biUnion (Set.toFinite _)
+        fun j _ => Place.finite_setOf_ord_ne_zero (t j)).subset (h2 t ht))).subset fun P hP => ?_
+    by_contra hPn
+    simp only [Set.mem_union, Set.mem_setOf_eq, not_or, not_not] at hPn
+    exact hP (hPn.1.trans hPn.2.symm)
+  have hXE : {x : QbarPoint K | x.P ∈ E}.Finite := QbarPoint.finite_setOf_mem hEfin
+  obtain ⟨C₂, hC₂⟩ := (hXE.image fun x => tupleHeight s x).bddAbove
+  refine ⟨max (c + ∑ τ ∈ U, Height.logHeight₁ (q τ)) C₂, fun x => ?_⟩
+  by_cases hxE : x.P ∈ E
+  · have := hC₂ ⟨x, hxE, rfl⟩
+    linarith [tupleHeight_nonneg t x, le_max_right (c + ∑ τ ∈ U, Height.logHeight₁ (q τ)) C₂]
+  suffices hsuff : tupleHeight s x ≤ tupleHeight t x + (c + ∑ τ ∈ U, Height.logHeight₁ (q τ)) by
+    linarith [le_max_left (c + ∑ τ ∈ U, Height.logHeight₁ (q τ)) C₂]
+  -- the normalised values at `x`
+  have hxE' : minOrd x.P s = minOrd x.P t := by
+    by_contra h
+    exact hxE h
+  set j₀ := normIdx x.P t ht with hj₀
+  have htj₀ : t j₀ ≠ 0 := normIdx_ne_zero ht
+  have hymem : ∀ i, s i / t j₀ ∈ x.P.1 := fun i =>
+    div_mem_of_forall_div_mem hs ht (hle x.P) i j₀ (div_normIdx_mem ht)
+  set z : κ → x.fieldOf := fun l => evalF x ⟨t l / t j₀, div_normIdx_mem ht l⟩ with hz
+  set y : ι → x.fieldOf := fun i => evalF x ⟨s i / t j₀, hymem i⟩ with hy
+  have hzj₀ : z j₀ = 1 := by
+    simp only [hz]
+    rw [show (⟨t j₀ / t j₀, div_normIdx_mem ht j₀⟩ : x.P.1) = 1 from
+      Subtype.ext (div_self htj₀), map_one]
+  have hz0 : z ≠ 0 := fun h => by
+    have := congrFun h j₀
+    rw [hzj₀] at this
+    exact one_ne_zero this
+  -- `s_{i₀} / t_{j₀}` is a unit at `x`
+  set i₀ := normIdx x.P s hs with hi₀
+  have hsi₀ : s i₀ ≠ 0 := normIdx_ne_zero hs
+  have hordi₀ : x.P.ord (s i₀ / t j₀) = 0 := by
+    rw [x.P.ord_div hsi₀ htj₀, ← minOrd_eq hs, ← minOrd_eq ht, hxE', sub_self]
+  have hyi₀ : y i₀ ≠ 0 := by
+    intro h0
+    have h1 : x.eval (s i₀ / t j₀) (hymem i₀) = 0 := by
+      rw [← coe_evalF x ⟨_, hymem i₀⟩]
+      simp only [hy] at h0
+      rw [h0]
+      rfl
+    rw [x.eval_eq_zero_iff (hymem i₀) (div_ne_zero hsi₀ htj₀)] at h1
+    omega
+  have hy0 : y ≠ 0 := fun h => hyi₀ (congrFun h i₀)
+  -- express the tuple heights
+  have hth : tupleHeight t x = logHeight fun l => (z l : Qbar) := by
+    rw [tupleHeight_def ht]
+    rfl
+  have hsh : tupleHeight s x = logHeight fun i => (y i : Qbar) := by
+    have hmem : ∀ i, s i * (t j₀)⁻¹ ∈ x.P.1 := fun i => by
+      rw [← div_eq_mul_inv]
+      exact hymem i
+    have hne : ∃ i, x.eval (s i * (t j₀)⁻¹) (hmem i) ≠ 0 := by
+      refine ⟨i₀, fun h0 => hyi₀ ?_⟩
+      apply Subtype.ext
+      rw [coe_evalF]
+      simp only [ZeroMemClass.coe_zero]
+      rw [← h0]
+      exact x.eval_congr (div_eq_mul_inv _ _) _
+    rw [tupleHeight_eq_of_mul hs x (t j₀)⁻¹ hmem hne]
+    congr 1
+    funext i
+    rw [coe_evalF]
+    exact x.eval_congr (div_eq_mul_inv _ _).symm _
+  rw [hsh, hth]
+  -- the local bound at a place `W`, for a maximal `z_j`
+  have key : ∀ (W : AbsoluteValue x.fieldOf ℝ) (B : ℝ), (∀ (p : ι × κ) {a : κ → x.fieldOf},
+      (∀ l, W (a l) ≤ 1) → ∀ {r : x.fieldOf}, r ≠ 0 → r ^ n p + ∑ k ∈ Finset.range (n p),
+        MvPolynomial.eval₂ (Rat.castHom x.fieldOf) a (Q p k) * r ^ k = 0 →
+        Real.log (W r) ≤ B) →
+      Real.log (⨆ i, W (y i)) ≤ Real.log (⨆ l, W (z l)) + B := by
+    intro W B hB
+    refine log_iSup_le_of_forall W hy0 hz0 B fun i j hjmax hzj hyi => ?_
+    -- `t_j / t_{j₀}` is a unit at `x`
+    have htj : t j ≠ 0 := by
+      intro h0
+      apply hzj
+      apply Subtype.ext
+      rw [coe_evalF]
+      simp only [ZeroMemClass.coe_zero]
+      rw [x.eval_eq_zero_iff']
+      left
+      rw [h0, zero_div]
+    have hordj : x.P.ord (t j / t j₀) = 0 := by
+      have h0 : 0 ≤ x.P.ord (t j / t j₀) := x.P.ord_nonneg_of_mem (div_normIdx_mem ht j)
+      by_contra hne0
+      apply hzj
+      apply Subtype.ext
+      rw [coe_evalF]
+      simp only [ZeroMemClass.coe_zero]
+      rw [x.eval_eq_zero_iff _ (div_ne_zero htj htj₀)]
+      omega
+    have hgmem : ∀ l, t l / t j ∈ x.P.1 := fun l => by
+      rcases eq_or_ne (t l) 0 with htl | htl
+      · rw [htl, zero_div]
+        exact zero_mem _
+      apply x.P.mem_of_ord_nonneg
+      rw [x.P.ord_div htl htj]
+      have h1 := x.P.ord_nonneg_of_mem (div_normIdx_mem ht l)
+      rw [x.P.ord_div htl htj₀] at h1
+      rw [x.P.ord_div htj htj₀] at hordj
+      linarith
+    have hgval : ∀ l, evalF x ⟨t l / t j, hgmem l⟩ = z l / z j := fun l => by
+      rw [eq_div_iff hzj]
+      simp only [hz]
+      rw [← map_mul]
+      congr 1
+      apply Subtype.ext
+      simp only [MulMemClass.coe_mul]
+      field_simp
+    have hrmem : s i / t j ∈ x.P.1 :=
+      div_mem_of_forall_div_mem hs ht (hle x.P) i j hgmem
+    have hrval : evalF x ⟨s i / t j, hrmem⟩ = y i / z j := by
+      rw [eq_div_iff hzj]
+      simp only [hz, hy]
+      rw [← map_mul]
+      congr 1
+      apply Subtype.ext
+      simp only [MulMemClass.coe_mul]
+      field_simp
+    -- evaluate the integral equation
+    obtain ⟨hcmem, -⟩ := aeval_mem_and_evalF x (fun l => t l / t j) hgmem (Q (i, j) 0)
+    have hcoef : ∀ k, ∃ h : MvPolynomial.aeval (fun l => t l / t j) (Q (i, j) k) ∈ x.P.1,
+        evalF x ⟨_, h⟩ = MvPolynomial.eval₂ (Rat.castHom x.fieldOf)
+          (fun l => z l / z j) (Q (i, j) k) := fun k => by
+      obtain ⟨h, he⟩ := aeval_mem_and_evalF x (fun l => t l / t j) hgmem (Q (i, j) k)
+      exact ⟨h, he.trans (by simp only [hgval])⟩
+    choose hcm hce using hcoef
+    have heq : ((⟨s i / t j, hrmem⟩ : x.P.1) ^ n (i, j) + ∑ k ∈ Finset.range (n (i, j)),
+        (⟨_, hcm k⟩ : x.P.1) * ⟨s i / t j, hrmem⟩ ^ k) = 0 := by
+      apply Subtype.ext
+      simp only [AddMemClass.coe_add, SubmonoidClass.coe_pow, ZeroMemClass.coe_zero]
+      rw [← hQ (i, j)]
+      congr 1
+      rw [AddSubmonoidClass.coe_finsetSum]
+      rfl
+    have heqF := congrArg (evalF x) heq
+    rw [map_add, map_pow, map_sum, map_zero] at heqF
+    simp only [map_mul, map_pow, hce, hrval] at heqF
+    exact hB (i, j) (fun l => by
+      rw [map_div₀]
+      exact div_le_one_of_le₀ (hjmax l) (W.nonneg _)) (div_ne_zero hyi hzj) heqF
+  have hcle : ∀ p : ι × κ,
+      Real.log (1 + ∑ k ∈ Finset.range (n p), ((Q p k).support.card : ℝ)) ≤ c := fun p =>
+    Real.log_le_log (by linarith [hN0 p]) (by linarith [hNp p])
+  rw [← add_assoc]
+  refine logHeight_le_of_forall_place x.fieldOf hy0 hz0 c U q (fun w => ?_) (fun v => ?_)
+  · have := key w.1 (c + ∑ τ ∈ U, Real.posLog (w.1 (q τ : x.fieldOf)))
+      fun p a ha r hr heq => by
+        have h1 := log_apply_le_of_eq w.1 ha (Q p) hr heq
+        have h2 := hloc w.1 p
+        linarith [hcle p]
+    rw [← add_assoc] at this
+    exact this
+  · exact key v.1 (∑ τ ∈ U, Real.posLog (v.1 (q τ : x.fieldOf)))
+      fun p a ha r hr heq => by
+        have h1 := log_apply_le_of_eq_nonarch v.1 (fun a b => v.add_le a b) ha (Q p) hr heq
+        have h2 := hloc v.1 p
+        linarith
+
+end Comparison
+
 end Heights.Curve
