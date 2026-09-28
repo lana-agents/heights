@@ -41,6 +41,7 @@ import Heights.Different.SerreBound
 import Heights.Different.NumberField
 import Heights.Different.Bounds
 import Heights.Different.Unramified
+import Heights.Different.Places
 import Heights.Local.Compactness
 import Heights.Local.PlaceEmbedding
 import Heights.Local.LimitPlace
