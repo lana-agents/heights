@@ -56,6 +56,7 @@ import Heights.Curve.DivisorHeight
 import Heights.Curve.Pullback
 import Heights.Curve.Compactness
 import Heights.Local.Bounded
+import Heights.Curve.ModelChange
 
 /-!
 # Heights
@@ -97,4 +98,3 @@ analytic `IsManifold` structure. The project still does not prove the explicit
 uniformization analytic for this intrinsic structure, formalize periods by
 integration, or construct an Arakelov Faltings height.
 -/
-import Heights.Curve.ModelChange

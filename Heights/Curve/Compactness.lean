@@ -165,7 +165,7 @@ theorem eventually_bounded_of_limitPlace (hQ : ∀ n (q : ℚ), (q : K) ∈ (y n
     (h : ∀ f, TendstoP1 (fun n => (y n).val f) (ξ f)) {φ : K} (hφ0 : φ ≠ 0) (hφ1 : φ ≠ 1)
     (hP : ∀ P, limitPlace hQ h = some P → φ ∈ P.1 ∧ φ⁻¹ ∈ P.1 ∧ (φ - 1)⁻¹ ∈ P.1) :
     ∃ C : ℝ, ∀ᶠ n in atTop, ∃ α, (y n).val φ = some α ∧
-      |Real.log ‖α‖| ≤ C ∧ |Real.log ‖α - 1‖| ≤ C := by
+      |Real.log ‖α‖| ≤ C ∧ |Real.log ‖α - 1‖| ≤ C ∧ α ≠ 0 ∧ α ≠ 1 := by
   have hmem : ∀ g, (g = φ ∨ g = φ⁻¹ ∨ g = (φ - 1)⁻¹) → ξ g ≠ none := by
     intro g hg
     rw [← mem_limitSubring h]
@@ -235,6 +235,7 @@ theorem exists_subseq_bounded (V : Finset Nat.Primes) {d : ℕ} (x : ℕ → Qba
     ∃ D : ℕ → ℕ, StrictMono D ∧ ∃ T : Finset (Place K), ∀ φ : K, φ ≠ 0 → φ ≠ 1 →
       (∀ P ∈ T, φ ∈ P.1 ∧ φ⁻¹ ∈ P.1 ∧ (φ - 1)⁻¹ ∈ P.1) →
       ∃ C : ℝ, ∀ᶠ n in atTop, ∃ hφ : φ ∈ (x (D n)).P.1,
+        evalF (x (D n)) ⟨φ, hφ⟩ ≠ 0 ∧ evalF (x (D n)) ⟨φ, hφ⟩ ≠ 1 ∧
         (∀ σ : (x (D n)).fieldOf →+* ℂ,
           |Real.log ‖σ (evalF (x (D n)) ⟨φ, hφ⟩)‖| ≤ C ∧
           |Real.log ‖σ (evalF (x (D n)) ⟨φ, hφ⟩) - 1‖| ≤ C) ∧
@@ -292,12 +293,12 @@ theorem exists_subseq_bounded (V : Finset Nat.Primes) {d : ℕ} (x : ℕ → Qba
         (limitPlace (hQP p.1 i) (hξP p.1 p.2 i)).toFinset with hT
   refine ⟨D, hD, T, fun φ hφ0 hφ1 hφT => ?_⟩
   have hbC : ∀ i, ∃ C : ℝ, ∀ᶠ n in atTop, ∃ α, (yC (D n) i).val φ = some α ∧
-      |Real.log ‖α‖| ≤ C ∧ |Real.log ‖α - 1‖| ≤ C := fun i =>
+      |Real.log ‖α‖| ≤ C ∧ |Real.log ‖α - 1‖| ≤ C ∧ α ≠ 0 ∧ α ≠ 1 := fun i =>
     eventually_bounded_of_limitPlace (hQC i) (hC i) hφ0 hφ1 fun P hP => hφT P (by
       rw [hT, Finset.mem_union, Finset.mem_biUnion]
       exact Or.inl ⟨i, Finset.mem_univ _, by simp [hP]⟩)
   have hbP : ∀ p : V, ∀ i, ∃ C : ℝ, ∀ᶠ n in atTop, ∃ α, (yP p.1 (D n) i).val φ = some α ∧
-      |Real.log ‖α‖| ≤ C ∧ |Real.log ‖α - 1‖| ≤ C := fun p i =>
+      |Real.log ‖α‖| ≤ C ∧ |Real.log ‖α - 1‖| ≤ C ∧ α ≠ 0 ∧ α ≠ 1 := fun p i =>
     eventually_bounded_of_limitPlace (hQP p.1 i) (hξP p.1 p.2 i) hφ0 hφ1 fun P hP => hφT P (by
       rw [hT, Finset.mem_union, Finset.mem_biUnion]
       right
@@ -323,20 +324,28 @@ theorem exists_subseq_bounded (V : Finset Nat.Primes) {d : ℕ} (x : ℕ → Qba
   refine ⟨C, ?_⟩
   have hevC := Filter.eventually_all.mpr hCC
   have hevP : ∀ᶠ n in atTop, ∀ p ∈ V.attach, ∀ i, ∃ α, (yP p.1 (D n) i).val φ = some α ∧
-      |Real.log ‖α‖| ≤ CP p i ∧ |Real.log ‖α - 1‖| ≤ CP p i :=
+      |Real.log ‖α‖| ≤ CP p i ∧ |Real.log ‖α - 1‖| ≤ CP p i ∧ α ≠ 0 ∧ α ≠ 1 :=
     (Filter.eventually_all_finset _).mpr fun p _ => Filter.eventually_all.mpr (hCP p)
   filter_upwards [hevC, hevP] with n hnC hnP
-  obtain ⟨α₀, hα₀, -⟩ := hnC ⟨0, hd⟩
-  obtain ⟨hφmem, -⟩ := (EPlace.val_eq_some_iff _).mp hα₀
-  refine ⟨hφmem, fun σ => ?_, fun p hp τ => ?_⟩
+  obtain ⟨α₀, hα₀, -, -, hα₀0, hα₀1⟩ := hnC ⟨0, hd⟩
+  obtain ⟨hφmem, hα₀eq⟩ := (EPlace.val_eq_some_iff _).mp hα₀
+  have hv0 : evalF (x (D n)) ⟨φ, hφmem⟩ ≠ 0 := fun h0 => hα₀0 (by
+    rw [← hα₀eq]
+    change eC (D n) ⟨0, hd⟩ (evalF (x (D n)) ⟨φ, hφmem⟩) = 0
+    rw [h0, map_zero])
+  have hv1 : evalF (x (D n)) ⟨φ, hφmem⟩ ≠ 1 := fun h0 => hα₀1 (by
+    rw [← hα₀eq]
+    change eC (D n) ⟨0, hd⟩ (evalF (x (D n)) ⟨φ, hφmem⟩) = 1
+    rw [h0, map_one])
+  refine ⟨hφmem, hv0, hv1, fun σ => ?_, fun p hp τ => ?_⟩
   · obtain ⟨i, rfl⟩ := heC (D n) σ
-    obtain ⟨α, hα, h1, h2⟩ := hnC i
+    obtain ⟨α, hα, h1, h2, -, -⟩ := hnC i
     rw [show (yC (D n) i).val φ = some (eC (D n) i (evalF (x (D n)) ⟨φ, hφmem⟩)) from
       pointEPlace_val_of_mem _ _ hφmem] at hα
     cases hα
     exact ⟨h1.trans (hCC_le i), h2.trans (hCC_le i)⟩
   · obtain ⟨i, rfl⟩ := heP p (D n) τ
-    obtain ⟨α, hα, h1, h2⟩ := hnP ⟨p, hp⟩ (Finset.mem_attach _ _) i
+    obtain ⟨α, hα, h1, h2, -, -⟩ := hnP ⟨p, hp⟩ (Finset.mem_attach _ _) i
     rw [show (yP p (D n) i).val φ = some (eP p (D n) i (evalF (x (D n)) ⟨φ, hφmem⟩)) from
       pointEPlace_val_of_mem _ _ hφmem] at hα
     cases hα

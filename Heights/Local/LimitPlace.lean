@@ -538,7 +538,7 @@ theorem mem_limitSubring (h : ∀ f, TendstoP1 (fun n => (x n).val f) (ξ f)) {f
 theorem eventually_abs_log_le (h : ∀ f, TendstoP1 (fun n => (x n).val f) (ξ f)) {f : K} {β : E}
     (hf : ξ f = some β) (hβ0 : β ≠ 0) (hβ1 : β ≠ 1) :
     ∃ C : ℝ, ∀ᶠ n in atTop, ∃ α, (x n).val f = some α ∧
-      |Real.log ‖α‖| ≤ C ∧ |Real.log ‖α - 1‖| ≤ C := by
+      |Real.log ‖α‖| ≤ C ∧ |Real.log ‖α - 1‖| ≤ C ∧ α ≠ 0 ∧ α ≠ 1 := by
   have hf' := h f
   rw [hf, tendstoP1_some_iff'] at hf'
   obtain ⟨a, ha, hla⟩ := hf'
@@ -575,7 +575,7 @@ theorem eventually_abs_log_le (h : ∀ f, TendstoP1 (fun n => (x n).val f) (ξ f
     rw [sub_sub_sub_cancel_right]
     exact lt_of_lt_of_le hc hδ2
   obtain ⟨h3, h4⟩ := hnear hc'
-  refine ⟨a n, hn, ?_, ?_⟩
+  refine ⟨a n, hn, ?_, ?_, ?_, ?_⟩
   · have := hlog (by positivity) h1 h2
     have h0 : 0 ≤ max |Real.log (‖β - 1‖ / 2)| |Real.log (‖β - 1‖ * 2)| :=
       le_max_of_le_left (abs_nonneg _)
@@ -583,6 +583,12 @@ theorem eventually_abs_log_le (h : ∀ f, TendstoP1 (fun n => (x n).val f) (ξ f
   · have := hlog (by positivity) h3 h4
     have h0 : 0 ≤ max |Real.log (‖β‖ / 2)| |Real.log (‖β‖ * 2)| :=
       le_max_of_le_left (abs_nonneg _)
+    linarith
+  · intro h0
+    rw [h0, norm_zero] at h1
+    linarith
+  · intro h0
+    rw [h0, sub_self, norm_zero] at h3
     linarith
 
 end Limit
