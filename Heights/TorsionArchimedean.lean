@@ -80,7 +80,7 @@ theorem norm_le_im_add_half (hτ : τ ∈ ModularGroup.fd) : ‖(τ : ℂ)‖ �
       rw [UpperHalfPlane.coe_im, abs_of_pos τ.im_pos]
     _ = τ.im + 1 / 2 := add_comm _ _
 
-/-- The absolute constant `S = ∑_{x ∈ ℤ²} ‖x‖_∞^{−3}` (the term `x = 0` vanishes). -/
+/-- The absolute number `S = ∑_{x ∈ ℤ²} ‖x‖_∞^{−3}` (the term `x = 0` vanishes). -/
 noncomputable def latticeSumThree : ℝ := ∑' x : Fin 2 → ℤ, ‖x‖ ^ (-3 : ℝ)
 
 lemma summable_latticeSumThree : Summable fun x : Fin 2 → ℤ => ‖x‖ ^ (-3 : ℝ) :=
