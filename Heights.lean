@@ -43,6 +43,7 @@ import Heights.Different.Bounds
 import Heights.Different.Unramified
 import Heights.Different.Places
 import Heights.Different.Conductor
+import Heights.Different.Kummer
 import Heights.Local.Compactness
 import Heights.Local.PlaceEmbedding
 import Heights.Local.LimitPlace
