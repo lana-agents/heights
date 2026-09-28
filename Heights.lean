@@ -73,4 +73,11 @@ gives the independently topologized compact curve a one-dimensional complex-
 analytic `IsManifold` structure. The project still does not prove the explicit
 uniformization analytic for this intrinsic structure, formalize periods by
 integration, or construct an Arakelov Faltings height.
+
+Two consumers-facing estimates for isogenies of prime degree are also proved:
+`Heights.Velu.prod_mul_sum_sub_sum` (Vélu's product formula for translated sums of
+`x`-coordinates over a finite subgroup) and `Heights.exists_torsion_x_bound` (the
+`x`-coordinates of `N`-torsion points of an elliptic curve over `ℂ` are `O(N²)`, with explicit
+dependence on `Δ` and `j`). They are used in `lana-agents/iut` for the cyclic-subgroup bound of
+[GenEll], Lemma 3.5.
 -/
