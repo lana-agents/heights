@@ -15,10 +15,11 @@ scope = "leanprover-community"
 rev = "v4.32.0"
 
 # Curves over number fields as function fields (Belyi.CurveField), for the height machine on
-# curves (GenEll height theory, branch wp-height-theory). Development pin: local path.
+# curves (GenEll height theory, branch wp-height-theory).
 [[require]]
 name = "belyi"
-path = "../belyi-snap"
+git = "https://github.com/lana-agents/belyi.git"
+rev = "9ce4d3f793d3bc831f2fc7214b7dbad90ea012d8"
 
 [[lean_lib]]
 name = "Heights"

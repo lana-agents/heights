@@ -603,6 +603,28 @@ certified semistability; no analytic estimate or realization certificate
 remains as a theorem argument.*
 :::
 
+:::theorem "thm:velu-product" (lean := "Heights.Velu.xOf_add_add_xOf_sub, Heights.Velu.xOf_add_half_sum, Heights.Velu.prod_mul_sum_sub_sum")
+For a Weierstrass curve over a field of characteristic $`\neq 2` and a finite
+subgroup $`H` without points of order $`2`, Vélu's $`x`-map
+$`P \mapsto \sum_{Q\in H} x(P+Q) - \sum_{Q\in H\setminus 0} x(Q)` depends on
+$`x(P)` only (the pair identity), and for $`P, R \notin H` with $`2R \notin H`,
+$`\prod_{Q\in H\setminus0}(x(P)-x(Q))\,(\sum_{Q\in H}x(P+Q)-\sum_{Q\in H}x(R+Q))
+= \prod_{Q\in H}(x(P)-x(R+Q))`.
+
+*Status: proved (identities between coordinates of points; no quotient curve is
+constructed).*
+:::
+
+:::theorem "thm:torsion-x-bound" (uses := "prop:archimedean-algebraic-realization") (lean := "Heights.norm_weierstrassP_le, Heights.norm_weierstrassP_torsion_le, Heights.norm_x_sub_r_le, Heights.exists_torsion_x_bound")
+For an elliptic curve $`W` over $`\mathbb{C}` and an affine $`N`-torsion point
+$`(x,y)`, $`\|x + b_2/12\|^6 \le A\,\|\Delta_W\|\max(\|j_W\|,1)
+(2N^2 + B(\log\max(\|j_W\|,e)+1)^2)^6` with absolute constants $`A, B`.
+
+*Status: proved from the lattice uniformization, the lattice-sum bound for
+$`\wp` on the fundamental parallelogram, and the fundamental-domain
+comparisons for $`\Delta` and $`\operatorname{Im}\tau`.*
+:::
+
 The repository proves modular-$`j` surjectivity, constructs
 `ArchimedeanPeriodData`, and obtains an all-curves comparison for the
 formula-defined `silvermanHeightOfCurve`. It also gives topological and

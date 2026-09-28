@@ -803,3 +803,20 @@ history to exclude both objects before public release. Retired the
 `dagur-clanker`-specific server orchestration files. The clean handoff remains
 main at the rewritten equivalent of `61e35a9`; actionable Taxis issues #180 and
 #181 are unassigned and labeled `ready-to-clanck`.
+
+## Branch `wp-isogeny` — 2026-09-28
+
+Added two isogeny-facing modules consumed by `lana-agents/iut` (cyclic-subgroup
+bound, [GenEll] Lemma 3.5, away from the prime `2`):
+
+* `Heights/VeluProduct.lean`: Vélu's pair identity
+  `x(P+Q) + x(P−Q) = 2x(Q) + t_Q/(x(P)−x(Q)) + u_Q/(x(P)−x(Q))²` and the product formula
+  `∏_{Q≠0}(x(P)−x(Q))·(∑_Q x(P+Q) − ∑_Q x(R+Q)) = ∏_Q (x(P)−x(R+Q))` for a finite subgroup
+  without `2`-torsion and `P, R, 2R ∉ H` (`Heights.Velu.prod_mul_sum_sub_sum`), via the
+  monic numerator polynomial of Vélu's `x`-map and its `|H|` distinct roots.
+* `Heights/TorsionArchimedean.lean`: `x`-coordinates of `N`-torsion points over `ℂ` are
+  `O(N²)` with explicit dependence on `Δ` and `j` (`Heights.exists_torsion_x_bound`), from
+  the lattice uniformization, a uniform bound for `℘` on the fundamental parallelogram of
+  `τ ∈ fd`, and the fundamental-domain comparisons of `ModularJ.lean`.
+
+No Faltings height or quotient curve is constructed.
