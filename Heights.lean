@@ -47,6 +47,15 @@ import Heights.Different.Kummer
 import Heights.Local.Compactness
 import Heights.Local.PlaceEmbedding
 import Heights.Local.LimitPlace
+import Heights.Curve.TupleHeight
+import Heights.Curve.Integrality
+import Heights.Curve.LinearEquiv
+import Heights.Curve.Conductor
+import Heights.Curve.CondHeight
+import Heights.Curve.DivisorHeight
+import Heights.Curve.Pullback
+import Heights.Curve.Compactness
+import Heights.Local.Bounded
 
 /-!
 # Heights
