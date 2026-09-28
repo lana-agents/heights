@@ -58,6 +58,7 @@ import Heights.Curve.Compactness
 import Heights.Local.Bounded
 import Heights.Curve.ModelChange
 import Heights.Curve.CondDivisor
+import Heights.Curve.KummerPoint
 
 /-!
 # Heights
