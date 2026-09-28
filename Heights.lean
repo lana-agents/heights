@@ -57,6 +57,7 @@ import Heights.Curve.Pullback
 import Heights.Curve.Compactness
 import Heights.Local.Bounded
 import Heights.Curve.ModelChange
+import Heights.Curve.CondDivisor
 
 /-!
 # Heights
