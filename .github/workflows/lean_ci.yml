@@ -2,8 +2,6 @@ name: Lean CI
 
 on:
   push:
-    branches:
-      - main
   pull_request:
   workflow_dispatch:
 
@@ -24,5 +22,3 @@ jobs:
 
       - name: Build Lean project
         uses: leanprover/lean-action@v1
-        with:
-          build-args: '-j 6'
