@@ -1,3 +1,8 @@
+/-
+Copyright (c) 2026 LANA Project. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: LANA Project
+-/
 import Heights.LatticeQuotientTopology
 import Mathlib.Geometry.Manifold.Complex
 import Mathlib.Geometry.Manifold.ContMDiff.Atlas
