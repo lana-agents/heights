@@ -129,3 +129,5 @@ LAKE_JOBS=6 ./scripts/ci-checks.sh   # build + trust and axiom audits
 Copyrighted reference material (the Silverman chapter) is deliberately not in this repository.
 
 Authors: Dagur Asgeirsson, Christian Merten.
+
+License: Apache 2.0 (see LICENSE)

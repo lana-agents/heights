@@ -1,0 +1,225 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/mathlib-initiative/formalization.yaml/main/schema/formalization.schema.json
+# formalization.yaml (v0.4): repo-root metadata for this formalization,
+# following https://github.com/mathlib-initiative/formalization.yaml
+
+version: "v0.4"
+
+project:
+  name: "heights"
+  description: >-
+    A Lean 4 / Mathlib formalization of heights on elliptic curves and on curves over number fields.
+    It proves Silverman's comparison (Heights and Elliptic Curves, Prop. 2.1) between the Weil
+    height of j and the elliptic-curve height defined by Silverman's formula (minimal discriminant
+    plus the archimedean term |Δ(τ_v)| (Im τ_v)^6), with the supporting analytic theory (the modular
+    j-function and fundamental-domain estimates, the lattice-quotient uniformization, the compact
+    complex-manifold structure on nonsingular complex Weierstrass curves). It also contains the
+    height machine on curves over number fields of Mochizuki's Arithmetic elliptic curves in general
+    position §1 (heights of tuples and divisors, log-different and log-conductor, log-cond ≲ height,
+    the compactness argument of Thm. 2.1), bounds on differents, conductors and discriminants
+    (Serre's bound, Kummer–Fermat extensions), absolute heights and Northcott over ℚ̄, and two
+    isogeny estimates (Vélu's product formula, x-coordinates of N-torsion points over ℂ are O(N²)).
+  authors:
+    - "Claude (Anthropic)"
+    - "LANA Project"
+    - "Dagur Asgeirsson"
+    - "Christian Merten"
+  responsible_maintainers:
+    - "Christian Merten"
+  license: "Apache-2.0"
+
+sources:
+  - title: "Heights and elliptic curves"
+    authors: ["Joseph H. Silverman"]
+    type: "book chapter"
+    location: >-
+      Ch. X of G. Cornell, J. H. Silverman (eds.), Arithmetic Geometry, Springer 1986;
+      Prop. 1.1 and Prop. 2.1
+    relationship: "formalizes"
+    note: >-
+      Proposition 2.1 is formalized for the height h(W) defined by Silverman's formula (Prop. 1.1);
+      this height is not identified with the Faltings height (see fidelity.divergences). The chapter
+      itself is not in the repository.
+    author_endorsement: "not-contacted"
+  - title: "Arithmetic elliptic curves in general position"
+    authors: ["Shinichi Mochizuki"]
+    type: "article"
+    location: "Math. J. Okayama Univ. 52 (2010), §1-2 (Prop. 1.4, Def. 1.5, Rem. 1.5.1, Prop. 1.6, Prop. 1.7, Thm. 2.1), Lemma 3.5"
+    relationship: "adapts"
+    note: >-
+      The height machine on curves, the log-conductor bounds and the number-field core of Prop. 1.7
+      are formalized; for Lemma 3.5 only the isogeny estimates used by lana-agents/iut are proved,
+      without a Faltings height or a quotient curve.
+    author_endorsement: "not-contacted"
+
+related_formalizations:
+  - id: "https://github.com/lana-agents/belyi"
+    relationship: "builds-on"
+    note: "Lake dependency (pinned 9ce4d3f); Belyi.CurveField provides the function fields, places and divisors."
+  - id: "https://github.com/lana-agents/iut"
+    relationship: "other"
+    note: "Used by: iut pins heights at 721496c (cyclic-subgroup bound, general position, log-differents)."
+  - id: "https://github.com/lana-agents/genl"
+    relationship: "other"
+    note: "Used by: the lana-agents fork of genl builds Genl.Curves on Heights.Curve and Heights.Different."
+
+classification:
+  arxiv: ["math.NT", "math.AG"]
+  msc2020: ["11G50", "11G05", "14G40", "11R29"]
+
+status:
+  scope: >-
+    Silverman's Proposition 2.1 for the formula-defined height (including the semistable and
+    certificate-level versions), the height machine and log-conductor bounds of [GenEll] §1-2 for
+    curves over number fields, bounds on differents, conductors and discriminants, Northcott over
+    ℚ̄, and the isogeny estimates used by iut. No sorry in the library; the only sorries in the
+    repository are the six deliberate placeholders of the comparator challenge
+    (Comparator/Challenge.lean).
+  sorry_count: 0
+  sorry_in_definitions: 0
+  axioms: ["propext", "Classical.choice", "Quot.sound"]
+  main_results:
+    - declaration: "Heights.proposition_2_1"
+      file: "Heights/IdealFactorization.lean"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      literature_dependencies: []
+    - declaration: "Heights.proposition_2_1_semistable"
+      file: "Heights/IdealFactorization.lean"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      literature_dependencies: []
+    - declaration: "Heights.silverman_proposition_2_1_certified"
+      file: "Comparator/Solution.lean"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      comparator_config: "Comparator/config.json"
+      literature_dependencies: []
+    - declaration: "Heights.modularJ_surjective"
+      file: "Heights/ModularJ.lean"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      literature_dependencies: []
+    - declaration: "Heights.complexWeierstrassPointIsManifold"
+      file: "Heights/WeierstrassCompactCharts.lean"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      literature_dependencies: []
+    - declaration: "Heights.Curve.abs_tupleHeight_sub_sub_le"
+      file: "Heights/Curve/LinearEquiv.lean"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      literature_dependencies: []
+    - declaration: "Heights.Curve.divHeight_pullback"
+      file: "Heights/Curve/Pullback.lean"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      literature_dependencies: []
+    - declaration: "Heights.Curve.logCondOf_le_tupleHeight_sub"
+      file: "Heights/Curve/CondHeight.lean"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      literature_dependencies: []
+    - declaration: "Heights.Curve.logCondOf_le_divHeight"
+      file: "Heights/Curve/CondDivisor.lean"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      literature_dependencies: []
+    - declaration: "Heights.Curve.exists_subseq_bounded"
+      file: "Heights/Curve/Compactness.lean"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      literature_dependencies: []
+    - declaration: "Heights.Different.logDisc_le_logDisc_add_cond_add"
+      file: "Heights/Different/Kummer.lean"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      literature_dependencies: []
+    - declaration: "Heights.Curve.logDisc_le_of_eq_adjoin"
+      file: "Heights/Curve/KummerPoint.lean"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      literature_dependencies: []
+    - declaration: "Heights.Absolute.finite_setOf_finrank_le_logHeight_le"
+      file: "Heights/Absolute/Northcott.lean"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      literature_dependencies: []
+    - declaration: "Heights.Local.abs_log_finitePlace_le"
+      file: "Heights/Local/Bounded.lean"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      literature_dependencies: []
+    - declaration: "Heights.Velu.prod_mul_sum_sub_sum"
+      file: "Heights/VeluProduct.lean"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      literature_dependencies: []
+    - declaration: "Heights.exists_torsion_x_bound"
+      file: "Heights/TorsionArchimedean.lean"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      literature_dependencies: []
+
+automation:
+  methods:
+    - method: "agent"
+      models: ["claude-opus-5-5", "claude-sonnet-5"]
+      framework: "Claude Code"
+      tool_setup: >-
+        orchestra for running the agents, taxis for project management, and Claude (Claude Code) as the
+        coding agent; Lean/Lake builds with `lake build --wfail`.
+      prompting_notes: >-
+        Human input consisted of high-level task descriptions and scope decisions.
+    - method: "agent"
+      models: ["gpt-5.6-sol"]
+      framework: "pi"
+      tool_setup: >-
+        The pi coding agent with the openai-codex/gpt-5.6-sol model (commit trailer
+        "Co-Authored-By: pi (openai-codex/gpt-5.6-sol)"), used in the initial phase (2026-07-20 to
+        2026-07-22: specification, comparator harness and the Silverman Proposition 2.1 work), with
+        Lean/Lake builds and the repository's audit scripts (scripts/ci-checks.sh).
+      prompting_notes: >-
+        Human input consisted of high-level task descriptions and scope decisions.
+  notes: >-
+    Agents were run with orchestra; project management (issues, status) was done in taxis;
+    Claude was the coding agent. The initial phase of the history (97 commits) was
+    written by the pi agent with an OpenAI model, as recorded in the commit trailers.
+
+fidelity:
+  divergences: >-
+    The elliptic-curve height h(W) in Proposition 2.1 is Heights.silvermanHeightOfCurve, defined by
+    Silverman's formula (Prop. 1.1) with τ_v chosen through Heights.modularJ_surjective (the
+    definition is independent of the choice); it is not identified with an Arakelov/Faltings height,
+    and period integration and the Hodge metric are not formalized. Curves over number fields are
+    represented by function fields (Belyi.CurveField). For [GenEll] Lemma 3.5 no Faltings height or
+    quotient curve is constructed; only Vélu's product formula and the archimedean torsion bound are
+    proved.
+
+review:
+  status: "agent-reviewed"
+  reviewers: ["Claude (Anthropic)"]
+  notes: >-
+    The formalization has only been reviewed by Claude; it has not been reviewed by a human.
+    All results are machine-checked by the Lean kernel; `#print axioms` of every main result listed
+    under status (checked on a build of this revision) gives only propext, Classical.choice and
+    Quot.sound. `git grep` finds no sorry, axiom declaration or native_decide in Heights/; the six
+    sorries of Comparator/Challenge.lean are the comparator's deliberate statement placeholders.
+
+alignment:
+  namespace: "Heights"
+  statements:
+    - source: "Silverman, Heights and Elliptic Curves, Prop. 2.1"
+      lean: "Heights.proposition_2_1, Heights.proposition_2_1_semistable"
+      module: "Heights/IdealFactorization.lean"
+      status: "proved"
+      note: "For the formula-defined height silvermanHeightOfCurve, not the Faltings height."
+    - source: "[GenEll] Prop. 1.6 (log-cond ≲ height)"
+      lean: "Heights.Curve.logCondOf_le_tupleHeight_sub, Heights.Curve.logCondOf_le_divHeight"
+      module: "Heights/Curve/CondHeight.lean, Heights/Curve/CondDivisor.lean"
+      status: "proved"
+    - source: "[GenEll] Thm. 2.1, compactness argument"
+      lean: "Heights.Curve.exists_subseq_bounded"
+      module: "Heights/Curve/Compactness.lean"
+      status: "proved"
+
+acknowledgements: "Built on Mathlib (Apache-2.0)."
