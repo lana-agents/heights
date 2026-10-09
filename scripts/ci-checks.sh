@@ -22,21 +22,11 @@ build_root() {
   lake build
 }
 
-build_blueprint() {
-  cd "$repo_root/Blueprint"
-  lake build
-}
-
 check_comparator() {
   cd "$repo_root"
   ./scripts/test_audit_comparator.sh
   lake env lean Comparator/Challenge.lean
   lake env lean Comparator/Solution.lean
-}
-
-check_blueprint_links() {
-  cd "$repo_root"
-  ./scripts/test_audit_blueprint_links.sh
 }
 
 check_trust() {
@@ -51,9 +41,7 @@ check_axioms() {
 }
 
 run_stage "root bounded build" build_root
-run_stage "blueprint bounded build" build_blueprint
 run_stage "comparator configuration audit and elaboration" check_comparator
-run_stage "blueprint declaration-link audit and negative fixture" check_blueprint_links
 run_stage "trust audit and negative fixtures" check_trust
 run_stage "axiom audit and orphan fixture" check_axioms
 

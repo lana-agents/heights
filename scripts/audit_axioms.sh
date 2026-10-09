@@ -25,7 +25,7 @@ paths = {
 
 # These are the two logical environments audited by AuditAxioms.lean.
 # Comparator/Challenge.lean is intentionally a separate, sorried environment;
-# Blueprint and scripts are tooling packages rather than project theorem roots.
+# Scripts are tooling packages rather than project theorem roots.
 heights_sources = {
     path for path in paths
     if path == "Heights.lean" or (path.startswith("Heights/") and path.endswith(".lean"))
