@@ -115,7 +115,6 @@ merge).
 * [`Plans/HeightsWorkLog.md`](Plans/HeightsWorkLog.md): work log.
 * [`Plans/AnalyticPeriodFeasibility.md`](Plans/AnalyticPeriodFeasibility.md): remaining analytic
   gates.
-* `Blueprint/`: Verso blueprint, deployed to `gh-pages`.
 * `Comparator/`: comparator harness (see [`Comparator/README.md`](Comparator/README.md)).
 
 ## Building
