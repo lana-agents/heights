@@ -70,6 +70,7 @@ theorem norm_le_one_of_monic_of_eval_eq_zero {E : Type*} [NormedField E] [IsUltr
 
 variable {F : Type*} [Field F] [NumberField F]
 
+omit [NumberField F] in
 /-- The image of an algebraic integer under a ring homomorphism `F → ℚ̄_p` has norm `≤ 1`. -/
 theorem norm_ringHom_le_one (τ : F →+* PadicAlgCl p) (y : 𝓞 F) : ‖τ y‖ ≤ 1 := by
   have hint : IsIntegral ℤ y := RingOfIntegers.isIntegral y
@@ -89,9 +90,11 @@ theorem norm_ringHom_le_one (τ : F →+* PadicAlgCl p) (y : 𝓞 F) : ‖τ y�
 noncomputable def ringHomAbv (τ : F →+* PadicAlgCl p) : AbsoluteValue F ℝ :=
   (NormedField.toAbsoluteValue (PadicAlgCl p)).comp τ.injective
 
+omit [NumberField F] in
 @[simp] theorem ringHomAbv_apply (τ : F →+* PadicAlgCl p) (y : F) :
     ringHomAbv τ y = ‖τ y‖ := rfl
 
+omit [NumberField F] in
 /-- `‖τ p‖ = p⁻¹`. -/
 theorem norm_ringHom_natCast_p (τ : F →+* PadicAlgCl p) : ‖τ (p : F)‖ = (p : ℝ)⁻¹ := by
   rw [map_natCast]

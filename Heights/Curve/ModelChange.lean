@@ -20,10 +20,10 @@ places is bounded by the heights of the finitely many coefficients.
 namespace Heights.Curve
 
 open Belyi.CurveField Heights.Absolute NumberField
-open scoped Classical
 
 variable {K : Type*} [Field K] [CharZero K] [IsCurveField K]
 
+open Classical in
 /-- **Model independence of log-conductors** ([GenEll], Remark 1.5.1). -/
 theorem logCondOf_le_logCondOf_add (G G' : Finset K)
     (hG' : ∀ g' ∈ G', g' ∈ Algebra.adjoin ℚ (G : Set K)) :

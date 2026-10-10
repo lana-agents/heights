@@ -27,7 +27,7 @@ open NumberField
 variable {F : Type*} [Field F] [NumberField F]
 
 /-- Bounds at all embeddings into `ℚ̄_p` give bounds at all finite places over `p`. -/
-theorem abs_log_finitePlace_le {p : ℕ} [Fact p.Prime] {c : ℝ} (hc : 0 ≤ c) {y : F}
+theorem abs_log_finitePlace_le {p : ℕ} [Fact p.Prime] {c : ℝ} {y : F}
     (hy : ∀ τ : F →+* PadicAlgCl p, |Real.log ‖τ y‖| ≤ c) (w : FinitePlace F)
     (hpw : ((p : ℕ) : 𝓞 F) ∈ w.maximalIdeal.asIdeal) :
     |Real.log (w y)| ≤ Module.finrank ℚ F * c := by
@@ -35,6 +35,7 @@ theorem abs_log_finitePlace_le {p : ℕ} [Fact p.Prime] {c : ℝ} (hc : 0 ≤ c)
   rw [hw y, Real.log_pow, abs_mul, Nat.abs_cast]
   exact mul_le_mul (by exact_mod_cast hNle) (hy τ) (abs_nonneg _) (Nat.cast_nonneg _)
 
+omit [NumberField F] in
 /-- Bounds at all complex embeddings give bounds at all infinite places. -/
 theorem abs_log_infinitePlace_le {c : ℝ} {y : F} (hy : ∀ σ : F →+* ℂ, |Real.log ‖σ y‖| ≤ c)
     (w : InfinitePlace F) : |Real.log (w y)| ≤ c := by

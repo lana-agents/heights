@@ -19,7 +19,7 @@ rev = "v4.32.0"
 [[require]]
 name = "belyi"
 git = "https://github.com/lana-agents/belyi.git"
-rev = "9ce4d3f793d3bc831f2fc7214b7dbad90ea012d8"
+rev = "1d84db91ffaaa64a869993507194b1b51263af07"
 
 [[lean_lib]]
 name = "Heights"
@@ -30,6 +30,9 @@ name = "Heights"
 [[lean_lib]]
 name = "Challenge"
 srcDir = "Comparator"
+# The six reviewed placeholders are `sorry` by design (comparator challenge), so `sorry`
+# warnings are switched off for this library only; `Heights` and `Solution` keep them.
+leanOptions = {warn.sorry = false}
 
 [[lean_lib]]
 name = "Solution"

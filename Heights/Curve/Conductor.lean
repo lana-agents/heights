@@ -29,7 +29,6 @@ condition used by `Iut.Tripod.logCond`.
 namespace Heights.Curve
 
 open Belyi.CurveField Heights.Absolute NumberField
-open scoped Classical
 
 /-! ### Number field lemmas -/
 
@@ -92,6 +91,7 @@ def meetsAt (x : QbarPoint K) (G : Finset K) (hG : ∀ g ∈ G, g ∈ x.P.1) :
     Set (FinitePlace x.fieldOf) :=
   {w | ∃ g, ∃ hg : g ∈ G, 1 < w ⟨x.eval g (hG g hg), x.eval_mem_fieldOf _⟩}
 
+open Classical in
 /-- **The log-conductor** of a point with respect to the model given by the generators `G` of
 the coordinate ring of `X ∖ D` ([GenEll], Definition 1.5 (iv)); `0` if some `g ∈ G` has a pole
 at `x` (i.e. `x ∈ D`). -/
@@ -101,6 +101,7 @@ noncomputable def logCondOf (G : Finset K) (x : QbarPoint K) : ℝ :=
       if w ∈ meetsAt x G hG then Real.log (Ideal.absNorm w.maximalIdeal.asIdeal) else 0) / x.deg
   else 0
 
+open Classical in
 theorem logCondOf_nonneg (G : Finset K) (x : QbarPoint K) : 0 ≤ logCondOf G x := by
   unfold logCondOf
   split_ifs with hG

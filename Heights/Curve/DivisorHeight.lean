@@ -39,12 +39,12 @@ Remark 1.4.1).
 namespace Heights.Curve
 
 open Belyi.CurveField Belyi.CurveField.Divisor Heights.Absolute
-open scoped Classical
 
 variable {K : Type*} [Field K] [CharZero K] [IsCurveField K]
 
 /-! ### Divisors of small tuples -/
 
+omit [IsCurveField K] in
 theorem exists_ne_zero_pair_one (f : K) : ∃ i, (![1, f] : Fin 2 → K) i ≠ 0 := ⟨0, by simp⟩
 
 /-- The divisor of the tuple `(1, f)` is the polar divisor of `f`. -/

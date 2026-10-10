@@ -29,7 +29,7 @@ subsequence: this puts them into a compactly bounded subset of the tripod.
 namespace Heights.Curve
 
 open Belyi.CurveField Heights.Absolute Heights.Local Filter Topology
-open scoped Classical IntermediateField
+open scoped IntermediateField
 
 variable {K : Type*} [Field K] [CharZero K] [IsCurveField K]
 
@@ -49,6 +49,7 @@ noncomputable def pointEPlace (x : QbarPoint K) (τ : x.fieldOf →+* E) : EPlac
     rw [map_eq_zero_iff _ x.residueFieldEquiv.injective, Place.residue_eq_zero_iff,
       IsLocalRing.mem_maximalIdeal, mem_nonunits_iff]
 
+omit [IsCurveField K] in
 theorem pointEPlace_val_of_mem (x : QbarPoint K) (τ : x.fieldOf →+* E) {f : K}
     (hf : f ∈ x.P.1) : (pointEPlace x τ).val f = some (τ (evalF x ⟨f, hf⟩)) :=
   EPlace.val_of_mem _ hf
@@ -124,6 +125,7 @@ section LimitPlaces
 
 variable {E : Type*} [NormedField E] [CharZero E]
 
+omit [IsCurveField K] in
 /-- `E`-valued places map rational numbers to themselves. -/
 theorem EPlace.val_ratCast (y : EPlace K E) (hQ : ∀ q : ℚ, (q : K) ∈ y.O) (q : ℚ) :
     y.val (q : K) = some (q : E) := by
@@ -143,6 +145,7 @@ theorem EPlace.val_ratCast (y : EPlace K E) (hQ : ∀ q : ℚ, (q : K) ∈ y.O) 
 
 variable {y : ℕ → EPlace K E} {ξ : K → Option E}
 
+omit [IsCurveField K] in
 /-- The limit of a convergent sequence of `E`-valued places with `ℚ ⊆ O` contains `ℚ`. -/
 theorem ratCast_mem_limitSubring (hQ : ∀ n (q : ℚ), (q : K) ∈ (y n).O)
     (h : ∀ f, TendstoP1 (fun n => (y n).val f) (ξ f)) (q : ℚ) : (q : K) ∈ limitSubring h := by
@@ -153,12 +156,14 @@ theorem ratCast_mem_limitSubring (hQ : ∀ n (q : ℚ), (q : K) ∈ (y n).O)
   rw [this]
   exact Option.some_ne_none _
 
+open Classical in
 /-- The limit place (if the limit valuation ring is not everything). -/
 noncomputable def limitPlace (hQ : ∀ n (q : ℚ), (q : K) ∈ (y n).O)
     (h : ∀ f, TendstoP1 (fun n => (y n).val f) (ξ f)) : Option (Place K) :=
   if hT : limitSubring h = ⊤ then none
   else some ⟨limitSubring h, hT, ratCast_mem_limitSubring hQ h⟩
 
+omit [IsCurveField K] in
 /-- **Bounds away from `0`, `1`, `∞` along a convergent sequence**, for a function which is
 regular, invertible, and with `φ − 1` invertible, at the limit place. -/
 theorem eventually_bounded_of_limitPlace (hQ : ∀ n (q : ℚ), (q : K) ∈ (y n).O)
@@ -224,6 +229,7 @@ section Main
 /-- Primes carry their primality as an instance (local). -/
 local instance factPrimes (p : Nat.Primes) : Fact (p : ℕ).Prime := ⟨p.2⟩
 
+open Classical in
 /-- **The compactness argument of [GenEll], Theorem 2.1**: for points `x_n` of degree `≤ d` and a
 finite set `V` of primes, there are a subsequence and a finite set `T` of places of `K` (the
 algebraic limit points at the places of `V ∪ {∞}`) such that every `φ ≠ 0, 1` regular and

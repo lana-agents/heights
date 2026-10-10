@@ -22,7 +22,6 @@ functorial ([GenEll], Definition 1.1 (ii) and Proposition 1.4):
 namespace Heights.Curve
 
 open Belyi.CurveField Belyi.CurveField.Divisor Heights.Absolute
-open scoped Classical
 
 variable {K L : Type*} [Field K] [Field L] [CharZero K] [CharZero L] [IsCurveField K]
   [IsCurveField L] [Algebra K L] [FiniteDimensional K L]
@@ -75,11 +74,7 @@ theorem tupleHeight_algebraMap (s : ι → K) (y : QbarPoint L) :
     congr 1
     funext i
     exact hval i
-  · have hs' : ¬ ∃ i, algebraMap K L (s i) ≠ 0 := by
-      push Not at hs ⊢
-      intro i
-      rw [hs i, map_zero]
-    simp [tupleHeight, hs, hs']
+  · simp [tupleHeight, hs]
 
 theorem pullback_sub (D₁ D₂ : Divisor K) :
     (pullback L (D₁ - D₂) : Divisor L) = pullback L D₁ - pullback L D₂ := by

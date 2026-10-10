@@ -21,7 +21,6 @@ additive.
 namespace Heights.Curve
 
 open Belyi.CurveField Heights.Absolute
-open scoped Classical
 
 variable {K : Type*} [Field K] [CharZero K] [IsCurveField K] {ι κ ι' κ' : Type*}
   [Fintype ι] [Fintype κ] [Fintype ι'] [Fintype κ']

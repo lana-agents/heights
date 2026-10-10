@@ -36,7 +36,6 @@ separately.
 namespace Heights.Curve
 
 open Belyi.CurveField Heights.Absolute NumberField Polynomial
-open scoped Classical
 
 /-! ### Elementary bounds -/
 
@@ -47,6 +46,7 @@ variable {F : Type*} [Field F] (w : AbsoluteValue F ℝ)
 /-- A product of reals `≥ 1` is `≥ 1`. -/
 theorem one_le_prod_of_one_le {α : Type*} (s : Finset α) {f : α → ℝ} (hf : ∀ a ∈ s, 1 ≤ f a) :
     1 ≤ ∏ a ∈ s, f a := by
+  classical
   induction s using Finset.induction_on with
   | empty => simp
   | insert a s ha ih =>
@@ -58,6 +58,7 @@ theorem one_le_prod_of_one_le {α : Type*} (s : Finset α) {f : α → ℝ} (hf 
 /-- A factor `≥ 1` of a product of reals `≥ 1` is at most the product. -/
 theorem le_prod_of_one_le {α : Type*} {s : Finset α} {f : α → ℝ} (hf : ∀ a ∈ s, 1 ≤ f a)
     {a : α} (ha : a ∈ s) : f a ≤ ∏ b ∈ s, f b := by
+  classical
   rw [← Finset.mul_prod_erase s f ha]
   have := one_le_prod_of_one_le (s.erase a) fun b hb => hf b (Finset.mem_of_mem_erase hb)
   have h0 : 0 ≤ f a := zero_le_one.trans (hf a ha)
@@ -135,9 +136,11 @@ variable {F : Type*} [Field F] [CharZero F] (w : AbsoluteValue F ℝ) {κ : Type
 noncomputable def coeffBound (Q : MvPolynomial κ ℚ) : ℝ :=
   ∏ m ∈ Q.support, max 1 (w ((Q.coeff m : ℚ) : F))
 
+omit [CharZero F] in
 theorem one_le_coeffBound (Q : MvPolynomial κ ℚ) : 1 ≤ coeffBound w Q :=
   one_le_prod_of_one_le _ fun _ _ => le_max_left _ _
 
+omit [CharZero F] in
 theorem log_coeffBound (Q : MvPolynomial κ ℚ) :
     Real.log (coeffBound w Q) = ∑ m ∈ Q.support, Real.posLog (w ((Q.coeff m : ℚ) : F)) := by
   rw [coeffBound, Real.log_prod (fun m _ => by positivity)]
@@ -240,6 +243,7 @@ section Integral
 
 variable {K : Type*} [Field K] [CharZero K] [IsCurveField K]
 
+omit [IsCurveField K] in
 /-- If `r` lies in every place containing all the `g l`, then `r` satisfies a monic equation
 whose coefficients are polynomials with rational coefficients in the `g l`. -/
 theorem exists_integral_eq {κ : Type*} (g : κ → K) (r : K)
@@ -285,12 +289,15 @@ variable {K : Type*} [Field K] [CharZero K] [IsCurveField K]
 noncomputable def evalF (x : QbarPoint K) : x.P.1 →+* x.fieldOf :=
   x.residueFieldEquiv.toRingHom.comp x.P.residue
 
+omit [IsCurveField K] in
 theorem coe_evalF (x : QbarPoint K) (f : x.P.1) : ((evalF x f : x.fieldOf) : Qbar) =
     x.eval f.1 f.2 := rfl
 
+omit [IsCurveField K] in
 theorem evalF_comp_ratHom (x : QbarPoint K) :
     (evalF x).comp x.P.ratHom = Rat.castHom x.fieldOf := RingHom.ext_rat _ _
 
+omit [IsCurveField K] in
 /-- Polynomial expressions in functions regular at `x` are regular at `x`, and evaluation
 commutes with them. -/
 theorem aeval_mem_and_evalF {κ : Type*} (x : QbarPoint K) (g : κ → K) (hg : ∀ l, g l ∈ x.P.1)
@@ -316,7 +323,7 @@ end Evaluation
 
 section LocalGlobal
 
-variable {ι κ : Type*} [Fintype ι] [Fintype κ]
+variable {ι κ : Type*} [Finite ι] [Finite κ]
 
 /-- Finitely many finite places see a nonzero tuple with maximum `≠ 1`. -/
 theorem hasFiniteSupport_log_iSup (F : IntermediateField ℚ Qbar) [FiniteDimensional ℚ F]
@@ -422,12 +429,15 @@ section Comparison
 
 variable {K : Type*} [Field K] [CharZero K] [IsCurveField K] {ι κ : Type*} [Fintype ι] [Fintype κ]
 
+omit [Fintype ι] [Fintype κ] in
 /-- The maximum of `|y_i|_W` compared with the maximum of `|z_l|_W`, given bounds for the
 quotients `y_i / z_j` at a maximal `z_j`. -/
-theorem log_iSup_le_of_forall {F : Type*} [Field F] (W : AbsoluteValue F ℝ) {y : ι → F}
-    {z : κ → F} (hy : y ≠ 0) (hz : z ≠ 0) (B : ℝ)
+theorem log_iSup_le_of_forall [Finite ι] [Finite κ] {F : Type*} [Field F] (W : AbsoluteValue F ℝ)
+    {y : ι → F} {z : κ → F} (hy : y ≠ 0) (hz : z ≠ 0) (B : ℝ)
     (h : ∀ i j, (∀ l, W (z l) ≤ W (z j)) → z j ≠ 0 → y i ≠ 0 → Real.log (W (y i / z j)) ≤ B) :
     Real.log (⨆ i, W (y i)) ≤ Real.log (⨆ l, W (z l)) + B := by
+  have := Fintype.ofFinite ι
+  have := Fintype.ofFinite κ
   obtain ⟨i₀, hi₀⟩ : ∃ i, y i ≠ 0 := by
     by_contra hh
     push Not at hh
@@ -551,9 +561,10 @@ theorem tupleHeight_le_of_minOrd_le {s : ι → K} {t : κ → K} (hs : ∃ i, s
       simp only [Set.mem_iUnion, Set.mem_setOf_eq, exists_prop]
       rw [minOrd_eq hu] at hP
       exact ⟨_, normIdx_ne_zero hu, hP⟩
-    refine ((Set.Finite.biUnion (Set.toFinite _) fun i _ => Place.finite_setOf_ord_ne_zero (s i)).subset
-      (h1 s hs) |>.union ((Set.Finite.biUnion (Set.toFinite _)
-        fun j _ => Place.finite_setOf_ord_ne_zero (t j)).subset (h2 t ht))).subset fun P hP => ?_
+    refine ((Set.Finite.biUnion (Set.toFinite _)
+      fun i _ => Place.finite_setOf_ord_ne_zero (s i)).subset (h1 s hs) |>.union
+        ((Set.Finite.biUnion (Set.toFinite _)
+          fun j _ => Place.finite_setOf_ord_ne_zero (t j)).subset (h2 t ht))).subset fun P hP => ?_
     by_contra hPn
     simp only [Set.mem_union, Set.mem_setOf_eq, not_or, not_not] at hPn
     exact hP (hPn.1.trans hPn.2.symm)

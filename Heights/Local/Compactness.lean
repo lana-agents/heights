@@ -58,7 +58,7 @@ theorem exists_strictMono_eq_of_le {f : ℕ → ℕ} {d : ℕ} (hf : ∀ n, f n 
   exact ⟨c, φ, hφ, fun n => congrArg Fin.val (hc n)⟩
 
 /-- If `t n ^ c ≤ ε n` with `t n ≥ 0`, `c ≠ 0` and `ε n → 0`, then `t n → 0`. -/
-theorem tendsto_zero_of_pow_le {t ε : ℕ → ℝ} {c : ℕ} (hc : c ≠ 0) (ht : ∀ n, 0 ≤ t n)
+theorem tendsto_zero_of_pow_le {t ε : ℕ → ℝ} {c : ℕ} (ht : ∀ n, 0 ≤ t n)
     (hle : ∀ n, t n ^ c ≤ ε n) (hε : Tendsto ε atTop (𝓝 0)) : Tendsto t atTop (𝓝 0) := by
   rw [Metric.tendsto_atTop] at hε ⊢
   intro δ hδ
@@ -247,7 +247,7 @@ theorem PadicAlgCl.exists_tendsto_of_norm_le_one (d : ℕ) (a : ℕ → PadicAlg
     simpa [S] using hrmem n⟩ : S))
   refine ⟨φ₁ ∘ ψ ∘ χ, hφ₁.comp (hψ.comp hχ), r₀, ?_⟩
   have hdist : Tendsto (fun n => ‖a₂ (χ n) - r₀‖) atTop (𝓝 0) := by
-    refine tendsto_zero_of_pow_le hcpos.ne' (fun n => norm_nonneg _) (fun n => ?_)
+    refine tendsto_zero_of_pow_le (c := c) (fun n => norm_nonneg _) (fun n => ?_)
       (hgto.comp hχ.tendsto_atTop)
     have := hr (χ n)
     have hrr : r (χ n) = r₀ := congrArg Subtype.val (hr₀ n)

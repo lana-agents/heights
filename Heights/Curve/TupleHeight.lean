@@ -39,25 +39,27 @@ namespace Heights.Curve
 
 open Belyi.CurveField Heights.Absolute
 
-open scoped Classical
-
 variable {K : Type*} [Field K] [CharZero K] [IsCurveField K]
 
 section Normalize
 
 variable {ι : Type*} [Fintype ι] (P : Place K) (s : ι → K)
 
+omit [CharZero K] [IsCurveField K] [Fintype ι] in
 /-- A tuple is nonzero iff some entry is nonzero. -/
 theorem exists_ne_zero_of_ne_zero {s : ι → K} (hs : s ≠ 0) : ∃ i, s i ≠ 0 := by
   by_contra h
   push Not at h
   exact hs (funext h)
 
+omit [CharZero K] [IsCurveField K] in
+open Classical in
 theorem filter_ne_zero_nonempty {s : ι → K} (hs : ∃ i, s i ≠ 0) :
     (Finset.univ.filter fun i => s i ≠ 0).Nonempty := by
   obtain ⟨i, hi⟩ := hs
   exact ⟨i, by simp [hi]⟩
 
+open Classical in
 /-- An index of an entry of minimal order at `P` among the nonzero entries. -/
 noncomputable def normIdx (hs : ∃ i, s i ≠ 0) : ι :=
   (Finset.exists_min_image (Finset.univ.filter fun i => s i ≠ 0) (fun i => P.ord (s i))
@@ -65,21 +67,25 @@ noncomputable def normIdx (hs : ∃ i, s i ≠ 0) : ι :=
 
 variable {P s}
 
+open Classical in
 theorem normIdx_ne_zero (hs : ∃ i, s i ≠ 0) : s (normIdx P s hs) ≠ 0 := by
   have := (Finset.exists_min_image (Finset.univ.filter fun i => s i ≠ 0) (fun i => P.ord (s i))
     (filter_ne_zero_nonempty hs)).choose_spec.1
   exact (Finset.mem_filter.mp this).2
 
+open Classical in
 theorem ord_normIdx_le (hs : ∃ i, s i ≠ 0) {j : ι} (hj : s j ≠ 0) :
     P.ord (s (normIdx P s hs)) ≤ P.ord (s j) :=
   (Finset.exists_min_image (Finset.univ.filter fun i => s i ≠ 0) (fun i => P.ord (s i))
     (filter_ne_zero_nonempty hs)).choose_spec.2 j (by simp [hj])
 
+open Classical in
 /-- The minimal order `min_i ord_P(s_i)` over the nonzero entries (`0` for the zero tuple);
 `−minOrd P s` is the multiplicity of `P` in the divisor `A_s`. -/
 noncomputable def minOrd (P : Place K) (s : ι → K) : ℤ :=
   if hs : ∃ i, s i ≠ 0 then P.ord (s (normIdx P s hs)) else 0
 
+open Classical in
 theorem minOrd_eq (hs : ∃ i, s i ≠ 0) : minOrd P s = P.ord (s (normIdx P s hs)) := by
   simp [minOrd, hs]
 
@@ -87,6 +93,7 @@ theorem minOrd_le (hs : ∃ i, s i ≠ 0) {j : ι} (hj : s j ≠ 0) : minOrd P s
   rw [minOrd_eq hs]
   exact ord_normIdx_le hs hj
 
+omit [Fintype ι] in
 /-- All quotients by an entry of minimal order are regular. -/
 theorem div_mem_of_minimal {i₀ : ι} (hi₀ : s i₀ ≠ 0) (hmin : ∀ j, s j ≠ 0 →
     P.ord (s i₀) ≤ P.ord (s j)) (j : ι) : s j / s i₀ ∈ P.1 := by
@@ -110,15 +117,18 @@ variable {ι κ : Type*} [Fintype ι] [Fintype κ]
 noncomputable def evalTuple (x : QbarPoint K) (s : ι → K) (hs : ∃ i, s i ≠ 0) : ι → Qbar :=
   fun j => x.eval (s j / s (normIdx x.P s hs)) (div_normIdx_mem hs j)
 
+open Classical in
 /-- **The height of the tuple `s` at the point `x`**: the absolute logarithmic Weil height of
 `[s₀ : ⋯ : s_n](x)` (`0` for the zero tuple). -/
 noncomputable def tupleHeight (s : ι → K) (x : QbarPoint K) : ℝ :=
   if hs : ∃ i, s i ≠ 0 then logHeight (evalTuple x s hs) else 0
 
+open Classical in
 theorem tupleHeight_def {s : ι → K} (hs : ∃ i, s i ≠ 0) (x : QbarPoint K) :
     tupleHeight s x = logHeight (evalTuple x s hs) := by
   simp [tupleHeight, hs]
 
+open Classical in
 theorem tupleHeight_nonneg (s : ι → K) (x : QbarPoint K) : 0 ≤ tupleHeight s x := by
   unfold tupleHeight
   split_ifs
@@ -210,11 +220,7 @@ theorem tupleHeight_smul {s : ι → K} (x : QbarPoint K) {c : K} (hc : c ≠ 0)
     congr 1
     funext j
     exact x.eval_congr (hcg j) _
-  · have hcs : ¬ ∃ i, c * s i ≠ 0 := by
-      push Not at hs ⊢
-      intro i
-      rw [hs i, mul_zero]
-    simp [tupleHeight, hs, hcs]
+  · simp [tupleHeight, hs]
 
 /-- **The Segre identity**: `h_{(s_i t_j)} = h_s + h_t` (the divisor of the product linear
 system is `A_s + A_t`). -/
@@ -251,7 +257,7 @@ theorem tupleHeight_pair_one_of_mem (x : QbarPoint K) {f : K} (hf : f ∈ x.P.1)
   have hs : ∃ i, (![1, f] : Fin 2 → K) i ≠ 0 := ⟨0, by simp⟩
   have hmem : ∀ j, (![1, f] : Fin 2 → K) j * 1 ∈ x.P.1 := fun j => by
     fin_cases j
-    · simpa using x.P.1.one_mem
+    · simp
     · simpa using hf
   have hne : ∃ j, x.eval ((![1, f] : Fin 2 → K) j * 1) (hmem j) ≠ 0 := by
     refine ⟨0, ?_⟩
@@ -273,7 +279,7 @@ theorem tupleHeight_pair_one_of_notMem (x : QbarPoint K) {f : K} (hf : f ∉ x.P
   have hmem : ∀ j, (![1, f] : Fin 2 → K) j * f⁻¹ ∈ x.P.1 := fun j => by
     fin_cases j
     · simpa using hfi
-    · simpa [hf0] using x.P.1.one_mem
+    · simp [hf0]
   have hne : ∃ j, x.eval ((![1, f] : Fin 2 → K) j * f⁻¹) (hmem j) ≠ 0 := by
     refine ⟨1, ?_⟩
     rw [x.eval_congr (by simp [hf0] : (![1, f] : Fin 2 → K) 1 * f⁻¹ = 1), x.eval_one]

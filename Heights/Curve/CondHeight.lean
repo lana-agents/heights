@@ -30,7 +30,6 @@ a factor `≥ N(w)`.
 namespace Heights.Curve
 
 open Belyi.CurveField Heights.Absolute NumberField
-open scoped Classical
 
 /-! ### Discreteness of finite places -/
 
@@ -100,6 +99,7 @@ theorem finsum_posLog_le (F : IntermediateField ℚ Qbar) [FiniteDimensional ℚ
     Finset.sum_nonneg fun w _ => mul_nonneg (Nat.cast_nonneg _) Real.posLog_nonneg
   linarith
 
+open Classical in
 theorem hasFiniteSupport_meetsAt (x : QbarPoint K) (G : Finset K) (hG : ∀ g ∈ G, g ∈ x.P.1) :
     (fun w : FinitePlace x.fieldOf => if w ∈ meetsAt x G hG then
       Real.log (Ideal.absNorm w.maximalIdeal.asIdeal) else 0).HasFiniteSupport := by
@@ -117,6 +117,7 @@ theorem hasFiniteSupport_meetsAt (x : QbarPoint K) (G : Finset K) (hG : ∀ g �
   rw [this, map_zero] at hg1
   linarith
 
+open Classical in
 /-- **[GenEll], Proposition 1.6 (tuple form)**: for a tuple `s` with a subfamily `s ∘ e`, and a
 finite set `G` of functions regular wherever `A_s` and `A_{s ∘ e}` agree, the log-conductor with
 respect to `G` is bounded by `h_s − h_{s ∘ e}` up to a constant. -/

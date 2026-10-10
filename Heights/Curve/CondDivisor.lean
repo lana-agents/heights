@@ -20,7 +20,6 @@ import Heights.Different.Conductor
 namespace Heights.Curve
 
 open Belyi.CurveField Belyi.CurveField.Divisor Heights.Absolute NumberField
-open scoped Classical
 
 variable {K : Type*} [Field K] [CharZero K] [IsCurveField K]
 
@@ -89,6 +88,7 @@ theorem logCondOf_le_divHeight (E : Divisor K) (hE : 0 ≤ E) (G : Finset K)
   rw [abs_le] at h2
   linarith [h2.1]
 
+open Classical in
 /-- **The log-conductor of a point is the log-conductor of the values**: `log-cond_G(x)` is
 `Heights.Different.cond` of the finite set `{g(x) : g ∈ G} ⊆ ℚ(x)`. -/
 theorem logCondOf_eq_cond (G : Finset K) (x : QbarPoint K) (hG : ∀ g ∈ G, g ∈ x.P.1) :

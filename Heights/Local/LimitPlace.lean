@@ -174,8 +174,7 @@ section Diagonal
 
 /-- A family of strictly monotone maps refining each other. -/
 theorem exists_diagonal {P : ℕ → (ℕ → ℕ) → Prop}
-    (hP : ∀ k (φ : ℕ → ℕ), StrictMono φ → ∃ ψ : ℕ → ℕ, StrictMono ψ ∧ P k (φ ∘ ψ))
-    (hmono : ∀ k (φ : ℕ → ℕ) (ψ : ℕ → ℕ), P k φ → Tendsto ψ atTop atTop → P k (φ ∘ ψ)) :
+    (hP : ∀ k (φ : ℕ → ℕ), StrictMono φ → ∃ ψ : ℕ → ℕ, StrictMono ψ ∧ P k (φ ∘ ψ)) :
     ∃ D : ℕ → ℕ, StrictMono D ∧ ∀ k, ∃ χ : ℕ → ℕ, Tendsto χ atTop atTop ∧
       ∃ φ : ℕ → ℕ, P k φ ∧ ∀ n, k < n → D n = φ (χ n) := by
   classical
@@ -400,10 +399,7 @@ theorem exists_limit [Countable K] {ι : Type*} [Countable ι] [Nonempty ι] {Go
     obtain ⟨ψ, hψ, b, hb⟩ := exists_tendstoP1 hcpt
       (fun n => (x (φ n) (e k).1).val (e k).2) (fun n α hα => hgood _ _ _ _ hα)
     exact ⟨ψ, hψ, b, hb⟩
-  have hmono : ∀ k (φ : ℕ → ℕ) (ψ : ℕ → ℕ), P k φ → Tendsto ψ atTop atTop → P k (φ ∘ ψ) := by
-    rintro k φ ψ ⟨b, hb⟩ hψ
-    exact ⟨b, hb.comp_of_tendsto hψ⟩
-  obtain ⟨D, hD, hDk⟩ := exists_diagonal hP hmono
+  obtain ⟨D, hD, hDk⟩ := exists_diagonal hP
   have hlim : ∀ k, ∃ b, TendstoP1 (fun n => (x (D n) (e k).1).val (e k).2) b := by
     intro k
     obtain ⟨χ, hχ, φ, ⟨b, hb⟩, hDφ⟩ := hDk k
